@@ -1,3 +1,4 @@
+/* Estilos globales de la aplicación */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -11,3 +12,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Estilos para corregir problemas de superposición */
+.MuiDrawer-root {
+  z-index: 1200;
+}
+
+/* Mejoras de legibilidad y espaciado */
+p {
+  line-height: 1.6;
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 600px) {
+  .MuiContainer-root {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+} 
