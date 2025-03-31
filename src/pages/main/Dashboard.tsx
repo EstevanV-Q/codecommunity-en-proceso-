@@ -18,6 +18,7 @@ import {
   Button,
   Alert,
 } from '@mui/material';
+import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 import {
   School as SchoolIcon,
   Assignment as AssignmentIcon,
@@ -243,6 +244,7 @@ const AdminDashboard: React.FC<DashboardProps> = ({ user }) => {
 
   const adminActions = [
     { title: 'Gestión de Usuarios', icon: PeopleIcon, path: '/admin/users' },
+    { title: 'Gestión de Tutor', icon: DeveloperModeIcon, path: '/admin/mentor' },
     { title: 'Gestión de Cursos', icon: SchoolIcon, path: '/admin/courses' },
     { title: 'Gestión de Pagos', icon: PaymentIcon, path: '/admin/payments' },
     { title: 'Analíticas', icon: AssessmentIcon, path: '/admin/analytics' },
