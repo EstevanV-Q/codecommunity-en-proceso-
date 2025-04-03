@@ -41,11 +41,15 @@ import {
   ListSubheader,
   Checkbox,
 } from '@mui/material';
+
+import CodeIcon from '@mui/icons-material/Code';  // ✅ Esto es correcto
+import AndroidIcon from '@mui/icons-material/Android'; // ✅ Esto es correcto
+
 import {
   People as PeopleIcon,
   School as SchoolIcon,
   Forum as ForumIcon,
-  Code as CodeIcon,
+  // Code as CodeIcon,
   Assessment as AssessmentIcon,
   Settings as SettingsIcon,
   MonetizationOn as MonetizationOnIcon,
@@ -1795,6 +1799,16 @@ const AdminDashboard = () => {
       color: '#1976d2',
       tooltip: 'Número total de usuarios registrados en la plataforma',
     },
+
+    {
+      title: 'Total de Tutores',
+      value: stats.users.toLocaleString(),
+      change: 12.5,
+      icon: <CodeIcon/>,
+      color: '#1976d2',
+      tooltip: 'Número total de usuarios registrados en la plataforma',
+    },
+
     {
       title: 'Cursos Activos',
       value: stats.courses.toString(),
@@ -1816,6 +1830,14 @@ const AdminDashboard = () => {
       value: `${stats.conversionRate}%`,
       change: 5.4,
       icon: <AssessmentIcon />,
+      color: '#9c27b0',
+      tooltip: 'Porcentaje de estudiantes que completan sus cursos',
+    },
+    {
+      title: 'Panel administrador 2.0(Beta)',
+      value: `${stats.conversionRate}%`,
+      change: 5.4,
+      icon: <AndroidIcon />,
       color: '#9c27b0',
       tooltip: 'Porcentaje de estudiantes que completan sus cursos',
     },
@@ -1975,6 +1997,13 @@ const AdminDashboard = () => {
                 label="Usuarios" 
                 iconPosition="start" 
               />
+
+              <Tab 
+                icon={<CodeIcon/>} 
+                label="Usuarios" 
+                iconPosition="start" 
+              />
+
               <Tab 
                 icon={<SchoolIcon />} 
                 label="Tutores" 
@@ -2246,7 +2275,7 @@ const AdminDashboard = () => {
                 
                 <Grid container spacing={2}>
                   {/* Primera fila con 3 tarjetas más importantes */}
-                  <Grid item xs={12} sm={6} md={4}>
+                  {/* <Grid item xs={12} sm={6} md={4}>
                     <Card 
                       variant="outlined" 
                       sx={{ 
@@ -2314,7 +2343,7 @@ const AdminDashboard = () => {
                         </Button>
                       </Box>
                     </Card>
-                  </Grid>
+                  </Grid> */}
                   
                   <Grid item xs={12} sm={6} md={4}>
                     <Card 
@@ -2356,6 +2385,51 @@ const AdminDashboard = () => {
                           fullWidth
                         >
                           Gestionar Usuarios
+                        </Button>
+                      </Box>
+                    </Card>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Card 
+                      variant="outlined" 
+                      sx={{ 
+                        height: '100%', 
+                        display: 'flex', 
+                        flexDirection: 'column',
+                        transition: 'transform 0.2s, box-shadow 0.2s',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          boxShadow: 2
+                        }
+                      }}
+                    >
+                      <CardHeader 
+                        avatar={<CodeIcon color='primary'/>}
+                        title="Gestión de Usuarios" 
+                        sx={{ 
+                          pb: 0,
+                          '& .MuiCardHeader-title': {
+                            fontWeight: 'medium',
+                            fontSize: '1.1rem'
+                          }
+                        }}
+                      />
+                      <CardContent sx={{ flexGrow: 1, pt: 1 }}>
+                        <Typography variant="body2" paragraph>
+                          Administra tutores, asigna roles y gestiona permisos de acceso.
+                        </Typography>
+                      </CardContent>
+                      <Box sx={{ p: 2, pt: 0 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          startIcon={<CodeIcon/>}
+                          component={RouterLink}
+                          to="/admin/tutors" // tutor management link
+                          fullWidth
+                        >
+                          Gestionar Tutores
                         </Button>
                       </Box>
                     </Card>
@@ -2492,6 +2566,51 @@ const AdminDashboard = () => {
                           fullWidth
                         >
                           Ver Analítica
+                        </Button>
+                      </Box>
+                    </Card>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={6}>
+                    <Card 
+                      variant="outlined" 
+                      sx={{ 
+                        height: '100%', 
+                        display: 'flex', 
+                        flexDirection: 'column',
+                        transition: 'transform 0.2s, box-shadow 0.2s',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          boxShadow: 2
+                        }
+                      }}
+                    >
+                      <CardHeader 
+                        avatar={<AndroidIcon color="primary" />}
+                        title="Analítica" 
+                        sx={{ 
+                          pb: 0,
+                          '& .MuiCardHeader-title': {
+                            fontWeight: 'medium',
+                            fontSize: '1.1rem'
+                          }
+                        }}
+                      />
+                      <CardContent sx={{ flexGrow: 1, pt: 1 }}>
+                        <Typography variant="body2" paragraph>
+                          Visualiza estadísticas detalladas y reportes de rendimiento del sistema.
+                        </Typography>
+                      </CardContent>
+                      <Box sx={{ p: 2, pt: 0 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          startIcon={<AndroidIcon />}
+                          component={RouterLink}
+                          to="/admin"
+                          fullWidth
+                        >
+                          Panel 2.0 admin beta
                         </Button>
                       </Box>
                     </Card>

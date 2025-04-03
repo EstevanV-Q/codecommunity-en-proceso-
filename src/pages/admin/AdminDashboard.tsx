@@ -7,7 +7,6 @@ import {
   Box, 
   Divider 
 } from '@mui/material';
-import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 import DashboardCards from '../../components/admin/DashboardCards';
 import { 
   TrendingUp as TrendingUpIcon,

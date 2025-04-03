@@ -1,10 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,Typography,Paper,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,IconButton,Button,Dialog,DialogTitle,DialogContent,
-  DialogActions,TextField,Select,MenuItem,FormControl,InputLabel,Box,Chip,Alert,Snackbar,TablePagination,Tooltip,Grid,Avatar,Card,CardContent,
-  List,ListItem,ListItemText,Divider,
+  Container,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Box,
+  Chip,
+  Alert,
+  Snackbar,
+  TablePagination,
+  Tooltip,
+  Grid,
+  Avatar,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
 } from '@mui/material';
-import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -20,8 +50,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'student' | 'admin'| 'mentor';
-  // Cambiado a 'student' | 'admin' | 'mentor' para incluir el rol de mentor
+  role: 'student' | 'admin';
   status: 'active' | 'inactive' | 'banned';
   createdAt: string;
   lastLogin?: string;
@@ -222,11 +251,10 @@ const UserManagement = () => {
               <Select
                 value={formData.role || 'student'}
                 label="Rol"
-                onChange={(e) => setFormData({ ...formData, role: e.target.value as 'student' | 'admin'| 'mentor' })}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value as 'student' | 'admin' })}
               >
                 <MenuItem value="student">Estudiante</MenuItem>
                 <MenuItem value="admin">Administrador</MenuItem>
-                <MenuItem value="mentor">Mentor</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -405,30 +433,12 @@ const UserManagement = () => {
                     </Box>
                   </TableCell>
                   <TableCell>
-                  <Chip
-  icon={
-    user.role === 'admin' 
-      ? <PersonIcon /> 
-      : user.role === 'mentor'
-      ? <DeveloperModeIcon />
-      : <SchoolIcon />
-  }
-  label={
-    user.role === 'admin'
-      ? 'Administrador'
-      : user.role === 'mentor'
-      ? 'Mentor'
-      : 'Estudiante'
-  }
-  color={
-    user.role === 'admin'
-      ? 'error'
-      : user.role === 'mentor'
-      ? 'secondary'
-      : 'primary'
-  }
-  size="small"
-/>
+                    <Chip
+                      icon={user.role === 'admin' ? <PersonIcon /> : <SchoolIcon />}
+                      label={user.role === 'admin' ? 'Administrador' : 'Estudiante'}
+                      color={user.role === 'admin' ? 'error' : 'primary'}
+                      size="small"
+                    />
                   </TableCell>
                   <TableCell>
                     <Box>

@@ -85,6 +85,11 @@ const CreateButton = () => {
                   : colors.neutral[800],
               },
             },
+            '& .MuiSpeedDialAction-staticTooltipLabel': {
+              padding: theme.spacing(1, 2), // Añadir espacio alrededor del texto
+              fontSize: '0.875rem', // Ajustar el tamaño de la fuente
+              whiteSpace: 'nowrap', // Evitar que el texto se corte en varias líneas
+            },
           }}
         />
       ))}
@@ -92,4 +97,4 @@ const CreateButton = () => {
   );
 };
 
-export default CreateButton; 
+export default CreateButton;

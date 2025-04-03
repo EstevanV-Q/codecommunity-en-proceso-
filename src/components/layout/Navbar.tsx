@@ -335,12 +335,12 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
       
       <Divider />
       
-      <MenuItem onClick={toggleTheme}>
+      {/* <MenuItem onClick={toggleTheme}>
         <ListItemIcon>
           {mode === 'dark' ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
         </ListItemIcon>
         <ListItemText>{mode === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}</ListItemText>
-      </MenuItem>
+      </MenuItem> */}
       
       <MenuItem onClick={handleLogout}>
         <ListItemIcon>
@@ -361,8 +361,9 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
     { text: 'Cursos', path: '/courses', icon: <SchoolIcon fontSize="small" /> },
     { text: 'Proyectos', path: '/projects', icon: <CodeIcon fontSize="small" /> },
     { text: 'Comunidad', path: '/community', icon: <ForumIcon fontSize="small" /> },
-    { text: 'Perfil', path: '/profile', icon: <PersonIcon fontSize="small" /> },
-    { text: 'Configuración', path: '/settings', icon: <SettingsIcon fontSize="small" /> },
+    { text: 'Foro', path: '/forum', icon: <ForumIcon fontSize="small" /> },
+    // { text: 'Perfil', path: '/profile', icon: <PersonIcon fontSize="small" /> },
+    // { text: 'Configuración', path: '/settings', icon: <SettingsIcon fontSize="small" /> },
     { text: 'Ayuda', path: '/help', icon: <HelpIcon fontSize="small" /> },
   ];
 
@@ -530,12 +531,27 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
         PaperProps={{
           elevation: 3,
           sx: {
-            mt: 2.8,
-            minWidth: 250,
-            maxWidth: '90vw',
-            maxHeight: '80vh',
-            overflowY: 'auto',
-            marginLeft: '-200px'
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 7,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -10,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              mt: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
           },
         }}
         anchorOrigin={{
@@ -612,8 +628,8 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
             },
             '&:before': {
               content: '""',
-              display: 'block',
-              position: 'absolute',
+              display: '',
+              position: '',
               top: 0,
               right: 14,
               width: 10,

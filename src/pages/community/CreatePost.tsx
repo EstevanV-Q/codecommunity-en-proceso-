@@ -52,8 +52,8 @@ const CreatePost = () => {
 
   const categories = {
     project: ['Frontend', 'Backend', 'Mobile', 'DevOps', 'Data Science', 'Machine Learning'],
-    forum: ['Preguntas', 'Discusión', 'Ayuda', 'Recursos', 'Noticias'],
-    community: ['General', 'Eventos', 'Empleos', 'Networking', 'Anuncios'],
+    forum: ['Preguntas', 'Discusión', 'Ayuda', 'Recursos', 'Consejos'],
+    community: ['General', 'Eventos', 'Empleos', 'Networking', 'Proyectos'],
   };
 
   const suggestedTags = [

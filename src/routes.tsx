@@ -74,6 +74,7 @@ import AnnouncementsList from './pages/admin/AnnouncementsList';
 import Announcements from './pages/announcements/Announcements';
 import PaymentManagement from './pages/admin/PaymentManagement';
 import MakePayment from './pages/payments/MakePayment';
+import Mentors from './pages/admin/MentorManagement';
 
 const LoadingScreen = () => (
   <Box
@@ -148,7 +149,7 @@ const AppRoutes = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/help" element={<Help />} />
-        <Route path="/privacy" element={<Privacy />} /> {/* falta mejoras*/}
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/tutorials" element={<Tutorials />} />
         <Route path="/documentation" element={<Documentation />} />
@@ -173,7 +174,7 @@ const AppRoutes = () => {
         <Route path="/courses/:courseId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
         <Route path="/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
         <Route path="/projects/new" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
-        <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} /> {/* falta terminar */}
+        <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
         <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="/payment" element={<ProtectedRoute><MakePayment /></ProtectedRoute>} />
@@ -182,7 +183,6 @@ const AppRoutes = () => {
         <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         <Route path="/admin/organization" element={<AdminRoute><OrganizationStructure /></AdminRoute>} />
         <Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
-        <Route path="/admin/mentor" element={<AdminRoute><TutorManagement /></AdminRoute>} />
         <Route path="/admin/content" element={<AdminRoute><ContentManagement /></AdminRoute>} />
         <Route path="/admin/analytics" element={<AdminRoute><Analytics /></AdminRoute>} />
         <Route path="/admin/payments" element={<AdminRoute><PaymentManagement /></AdminRoute>} />
@@ -194,6 +194,7 @@ const AppRoutes = () => {
         <Route path="/admin/courses" element={<AdminRoute><CourseManagement /></AdminRoute>} />
         <Route path="/admin/courses/new" element={<AdminRoute><CourseManagement mode="create" /></AdminRoute>} />
         <Route path="/admin/tutors" element={<AdminRoute><TutorManagement /></AdminRoute>} />
+        <Route path="/admin/mentors" element={<AdminRoute><Mentors /></AdminRoute>} />
 
         {/* Ruta para el salón de clases en vivo */}
         <Route path="/live-classroom/:courseId" element={<ProtectedRoute><LiveClassroom /></ProtectedRoute>} />
