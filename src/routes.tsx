@@ -74,7 +74,9 @@ import AnnouncementsList from './pages/admin/AnnouncementsList';
 import Announcements from './pages/announcements/Announcements';
 import PaymentManagement from './pages/admin/PaymentManagement';
 import MakePayment from './pages/payments/MakePayment';
+import Cart from './pages/payments/carts';
 import Mentors from './pages/admin/MentorManagement';
+import Donations from './pages/payments/Donations';
 
 const LoadingScreen = () => (
   <Box
@@ -173,11 +175,14 @@ const AppRoutes = () => {
         <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
         <Route path="/courses/:courseId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
         <Route path="/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
+        <Route path="/projects/:projectId" element={<ProtectedRoute><ProjectDetail /></ProtectedRoute>} />
         <Route path="/projects/new" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
         <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
         <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="/payment" element={<ProtectedRoute><MakePayment /></ProtectedRoute>} />
+        <Route path="/donation" element={<ProtectedRoute><Donations/></ProtectedRoute>} />
+        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
 
         {/* Rutas de administración */}
         <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />

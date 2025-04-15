@@ -71,7 +71,7 @@ interface Message {
 export type { Participant, Message };
 
 const DRAWER_WIDTH = 340;
-const EMOJIS = ['👍', '👏', '❤️', '😊', '🎉', '🤔', '✋', '👋'];
+const EMOJIS = ['👍', '👏', '❤️', '😊', '🎉', '🤔', '✋', '👋', '✅','👌'];
 
 const LiveClassroom: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -211,7 +211,7 @@ const LiveClassroom: React.FC = () => {
               startIcon={<ExitToApp />}
               onClick={handleExitClass}
             >
-              Salir
+              Salir de clases
             </Button>
           </Box>
         </Toolbar>

@@ -55,7 +55,7 @@ const Navbar = () => {
         </Typography>
 
         {user ? (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'center', alignItems: 'center' }}>
             <Button color="inherit" onClick={() => navigate('/courses')}>
               Cursos
             </Button>

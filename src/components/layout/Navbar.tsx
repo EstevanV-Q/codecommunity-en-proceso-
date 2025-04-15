@@ -47,7 +47,11 @@ import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
   Announcement as AnnouncementIcon,
+  Computer as ComputerIcon,
 } from '@mui/icons-material';
+
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+
 import { useAuth } from '../../context/AuthContext';
 import { colors, dimensions, transitions, typography } from '../../theme/tokens';
 import { useTheme } from '../../context/ThemeContext';
@@ -361,7 +365,8 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
     { text: 'Cursos', path: '/courses', icon: <SchoolIcon fontSize="small" /> },
     { text: 'Proyectos', path: '/projects', icon: <CodeIcon fontSize="small" /> },
     { text: 'Comunidad', path: '/community', icon: <ForumIcon fontSize="small" /> },
-    { text: 'Foro', path: '/forum', icon: <ForumIcon fontSize="small" /> },
+    { text: 'Foro', path: '/forum', icon: <ComputerIcon fontSize="small" /> },
+    { text: 'Carrito', path: '/Cart', icon: <ShoppingBasketIcon fontSize="small" /> },
     // { text: 'Perfil', path: '/profile', icon: <PersonIcon fontSize="small" /> },
     // { text: 'Configuración', path: '/settings', icon: <SettingsIcon fontSize="small" /> },
     { text: 'Ayuda', path: '/help', icon: <HelpIcon fontSize="small" /> },
@@ -585,7 +590,7 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
           </MenuItem>
         ))}
         <Divider />
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             toggleTheme();
             setOpenMenu('none');
@@ -604,7 +609,7 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
             {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
           </ListItemIcon>
           <Typography>{mode === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}</Typography>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
 
       {/* Menú de perfil */}

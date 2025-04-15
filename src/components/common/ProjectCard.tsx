@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -139,6 +139,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   milestones,
   lastActivity,
 }) => {
+  const navigate = useNavigate();
+
   // Generar datos de contribución simulados para el gráfico
   const contributionData = Array.from({ length: 20 }, () => Math.floor(Math.random() * 10));
   
@@ -277,8 +279,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <Button
             variant="text"
             color="primary"
-            component={RouterLink}
-            to={`/projects/${id}`}
+            onClick={() => navigate(`/projects/${id}`)}
             endIcon={<ArrowForwardIcon />}
             sx={{
               textTransform: 'none',
@@ -293,4 +294,4 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   );
 };
 
-export default ProjectCard; 
+export default ProjectCard;
