@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Container,
   Paper,
@@ -52,6 +53,9 @@ const initialForm: PaymentForm = {
 };
 
 const MakePayment = () => {
+  const location = useLocation();
+  const totalAmount = location.state?.totalAmount || 0;
+
   const [activeStep, setActiveStep] = useState(0);
   const [form, setForm] = useState<PaymentForm>(initialForm);
   const [error, setError] = useState<string | null>(null);
@@ -107,10 +111,9 @@ const MakePayment = () => {
                 fullWidth
                 label="Monto"
                 name="amount"
-                value={form.amount || ''}
-                onChange={handleInputChange}
+                value={totalAmount}
                 type="number"
-                inputProps={{ min: 0, step: 0.01 }}
+                inputProps={{ readOnly: true }}
                 required
               />
             </Grid>
@@ -340,4 +343,4 @@ const MakePayment = () => {
   );
 };
 
-export default MakePayment; 
+export default MakePayment;

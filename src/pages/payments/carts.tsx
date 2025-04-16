@@ -19,7 +19,8 @@ import {
   styled,
   Alert,
   Stack,
-  Snackbar
+  Snackbar,
+  TextField
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -113,7 +114,7 @@ const AppCarrito: React.FC = () => {
     suscripciones: []
   });
   
-  const [seccionActiva, setSeccionActiva] = useState<'carrito' | 'compras' | 'suscripciones'>('carrito');
+  const [seccionActiva, setSeccionActiva] = useState<'carrito' | 'compras' | 'suscripciones' | 'metodosPago'>('carrito'); // Add 'metodosPago'
   
   // 1. Primero, agregar estados para el feedback
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -198,23 +199,25 @@ const AppCarrito: React.FC = () => {
   // Función para completar la compra
   const realizarCompra = () => {
     if (estado.itemsCarrito.length === 0) return;
-    
+  
+    const totalAmount = calcularTotal(); // Calculate the total price of the cart
+  
     const nuevaCompra: Compra = {
       id: `compra-${Date.now()}`,
       fecha: new Date(),
       items: [...estado.itemsCarrito],
-      total: calcularTotal(),
-      estado: 'completada'
+      total: totalAmount,
+      estado: 'completada',
     };
-    
+  
     setEstado(prevEstado => ({
       ...prevEstado,
       compras: [nuevaCompra, ...prevEstado.compras],
-      itemsCarrito: []
+      itemsCarrito: [],
     }));
-    
-    // Redirigir a /payment
-    navigate('/payment');
+  
+    // Pass the total amount as state when navigating to the payment page
+    navigate('/payment', { state: { totalAmount } });
   };
   
   // Funciones para las suscripciones
@@ -265,14 +268,45 @@ const AppCarrito: React.FC = () => {
     );
   };
 
+  const [form, setForm] = useState({
+    cardNumber: '',
+    cardName: '',
+    expiryDate: '',
+    cvv: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: value
+    }));
+  };
+
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'credit_card' | 'paypal' | 'stripe'>('credit_card'); // Add state for payment method
+
+  const handlePaymentMethodChange = (method: 'credit_card' | 'paypal' | 'stripe') => {
+    setSelectedPaymentMethod(method);
+  };
+
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      {/* Tabs de navegación */}
+      {/* Tabs de navegación CARRITO COMPRAS SUSCRIPCIONES Y METODO DE PAGO*/}
       <Paper sx={{ mb: 4 }}>
         <Tabs 
-          value={seccionActiva === 'carrito' ? 0 : seccionActiva === 'compras' ? 1 : 2}
+          value={
+            seccionActiva === 'carrito' ? 0 : 
+            seccionActiva === 'compras' ? 1 : 
+            seccionActiva === 'suscripciones' ? 2 : 
+            3 // Add case for 'metodosPago'
+          }
           onChange={(_, newValue) => {
-            setSeccionActiva(newValue === 0 ? 'carrito' : newValue === 1 ? 'compras' : 'suscripciones');
+            setSeccionActiva(
+              newValue === 0 ? 'carrito' : 
+              newValue === 1 ? 'compras' : 
+              newValue === 2 ? 'suscripciones' : 
+              'metodosPago' // Handle 'metodosPago'
+            );
           }}
           sx={{ borderBottom: 1, borderColor: 'divider' }}
         >
@@ -284,6 +318,7 @@ const AppCarrito: React.FC = () => {
           />
           <Tab icon={<HistoryIcon />} label="Mis Compras" />
           <Tab icon={<SubscriptionsIcon />} label="Suscripciones" />
+          <Tab icon={<LockIcon />} label="Métodos de Pago" /> {/* Add new tab */}
         </Tabs>
       </Paper>
 
@@ -681,6 +716,97 @@ const AppCarrito: React.FC = () => {
               ))}
             </Grid>
           )}
+        </Box>
+      )}
+      {seccionActiva === 'metodosPago' && (
+        <Box>
+          <Typography variant="h4" gutterBottom>
+            Métodos de Pago
+          </Typography>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Selecciona un método de pago:
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+              <Button
+                variant={selectedPaymentMethod === 'credit_card' ? 'contained' : 'outlined'}
+                onClick={() => handlePaymentMethodChange('credit_card')}
+              >
+                Tarjeta de Crédito
+              </Button>
+              <Button
+                variant={selectedPaymentMethod === 'paypal' ? 'contained' : 'outlined'}
+                onClick={() => handlePaymentMethodChange('paypal')}
+              >
+                PayPal
+              </Button>
+              <Button
+                variant={selectedPaymentMethod === 'stripe' ? 'contained' : 'outlined'}
+                onClick={() => handlePaymentMethodChange('stripe')}
+              >
+                Stripe
+              </Button>
+            </Box>
+
+            {selectedPaymentMethod === 'credit_card' && (
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Número de Tarjeta"
+                    name="cardNumber"
+                    value={form.cardNumber}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Nombre en la Tarjeta"
+                    name="cardName"
+                    value={form.cardName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    fullWidth
+                    label="Fecha de Expiración"
+                    name="expiryDate"
+                    value={form.expiryDate}
+                    onChange={handleInputChange}
+                    placeholder="MM/YY"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    fullWidth
+                    label="CVV"
+                    name="cvv"
+                    value={form.cvv}
+                    onChange={handleInputChange}
+                    type="password"
+                    required
+                  />
+                </Grid>
+              </Grid>
+            )}
+
+            {selectedPaymentMethod === 'paypal' && (
+              <Typography variant="body1">
+                Serás redirigido a PayPal para completar tu pago.
+              </Typography>
+            )}
+
+            {selectedPaymentMethod === 'stripe' && (
+              <Typography variant="body1">
+                Serás redirigido a Stripe para completar tu pago.
+              </Typography>
+            )}
+          </Paper>
         </Box>
       )}
       {/* 3. Agregar el componente Snackbar después del Container */}
