@@ -434,6 +434,7 @@ const AppCarrito: React.FC = () => {
               </Box>
             ) : (
               <>
+                {/* Listado de items en el carrito */}
                 <Stack spacing={2}>
                   {estado.itemsCarrito.map((item) => (
                     <Box
@@ -446,61 +447,70 @@ const AppCarrito: React.FC = () => {
                         border: 1,
                         borderColor: 'divider',
                         borderRadius: 1,
+                        flexWrap: 'wrap', // Allow wrapping for smaller screens
+                        backgroundColor: 'background.paper',
                       }}
                     >
                       <CardMedia
                         component="img"
-                        sx={{ width: 100, height: 60, borderRadius: 1 }}
+                        sx={{
+                          width: { xs: 80, sm: 100 }, // Adjust width for smaller screens
+                          height: { xs: 50, sm: 60 },
+                          borderRadius: 1,
+                          objectFit: 'cover', // Ensure image fits nicely
+                        }}
                         image={item.curso.imagen}
                         alt={item.curso.titulo}
                       />
-                      <Box sx={{ flex: 1 }}>
-                        <Typography variant="subtitle1">{item.curso.titulo}</Typography>
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Typography
+                          variant="subtitle1"
+                          noWrap
+                          sx={{ maxWidth: '100%', fontWeight: 'bold' }} // Prevent overflow
+                        >
+                          {item.curso.titulo}
+                        </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          ${item.curso.precio} x {item.cantidad}
+                          ${item.curso.precio.toFixed(2)}
                         </Typography>
                       </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <IconButton 
-                          size="small"
-                          onClick={() => actualizarCantidad(item.curso.id, item.cantidad - 1)}
-                        >
-                          <RemoveIcon />
-                        </IconButton>
-                        <Typography>{item.cantidad}</Typography>
-                        <IconButton 
-                          size="small"
-                          onClick={() => actualizarCantidad(item.curso.id, item.cantidad + 1)}
-                        >
-                          <AddIcon />
-                        </IconButton>
-                        <IconButton 
-                          color="error"
-                          onClick={() => eliminarDelCarrito(item.curso.id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Box>
-                      <Typography variant="subtitle1" sx={{ minWidth: 80, textAlign: 'right' }}>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          minWidth: 80,
+                          textAlign: 'right',
+                          flex: '0 0 auto', // Prevent shrinking
+                          fontWeight: 'bold',
+                        }}
+                      >
                         ${(item.curso.precio * item.cantidad).toFixed(2)}
                       </Typography>
+                      <IconButton
+                        color="error"
+                        onClick={() => eliminarDelCarrito(item.curso.id)}
+                         // Add margin-left to move it closer to the price
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </Box>
                   ))}
                 </Stack>
 
+                {/* Divider y total */}
                 <Divider sx={{ my: 3 }} />
-                
-                <Box sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  mt: 3 
-                }}>
-                  <Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mt: 2,
+                    flexWrap: 'wrap', // Allow wrapping for smaller screens
+                  }}
+                >
+                  <Box sx={{ mb: { xs: 2, sm: 0 } }}>
                     <Typography variant="subtitle1" color="text.secondary">
-                      Total ({estado.itemsCarrito.length} {
-                        estado.itemsCarrito.length === 1 ? 'curso' : 'cursos'
-                      })
+                      Total ({estado.itemsCarrito.length}{' '}
+                      {estado.itemsCarrito.length === 1 ? 'curso' : 'cursos'})
                     </Typography>
                     <Typography variant="h4" color="primary.main" sx={{ fontWeight: 'bold' }}>
                       ${calcularTotal().toFixed(2)}
@@ -510,9 +520,9 @@ const AppCarrito: React.FC = () => {
                     variant="contained"
                     size="large"
                     startIcon={<ShoppingCart />}
-                    
                     onClick={realizarCompra}
                     disabled={estado.itemsCarrito.length === 0}
+                    sx={{ width: { xs: '100%', sm: 'auto' } }} // Full width on mobile
                   >
                     Realizar Compra
                   </Button>
