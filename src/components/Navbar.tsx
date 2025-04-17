@@ -44,32 +44,63 @@ const Navbar = () => {
 
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' }, // Stack items vertically on mobile
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: { xs: 1, sm: 0 },
+          width: '100%',
+        }}
+      >
         <Typography
-          variant="h6"
+          variant="h4" // Make the logo larger
           component="div"
-          sx={{ flexGrow: 1, cursor: 'pointer' }}
+          sx={{
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            fontWeight: 'bold',
+            mb: { xs: 1, sm: 0 }, // Add margin on mobile
+          }}
           onClick={() => navigate('/')}
         >
-          CodeCommunity
+          {'<>'}
         </Typography>
 
         {user ? (
-          <Box sx={{ display: 'center', alignItems: 'center' }}>
-            <Button color="inherit" onClick={() => navigate('/courses')}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: { xs: 'center', sm: 'flex-end' }, // Center items on mobile
+              gap: 2, // Add spacing between items
+              flexWrap: 'wrap',
+              width: '100%',
+            }}
+          >
+            <Button
+              color="inherit"
+              onClick={() => navigate('/courses')}
+              sx={{ display: { xs: 'inline-flex', sm: 'inline-flex' } }} // Ensure visibility on mobile
+            >
               Cursos
             </Button>
-            <Button color="inherit" onClick={() => navigate('/projects')}>
+            <Button
+              color="inherit"
+              onClick={() => navigate('/projects')}
+              sx={{ display: { xs: 'inline-flex', sm: 'inline-flex' } }} // Ensure visibility on mobile
+            >
               Proyectos
             </Button>
-            
+
             <NotificationBell />
 
             <IconButton
               size="large"
               onClick={handleMenu}
               color="inherit"
-              sx={{ ml: 2 }}
             >
               <Avatar
                 src={user.photoURL || undefined}
@@ -88,7 +119,16 @@ const Navbar = () => {
             </Menu>
           </Box>
         ) : (
-          <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: { xs: 'center', sm: 'flex-end' }, // Center items on mobile
+              gap: 2, // Add spacing between items
+              flexWrap: 'wrap',
+              width: '100%',
+            }}
+          >
             <Button color="inherit" onClick={() => navigate('/login')}>
               Iniciar Sesión
             </Button>
@@ -102,4 +142,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

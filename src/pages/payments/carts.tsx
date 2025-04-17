@@ -292,34 +292,92 @@ const AppCarrito: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Tabs de navegación CARRITO COMPRAS SUSCRIPCIONES Y METODO DE PAGO*/}
-      <Paper sx={{ mb: 4 }}>
-        <Tabs 
-          value={
-            seccionActiva === 'carrito' ? 0 : 
-            seccionActiva === 'compras' ? 1 : 
-            seccionActiva === 'suscripciones' ? 2 : 
-            3 // Add case for 'metodosPago'
-          }
-          onChange={(_, newValue) => {
-            setSeccionActiva(
-              newValue === 0 ? 'carrito' : 
-              newValue === 1 ? 'compras' : 
-              newValue === 2 ? 'suscripciones' : 
-              'metodosPago' // Handle 'metodosPago'
-            );
+      <Paper
+        sx={{
+          mb: 4,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderBottom: 1,
+          borderColor: 'divider',
+          backgroundColor: 'background.default',
+          boxShadow: shadows.sm,
+          p: { xs: 2, sm: 0 }, // Add padding for mobile
+        }}
+      >
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, // 2x2 grid on mobile, 4 columns on larger screens
+            gap: 2,
+            width: '100%',
           }}
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
         >
-          <Tab 
-            icon={<StyledBadge badgeContent={estado.itemsCarrito.length} color="primary">
-              <CartIcon />
-            </StyledBadge>} 
-            label="Carrito" 
-          />
-          <Tab icon={<HistoryIcon />} label="Mis Compras" />
-          <Tab icon={<SubscriptionsIcon />} label="Suscripciones" />
-          <Tab icon={<LockIcon />} label="Métodos de Pago" /> {/* Add new tab */}
-        </Tabs>
+          <Button
+            variant={seccionActiva === 'carrito' ? 'contained' : 'outlined'}
+            onClick={() => setSeccionActiva('carrito')}
+            startIcon={
+              <StyledBadge badgeContent={estado.itemsCarrito.length} color="primary">
+                <CartIcon />
+              </StyledBadge>
+            }
+            sx={{
+              textTransform: 'none',
+              fontWeight: 'bold',
+              justifyContent: 'flex-start',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            Carrito
+          </Button>
+          <Button
+            variant={seccionActiva === 'compras' ? 'contained' : 'outlined'}
+            onClick={() => setSeccionActiva('compras')}
+            startIcon={<HistoryIcon />}
+            sx={{
+              textTransform: 'none',
+              fontWeight: 'bold',
+              justifyContent: 'flex-start',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            Mis Compras
+          </Button>
+          <Button
+            variant={seccionActiva === 'suscripciones' ? 'contained' : 'outlined'}
+            onClick={() => setSeccionActiva('suscripciones')}
+            startIcon={<SubscriptionsIcon />}
+            sx={{
+              textTransform: 'none',
+              fontWeight: 'bold',
+              justifyContent: 'flex-start',
+              display: 'flex',
+              alignItems: 'center',
+              
+            }}
+          >
+            Suscripciones
+          </Button>
+          <Button
+            variant={seccionActiva === 'metodosPago' ? 'contained' : 'outlined'}
+            onClick={() => setSeccionActiva('metodosPago')}
+            startIcon={<LockIcon />}
+            sx={{
+              textTransform: 'none',
+              fontWeight: 'bold',
+              justifyContent: 'flex-start',
+              display: 'flex',
+              alignItems: 'center',
+              
+            }}
+          >
+            Métodos de Pago
+          </Button>
+        </Box>
       </Paper>
 
       {seccionActiva === 'carrito' && (

@@ -413,119 +413,108 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
 
   return (
     <NavbarRoot position="fixed">
-      <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 1, sm: 2, md: 3 } }}>
-        <NavContainer>
-          {/* Sección izquierda: Logo y menú móvil */}
-          <NavSection>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Logo variant="h6" noWrap>
-                <RouterLink to="/" style={{ display: 'flex', alignItems: 'center', color: 'inherit', textDecoration: 'none' }}>
-                  <CodeIcon fontSize="large" />
-                  <span style={{ whiteSpace: 'nowrap' }}>CodeCommunity</span>
-                </RouterLink>
-              </Logo>
-            </Stack>
-          </NavSection>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'row', sm: 'row' }, // Keep items in a row
+          alignItems: 'center',
+          px: { xs: 1, sm: 2, md: 3 },
+          width: '100%',
+        }}
+      >
+        {/* Left Section: Logo */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <Logo variant="h6" noWrap>
+            <RouterLink
+              to="/"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              <CodeIcon fontSize="large" />
+              <Typography
+                component="span"
+                sx={{
+                  whiteSpace: 'nowrap',
+                  display: { xs: 'none', md: 'inline' }, // Hide on mobile
+                }}
+              >
+                CodeCommunity
+              </Typography>
+            </RouterLink>
+          </Logo>
+        </Box>
 
-          {/* Sección central: Solo búsqueda */}
-          <NavSection sx={{ 
-            flex: 1, 
+        {/* Center Section: Search Bar */}
+        <Box
+          sx={{
+            flexGrow: 2,
             justifyContent: 'center',
-            display: { xs: 'none', md: 'flex' },
-            gap: 2
-          }}>
-            <SearchBar>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <form onSubmit={handleSearchSubmit}>
-                <StyledInputBase
-                  placeholder="Buscar..."
-                  inputProps={{ 'aria-label': 'search' }}
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-              </form>
-              {showResults && searchResults.length > 0 && (
-                <Paper
-                  sx={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    right: 0,
-                    mt: 1,
-                    zIndex: 1000,
-                    maxHeight: '300px',
-                    overflow: 'auto',
-                  }}
-                >
-                  <List>
-                    {searchResults.map((result, index) => (
-                      <ListItem
-                        key={index}
-                        component="div"
-                        onClick={() => {
-                          navigate(result.url);
-                          setSearchQuery('');
-                          setShowResults(false);
-                        }}
-                        sx={{ cursor: 'pointer' }}
-                      >
-                        <ListItemIcon>
-                          {result.type === 'curso' && <SchoolIcon />}
-                          {result.type === 'proyecto' && <CodeIcon />}
-                          {result.type === 'foro' && <ForumIcon />}
-                          {result.type === 'usuario' && <PersonIcon />}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={result.title}
-                          secondary={result.type.charAt(0).toUpperCase() + result.type.slice(1)}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Paper>
-              )}
-            </SearchBar>
-          </NavSection>
+            display: { xs: 'none', sm: 'flex'}, // Hide search bar on mobile
+            width: "auto",
+            marginLeft: { xs: 0, sm: 2 }, // Adjust margin for mobile
+          }}
+        >
+          <SearchBar>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <form onSubmit={handleSearchSubmit}>
+              <StyledInputBase
+                placeholder="Buscar..."
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+            </form>
+          </SearchBar>
+        </Box>
 
-          {/* Sección derecha: Menú hamburguesa, notificaciones y perfil */}
-          <NavSection>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <IconButton
-                onClick={handleMenuToggle}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <NotificationBell />
-              <NavIconButton
-                onClick={toggleTheme}
-                color="inherit"
-                aria-label="cambiar tema"
-              >
-                {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-              </NavIconButton>
-              <IconButton
-                size="large"
-                edge={isMobile ? 'end' : false}
-                aria-label="cuenta del usuario actual"
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-              >
-                {user?.photoURL ? (
-                  <Avatar 
-                    src={user.photoURL} 
-                    alt={user.displayName || 'Usuario'} 
-                    sx={{ width: 32, height: 32, border: `2px solid ${colors.primary[400]}` }}
-                  />
-                ) : (
-                  <AccountCircle />
-                )}
-              </IconButton>
-            </Stack>
-          </NavSection>
-        </NavContainer>
+        {/* Right Section: Menu, Notifications, and Profile */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+           
+            flexGrow: 1,
+            justifyContent: { xs: 'flex-end', sm: 'flex-end' }, // Align items to the right
+            marginLeft: "-50px",
+          }}
+        >
+          <IconButton onClick={handleMenuToggle} color="inherit">
+            <MenuIcon />
+          </IconButton>
+          <NotificationBell />
+          <NavIconButton onClick={toggleTheme} color="inherit" aria-label="cambiar tema">
+            {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+          </NavIconButton>
+          <IconButton
+            size="large"
+            edge="end"
+            aria-label="cuenta del usuario actual"
+            aria-haspopup="true"
+            onClick={handleProfileMenuOpen}
+          >
+            {user?.photoURL ? (
+              <Avatar
+                src={user.photoURL}
+                alt={user.displayName || 'Usuario'}
+                sx={{ width: 32, height: 32, border: `2px solid ${colors.primary[400]}` }}
+              />
+            ) : (
+              <AccountCircle />
+            )}
+          </IconButton>
+        </Box>
       </Toolbar>
 
       {/* Menú desplegable lateral */}
@@ -575,13 +564,12 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
               handleNavigate(item.path);
               setOpenMenu('none');
             }}
-            sx={{ 
+            sx={{
               py: 1.5,
               px: 2,
               gap: 2,
               '&:hover': {
-                backgroundColor: (theme) => 
-                  alpha(theme.palette.primary.main, 0.1),
+                backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
               },
             }}
           >
@@ -590,26 +578,6 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
           </MenuItem>
         ))}
         <Divider />
-        {/* <MenuItem
-          onClick={() => {
-            toggleTheme();
-            setOpenMenu('none');
-          }}
-          sx={{ 
-            py: 1.5,
-            px: 2,
-            gap: 2,
-            '&:hover': {
-              backgroundColor: (theme) => 
-                alpha(theme.palette.primary.main, 0.1),
-            },
-          }}
-        >
-          <ListItemIcon>
-            {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-          </ListItemIcon>
-          <Typography>{mode === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}</Typography>
-        </MenuItem> */}
       </Menu>
 
       {/* Menú de perfil */}
@@ -672,4 +640,4 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
   );
 };
 
-export default Navbar; 
+export default Navbar;
