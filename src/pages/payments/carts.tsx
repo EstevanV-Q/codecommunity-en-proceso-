@@ -368,6 +368,7 @@ const AppCarrito: React.FC = () => {
     csc: '', // Add the missing csc property
     cardNumber: '', // Add missing property
     expiryDate: '', // Add missing property
+    postalCode: '', // Add missing property
   });
 
   // Update the type for PayPal errors to include cardNumber and expiryDate
@@ -377,6 +378,7 @@ const AppCarrito: React.FC = () => {
     csc: '', // Add the missing csc property
     cardNumber: '', // Add missing property
     expiryDate: '', // Add missing property
+    postalCode: '', // Add missing property
   });
 
   const validatePaypalField = (name: string, value: string) => {
@@ -467,6 +469,7 @@ const AppCarrito: React.FC = () => {
       csc: '', // Reset csc
       cardNumber: '', // Reset cardNumber
       expiryDate: '', // Reset expiryDate
+      postalCode: '', // Reset postalCode
     });
     setSelectedCountry('Mexico'); // Reset to default country
   };
@@ -1247,23 +1250,28 @@ const AppCarrito: React.FC = () => {
                       helperText="Introduce tu estado"
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                    <Grid item xs={12}>
                     <TextField
                       fullWidth
                       label="Código postal"
                       name="postalCode"
                       required
                       helperText="Formato: 12345"
-                      inputProps={{ maxLength: 5 }}
-                      onChange={(e) => {
-                        const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
-                        setPaypalForm((prevForm) => ({
-                          ...prevForm,
-                          postalCode: numericValue,
-                        }));
+                      inputProps={{
+                      maxLength: 5,
+                      inputMode: 'numeric', // Ensure numeric input
+                      pattern: '[0-9]*', // Restrict to numbers only
                       }}
+                      onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      setPaypalForm((prevForm) => ({
+                        ...prevForm,
+                        postalCode: numericValue,
+                      }));
+                      }}
+                      value={paypalForm.postalCode || ''} // Bind the value to the form state
                     />
-                  </Grid>
+                    </Grid>
                 </Grid>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
                   Te enviaremos un mensaje de texto con un código de seguridad para confirmar este número.
@@ -1291,6 +1299,9 @@ const AppCarrito: React.FC = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
+                  <Typography variant="h6" gutterBottom>
+                  Informacion de la tajeta
+                </Typography>
                     <TextField
                       fullWidth
                       label="Número de Tarjeta"
@@ -1311,7 +1322,82 @@ const AppCarrito: React.FC = () => {
                       value={paypalForm.cardNumber} // Bind the value to the form state
                     />
                   </Grid>
+                  <Grid item xs={12} md={3}>
+                  <TextField
+                    fullWidth
+                    label="Fecha de Expiración"
+                    name="expiryDate"
+                    value={form.expiryDate}
+                    onChange={handleInputChange}
+                    placeholder="MM/YY"
+                    error={!!errors.expiryDate}
+                    helperText={errors.expiryDate || 'Formato: MM/YY'}
+                    required
+                  />
                 </Grid>
+                <Grid item xs={12} md={3}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <TextField
+                      fullWidth
+                      label="CVC"
+                      name="cvv"
+                      value={form.cvv}
+                      onChange={handleInputChange}
+                      type="password"
+                      error={!!errors.cvv}
+                      helperText={errors.cvv ||""}
+                      required
+                    />
+                    
+                  </Box>
+                </Grid>
+                </Grid>
+                <Typography variant="h6" mt={3}gutterBottom>
+                  País o Región
+                </Typography>
+                <Grid item xs={10} mt={2}>
+                    <TextField
+                    
+                      fullWidth
+                      label="País/Región"
+                      name="country"
+                      value={selectedCountry}
+                      onChange={(e) => handleCountryChange(e.target.value as 'Mexico' | 'UnitedStates' | 'Canada' | 'Brazil' | 'Argentina' | 'Colombia' | 'Chile' | 'Peru' | 'Venezuela' | 'CostaRica' | 'Panama' | 'Uruguay')}
+                      select
+                      SelectProps={{
+                        native: true,
+                      }}
+                      required
+                    >
+                      {Object.keys(countryCodes).map((code) => (
+                        <option key={code} value={code}>
+                          {code}
+                        </option>
+                      ))}
+                    </TextField>
+                  </Grid>
+                    <Grid item xs={12} mt={2}>
+                    <TextField
+                      fullWidth
+                      label="Código postal"
+                      name="postalCode"
+                      required
+                      helperText="Formato: 12345"
+                      inputProps={{
+                      maxLength: 5,
+                      inputMode: 'numeric', // Ensure numeric input
+                      pattern: '[0-9]*', // Restrict to numbers only
+                      }}
+                      onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      setPaypalForm((prevForm) => ({
+                        ...prevForm,
+                        postalCode: numericValue,
+                      }));
+                      }}
+                      value={paypalForm.postalCode || ''} // Bind the value to the form state
+                    />
+                    </Grid>
               </Box>
             )}
           </Paper>
