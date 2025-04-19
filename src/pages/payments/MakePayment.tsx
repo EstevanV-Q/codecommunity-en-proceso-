@@ -60,14 +60,63 @@ const MakePayment = () => {
   const [form, setForm] = useState<PaymentForm>(initialForm);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [errors, setErrors] = useState({
+    expiryDate: '',
+    cvv: '',
+  });
+
+  const validateField = (name: string, value: string) => {
+    if (name === 'expiryDate') {
+      const isValid = /^\d{2}\/\d{2}$/.test(value); // MM/YY format
+      setErrors(prev => ({
+        ...prev,
+        expiryDate: isValid ? '' : 'El formato debe ser MM/YY',
+      }));
+    }
+
+    if (name === 'cvv') {
+      const isValid = /^\d{3,4}$/.test(value); // 3 or 4 digits
+      setErrors(prev => ({
+        ...prev,
+        cvv: isValid ? '' : 'El CVV debe contener 3 o 4 dígitos',
+      }));
+    }
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
+    // Restrict input for specific fields
+    if (name === 'expiryDate') {
+      const numericValue = value.replace(/[^0-9/]/g, ''); // Allow only numbers and "/"
+      if (numericValue.length <= 5) {
+        validateField(name, numericValue);
+        setForm(prev => ({
+          ...prev,
+          [name]: numericValue,
+        }));
+      }
+      return;
+    }
+
+    if (name === 'cvv') {
+      const numericValue = value.replace(/[^0-9]/g, ''); // Allow only numbers
+      if (numericValue.length <= 4) {
+        validateField(name, numericValue);
+        setForm(prev => ({
+          ...prev,
+          [name]: numericValue,
+        }));
+      }
+      return;
+    }
+
+    // For other fields
     setForm(prev => ({
       ...prev,
-      [name]: name === 'amount' ? Number(value) : value
+      [name]: name === 'amount' ? Number(value) : value,
     }));
   };
 
@@ -181,12 +230,19 @@ const MakePayment = () => {
               <>
                 <Grid item xs={12}>
                   <TextField
-                    fullWidth
-                    label="Número de Tarjeta"
-                    name="cardNumber"
-                    value={form.cardNumber}
-                    onChange={handleInputChange}
-                    required
+                  fullWidth
+                  label="Número de Tarjeta"
+                  name="cardNumber"
+                  value={form.cardNumber}
+                  onChange={(e) => {
+                    const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                    setForm(prev => ({
+                    ...prev,
+                    cardNumber: numericValue,
+                    }));
+                  }}
+                  inputProps={{ maxLength: 16 }} // Optional: Limit to 16 digits
+                  required
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -207,6 +263,8 @@ const MakePayment = () => {
                     value={form.expiryDate}
                     onChange={handleInputChange}
                     placeholder="MM/YY"
+                    error={!!errors.expiryDate}
+                    helperText={errors.expiryDate}
                     required
                   />
                 </Grid>
@@ -218,6 +276,8 @@ const MakePayment = () => {
                     value={form.cvv}
                     onChange={handleInputChange}
                     type="password"
+                    error={!!errors.cvv}
+                    helperText={errors.cvv}
                     required
                   />
                 </Grid>
