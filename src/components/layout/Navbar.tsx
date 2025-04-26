@@ -145,11 +145,12 @@ const Logo = styled(Typography)(({ theme }) => ({
   color: theme.palette.mode === 'light' ? colors.neutral.white : theme.palette.text.primary,
   display: 'flex',
   alignItems: 'center',
-  minWidth: '180px',
+  minWidth: '120px',
   zIndex: theme.zIndex.drawer + 1,
-  marginRight: theme.spacing(3),
+  marginRight: theme.spacing(40),
   '& svg': {
     marginRight: theme.spacing(1),
+    fontSize: '1.5rem',
   },
   '& a': {
     display: 'flex',
@@ -157,6 +158,7 @@ const Logo = styled(Typography)(({ theme }) => ({
     color: 'inherit',
     textDecoration: 'none',
     whiteSpace: 'nowrap',
+    fontSize: '1.1rem',
   },
 }));
 
@@ -177,7 +179,7 @@ const NavSection = styled(Box)(({ theme }) => ({
   position: 'relative',
   zIndex: theme.zIndex.drawer + 1,
   '&:first-of-type': {
-    minWidth: 220, // Asegurar espacio suficiente para el logo
+    minWidth: 160,
   },
 }));
 
@@ -440,12 +442,13 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
                 textDecoration: 'none',
               }}
             >
-              <CodeIcon fontSize="large" />
+              <CodeIcon sx={{ fontSize: '1.5rem' }} />
               <Typography
                 component="span"
                 sx={{
                   whiteSpace: 'nowrap',
-                  display: { xs: 'none', md: 'inline' }, // Hide on mobile
+                  display: { xs: 'none', md: 'inline' },
+                  fontSize: '1.1rem',
                 }}
               >
                 CodeCommunity

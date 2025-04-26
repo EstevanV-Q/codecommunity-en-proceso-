@@ -1,5 +1,15 @@
 import { AdminRole, TechnicalRole, TeachingRole, LearningRole, MentoringRole, UserRole } from '../types/roles';
 
+export interface MentorPermissions {
+  'courses.create'?: boolean;
+  'courses.edit'?: boolean;
+  'courses.manage'?: boolean;
+  'content.create'?: boolean;
+  'content.edit'?: boolean;
+  'content.moderate'?: boolean;
+  [key: string]: boolean | undefined;
+}
+
 export interface MockUser {
   id: string;
   email: string;
@@ -54,6 +64,7 @@ export interface MockUser {
     name: string;
     email: string;
   }>;
+  permissions?: MentorPermissions;
 }
 
 export const mockUsers: MockUser[] = [

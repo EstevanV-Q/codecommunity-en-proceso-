@@ -121,6 +121,19 @@ const DashboardCards = () => {
         total: 1250,
         active: 820
       }
+    },
+    {
+      id: 'Mentor2',
+      title: 'Usuarios',
+      description: 'Gestiona los usuarios de la plataforma, sus roles y permisos.',
+      color: '#EC407A',
+      icon: <GroupIcon fontSize="large" />,
+      path: '/admin/Mentor2',
+      action: 'Gestionar usuarios',
+      stats: {
+        total: 1250,
+        active: 820
+      }
     }
   ];
 
@@ -152,6 +165,9 @@ const DashboardCards = () => {
         break;
       case 'users':
         navigate('/admin/users');
+        break;
+      case 'Mentor2':
+        navigate('/admin/tutors')
         break;
       default:
         navigate('/admin');

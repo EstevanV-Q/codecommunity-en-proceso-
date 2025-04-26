@@ -275,11 +275,82 @@ const AppCarrito: React.FC = () => {
     cvv: ''
   });
 
+  const [errors, setErrors] = useState({
+    cardNumber: '',
+    expiryDate: '',
+    cvv: ''
+  });
+
+  const validateField = (name: string, value: string) => {
+    if (name === 'expiryDate') {
+      const isValid = /^\d{2}\/\d{2}$/.test(value); // MM/YY format
+      setErrors(prev => ({
+        ...prev,
+        expiryDate: isValid ? '' : 'El formato debe ser MM/YY',
+      }));
+    }
+
+    if (name === 'cvv') {
+      const isValid = /^\d{3,4}$/.test(value); // 3 or 4 digits
+      setErrors(prev => ({
+        ...prev,
+        cvv: isValid ? '' : 'El CVV debe contener 3 o 4 dígitos',
+      }));
+    }
+
+    if (name === 'cardNumber') {
+      const isValid = /^\d{16}$/.test(value); // 16 digits for card number
+      setErrors(prev => ({
+        ...prev,
+        cardNumber: isValid ? '' : 'El número de tarjeta debe contener 16 dígitos',
+      }));
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // Restrict input for specific fields
+    if (name === 'expiryDate') {
+      const numericValue = value.replace(/[^0-9/]/g, ''); // Allow only numbers and "/"
+      if (numericValue.length <= 5) {
+        validateField(name, numericValue);
+        setForm(prevForm => ({
+          ...prevForm,
+          [name]: numericValue,
+        }));
+      }
+      return;
+    }
+
+    if (name === 'cvv') {
+      const numericValue = value.replace(/[^0-9]/g, ''); // Allow only numbers
+      if (numericValue.length <= 4) {
+        validateField(name, numericValue);
+        setForm(prevForm => ({
+          ...prevForm,
+          [name]: numericValue,
+        }));
+      }
+      return;
+    }
+
+    if (name === 'cardNumber') {
+      const numericValue = value.replace(/[^0-9]/g, ''); // Allow only numbers
+      if (numericValue.length <= 16) {
+        validateField(name, numericValue);
+        setForm(prevForm => ({
+          ...prevForm,
+          [name]: numericValue,
+        }));
+      }
+      return;
+    }
+
+    // For other fields
     setForm(prevForm => ({
       ...prevForm,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -287,6 +358,120 @@ const AppCarrito: React.FC = () => {
 
   const handlePaymentMethodChange = (method: 'credit_card' | 'paypal' | 'stripe') => {
     setSelectedPaymentMethod(method);
+  };
+
+  const [paypalForm, setPaypalForm] = useState({
+    country: '',
+    email: '',
+    type: '',
+    phone: '',
+    csc: '', // Add the missing csc property
+    cardNumber: '', // Add missing property
+    expiryDate: '', // Add missing property
+    postalCode: '', // Add missing property
+  });
+
+  // Update the type for PayPal errors to include cardNumber and expiryDate
+  const [paypalErrors, setPaypalErrors] = useState({
+    email: '',
+    phone: '',
+    csc: '', // Add the missing csc property
+    cardNumber: '', // Add missing property
+    expiryDate: '', // Add missing property
+    postalCode: '', // Add missing property
+  });
+
+  const validatePaypalField = (name: string, value: string) => {
+    if (name === 'email') {
+      const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); // Basic email format
+      setPaypalErrors(prev => ({
+        ...prev,
+        email: isValid ? '' : 'El correo electrónico no es válido',
+      }));
+    }
+
+    if (name === 'phone') {
+      const isValid = /^\+\d{1,15}$/.test(value); // International phone format
+      setPaypalErrors(prev => ({
+        ...prev,
+        phone: isValid ? '' : 'El número de teléfono debe incluir el código de país (e.g., +52)',
+      }));
+    }
+  };
+
+  const handlePaypalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Validate the field
+    validatePaypalField(name, value);
+
+    setPaypalForm(prevForm => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  const countryCodes = {
+    Mexico: '+52', // México
+    UnitedStates: '+1',  // Estados Unidos
+    Canada: '+1',  // Canadá
+    Brazil: '+55', // Brasil
+    Argentina: '+54', // Argentina
+    Colombia: '+57', // Colombia
+    Chile: '+56', // Chile
+    Peru: '+51', // Perú
+    Venezuela: '+58', // Venezuela
+    CostaRica: '+506', // Costa Rica
+    Panama: '+507', // Panamá
+    Uruguay: '+598', // Uruguay
+  };
+  
+  const [selectedCountry, setSelectedCountry] = useState<'Mexico' | 'UnitedStates' | 'Canada' | 'Brazil' | 'Argentina' | 'Colombia' | 'Chile' | 'Peru' | 'Venezuela' | 'CostaRica' | 'Panama' | 'Uruguay'>('Mexico'); // Default to México
+  
+  const handleCountryChange = (country: 'Mexico' | 'UnitedStates' | 'Canada' | 'Brazil' | 'Argentina' | 'Colombia' | 'Chile' | 'Peru' | 'Venezuela' | 'CostaRica' | 'Panama' | 'Uruguay') => {
+    setSelectedCountry(country);
+    setPaypalForm(prevForm => ({
+      ...prevForm,
+      phone: countryCodes[country], 
+    }));
+  };
+
+  const handlePaypalPayment = () => {
+    // Validate required fields
+    const requiredFields = ['country', 'email', 'type', 'phone', 'csc']; // Include csc in validation
+    let hasErrors = false;
+  
+    requiredFields.forEach((field) => {
+      if (!paypalForm[field as keyof typeof paypalForm]) {
+        setPaypalErrors((prev) => ({
+          ...prev,
+          [field]: `El campo ${field} es obligatorio`,
+        }));
+        hasErrors = true;
+      }
+    });
+  
+    if (hasErrors) {
+      alert('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+  
+    // Simulate PayPal payment process
+    alert('Procesando pago con PayPal...');
+    console.log('PayPal Payment Details:', paypalForm);
+  
+    // Reset form after successful payment
+    setPaypalForm({
+      country: '',
+      email: '',
+      type: '',
+      phone: '',
+      csc: '', // Reset csc
+      cardNumber: '', // Reset cardNumber
+      expiryDate: '', // Reset expiryDate
+      postalCode: '', // Reset postalCode
+    });
+    setSelectedCountry('Mexico'); // Reset to default country
   };
 
   return (
@@ -802,12 +987,13 @@ const AppCarrito: React.FC = () => {
               >
                 Tarjeta de Crédito
               </Button>
-              <Button
-                variant={selectedPaymentMethod === 'paypal' ? 'contained' : 'outlined'}
-                onClick={() => handlePaymentMethodChange('paypal')}
-              >
-                PayPal
-              </Button>
+                <Button
+                  variant={selectedPaymentMethod === 'paypal' ? 'contained' : 'outlined'}
+                  onClick={() => handlePaymentMethodChange('paypal')}
+                  
+                >
+                  Paypal
+                </Button>
               <Button
                 variant={selectedPaymentMethod === 'stripe' ? 'contained' : 'outlined'}
                 onClick={() => handlePaymentMethodChange('stripe')}
@@ -823,9 +1009,20 @@ const AppCarrito: React.FC = () => {
                     fullWidth
                     label="Número de Tarjeta"
                     name="cardNumber"
-                    value={form.cardNumber}
-                    onChange={handleInputChange}
                     required
+                    inputProps={{
+                      maxLength: 19,
+                      inputMode: 'numeric', // Ensure numeric input
+                      pattern: '[0-9]*', // Restrict to numbers only
+                    }}
+                    onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      setPaypalForm((prevForm) => ({
+                        ...prevForm,
+                        cardNumber: numericValue, // Update the correct field
+                      }));
+                    }}
+                    value={paypalForm.cardNumber} // Bind the value to the form state
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -846,33 +1043,362 @@ const AppCarrito: React.FC = () => {
                     value={form.expiryDate}
                     onChange={handleInputChange}
                     placeholder="MM/YY"
+                    error={!!errors.expiryDate}
+                    helperText={errors.expiryDate || 'Formato: MM/YY'}
                     required
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
-                  <TextField
-                    fullWidth
-                    label="CVV"
-                    name="cvv"
-                    value={form.cvv}
-                    onChange={handleInputChange}
-                    type="password"
-                    required
-                  />
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <TextField
+                      fullWidth
+                      label="CVV"
+                      name="cvv"
+                      value={form.cvv}
+                      onChange={handleInputChange}
+                      type="password"
+                      error={!!errors.cvv}
+                      helperText={errors.cvv ||""}
+                      required
+                    />
+                    
+                  </Box>
                 </Grid>
               </Grid>
             )}
 
             {selectedPaymentMethod === 'paypal' && (
-              <Typography variant="body1">
-                Serás redirigido a PayPal para completar tu pago.
-              </Typography>
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Completa tu pago con PayPal
+                </Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="País/Región"
+                      name="country"
+                      value={selectedCountry}
+                      onChange={(e) => handleCountryChange(e.target.value as 'Mexico' | 'UnitedStates' | 'Canada' | 'Brazil' | 'Argentina' | 'Colombia' | 'Chile' | 'Peru' | 'Venezuela' | 'CostaRica' | 'Panama' | 'Uruguay')}
+                      select
+                      SelectProps={{
+                        native: true,
+                      }}
+                      required
+                    >
+                      {Object.keys(countryCodes).map((code) => (
+                        <option key={code} value={code}>
+                          {code}
+                        </option>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Correo Electrónico"
+                      name="email"
+                      value={paypalForm.email}
+                      onChange={handlePaypalInputChange}
+                      error={!!paypalErrors.email}
+                      helperText={paypalErrors.email || 'Formato: usuario@dominio.com'}
+                      required
+                    />
+                  </Grid>
+                    <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="No. de la Tarjeta"
+                      name="cardNumber"
+                      required
+                      inputProps={{
+                      maxLength: 19,
+                      inputMode: 'numeric', // Ensure numeric input
+                      pattern: '[0-9]*', // Restrict to numbers only
+                      }}
+                      onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      setPaypalForm((prevForm) => ({
+                        ...prevForm,
+                        cardNumber: numericValue, // Update the correct field
+                      }));
+                      }}
+                      value={paypalForm.cardNumber} // Bind the value to the form state
+                    />
+                    </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Fecha de Vencimiento"
+                      name="expiryDate"
+                      required
+                      inputProps={{
+                        maxLength: 5,
+                        inputMode: 'numeric', // Ensure numeric input
+                        pattern: '[0-9/]*', // Restrict to numbers and "/"
+                      }}
+                      onChange={(e) => {
+                        const numericValue = e.target.value.replace(/[^0-9/]/g, ''); // Allow only numbers and "/"
+                        setPaypalForm((prevForm) => ({
+                          ...prevForm,
+                          expiryDate: numericValue, // Update the correct field
+                        }));
+                      }}
+                      value={paypalForm.expiryDate} // Bind the value to the form state
+                    />
+                  </Grid>
+                    <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="CSC"
+                      required
+                      inputProps={{
+                      maxLength: 4,
+                      inputMode: 'numeric', // Ensure numeric input
+                      pattern: '[0-9]*', // Restrict to numbers only
+                      }}
+                      onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      setPaypalForm((prevForm) => ({
+                        ...prevForm,
+                        csc: numericValue, // Update the correct field
+                      }));
+                      }}
+                      value={paypalForm.csc || ''} // Bind the value to the form state
+                    />
+                    </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <TextField
+                        fullWidth
+                        label="Número de Teléfono"
+                        name="phone"
+                        value={paypalForm.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')} // Format as XXX-XXX-XXXX
+                        onChange={(e) => {
+                          const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                          setPaypalForm((prevForm) => ({
+                            ...prevForm,
+                            phone: numericValue,
+                          }));
+                        }}
+                        error={!!paypalErrors.phone}
+                        helperText={paypalErrors.phone || 'Formato: 123-456-7890'}
+                        placeholder="Ejemplo: 123-456-7890"
+                        required
+                      />
+                      
+                    </Box>
+                  </Grid>
+
+                  {/* Address Fields */}
+                  <Grid item xs={12}>
+                    <Typography variant="h6" gutterBottom>
+                      Dirección de la tarjeta
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Nombres"
+                      name="firstName"
+                      required
+                      helperText="Introduce tu(s) nombre(s)"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Apellidos"
+                      name="lastName"
+                      required
+                      helperText="Introduce tu(s) apellido(s)"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Dirección"
+                      name="address"
+                      required
+                      helperText="Introduce tu dirección completa"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Colonia"
+                      name="colony"
+                      required
+                      helperText="Introduce tu colonia"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Ciudad"
+                      name="city"
+                      required
+                      helperText="Introduce tu ciudad"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Estado"
+                      name="state"
+                      required
+                      helperText="Introduce tu estado"
+                    />
+                  </Grid>
+                    <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Código postal"
+                      name="postalCode"
+                      required
+                      helperText="Formato: 12345"
+                      inputProps={{
+                      maxLength: 5,
+                      inputMode: 'numeric', // Ensure numeric input
+                      pattern: '[0-9]*', // Restrict to numbers only
+                      }}
+                      onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      setPaypalForm((prevForm) => ({
+                        ...prevForm,
+                        postalCode: numericValue,
+                      }));
+                      }}
+                      value={paypalForm.postalCode || ''} // Bind the value to the form state
+                    />
+                    </Grid>
+                </Grid>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                  Te enviaremos un mensaje de texto con un código de seguridad para confirmar este número.
+                </Typography>
+                
+              </Box>
             )}
 
             {selectedPaymentMethod === 'stripe' && (
-              <Typography variant="body1">
-                Serás redirigido a Stripe para completar tu pago.
-              </Typography>
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Completa tu pago con Stripe
+                </Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Correo Electrónico"
+                      name="email"
+                      value={paypalForm.email}
+                      onChange={handlePaypalInputChange}
+                      error={!!paypalErrors.email}
+                      helperText={paypalErrors.email || ''}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                  <Typography variant="h6" gutterBottom>
+                  Informacion de la tajeta
+                </Typography>
+                    <TextField
+                      fullWidth
+                      label="Número de Tarjeta"
+                      name="cardNumber"
+                      required
+                      inputProps={{
+                        maxLength: 19,
+                        inputMode: 'numeric', // Ensure numeric input
+                        pattern: '[0-9]*', // Restrict to numbers only
+                      }}
+                      onChange={(e) => {
+                        const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                        setPaypalForm((prevForm) => ({
+                          ...prevForm,
+                          cardNumber: numericValue, // Update the correct field
+                        }));
+                      }}
+                      value={paypalForm.cardNumber} // Bind the value to the form state
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={3}>
+                  <TextField
+                    fullWidth
+                    label="Fecha de Expiración"
+                    name="expiryDate"
+                    value={form.expiryDate}
+                    onChange={handleInputChange}
+                    placeholder="MM/YY"
+                    error={!!errors.expiryDate}
+                    helperText={errors.expiryDate || 'Formato: MM/YY'}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <TextField
+                      fullWidth
+                      label="CVC"
+                      name="cvv"
+                      value={form.cvv}
+                      onChange={handleInputChange}
+                      type="password"
+                      error={!!errors.cvv}
+                      helperText={errors.cvv ||""}
+                      required
+                    />
+                    
+                  </Box>
+                </Grid>
+                </Grid>
+                <Typography variant="h6" mt={3}gutterBottom>
+                  País o Región
+                </Typography>
+                <Grid item xs={10} mt={2}>
+                    <TextField
+                    
+                      fullWidth
+                      label="País/Región"
+                      name="country"
+                      value={selectedCountry}
+                      onChange={(e) => handleCountryChange(e.target.value as 'Mexico' | 'UnitedStates' | 'Canada' | 'Brazil' | 'Argentina' | 'Colombia' | 'Chile' | 'Peru' | 'Venezuela' | 'CostaRica' | 'Panama' | 'Uruguay')}
+                      select
+                      SelectProps={{
+                        native: true,
+                      }}
+                      required
+                    >
+                      {Object.keys(countryCodes).map((code) => (
+                        <option key={code} value={code}>
+                          {code}
+                        </option>
+                      ))}
+                    </TextField>
+                  </Grid>
+                    <Grid item xs={12} mt={2}>
+                    <TextField
+                      fullWidth
+                      label="Código postal"
+                      name="postalCode"
+                      required
+                      helperText="Formato: 12345"
+                      inputProps={{
+                      maxLength: 5,
+                      inputMode: 'numeric', // Ensure numeric input
+                      pattern: '[0-9]*', // Restrict to numbers only
+                      }}
+                      onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      setPaypalForm((prevForm) => ({
+                        ...prevForm,
+                        postalCode: numericValue,
+                      }));
+                      }}
+                      value={paypalForm.postalCode || ''} // Bind the value to the form state
+                    />
+                    </Grid>
+              </Box>
             )}
           </Paper>
         </Box>

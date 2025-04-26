@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApplication1</name>
+    </assembly>
+    <members>
+        <member name="T:WebApplication1.Controllers.AuthController">
+            <summary>
+            Controller for handling authentication operations
+            </summary>
+        </member>
+        <member name="M:WebApplication1.Controllers.AuthController.Register(WebApplication1.Models.RegisterRequest)">
+            <summary>
+            Register a new user
+            </summary>
+            <param name="request">User registration details</param>
+            <returns>Authentication response with JWT token</returns>
+            <response code="200">Returns the authentication response</response>
+            <response code="400">If the request is invalid or email already exists</response>
+        </member>
+        <member name="M:WebApplication1.Controllers.AuthController.Login(WebApplication1.Models.LoginRequest)">
+            <summary>
+            Login a user
+            </summary>
+            <param name="request">User login credentials</param>
+            <returns>Authentication response with JWT token</returns>
+            <response code="200">Returns the authentication response</response>
+            <response code="401">If the credentials are invalid</response>
+        </member>
+        <member name="M:WebApplication1.Controllers.AuthController.ForgotPassword(WebApplication1.Models.ForgotPasswordRequest)">
+            <summary>
+            Request a password reset
+            </summary>
+            <param name="request">Email address for password reset</param>
+            <returns>Success message</returns>
+            <response code="200">If the reset email was sent successfully</response>
+            <response code="400">If the request is invalid</response>
+        </member>
+        <member name="M:WebApplication1.Controllers.AuthController.ResetPassword(WebApplication1.Models.ResetPasswordRequest)">
+            <summary>
+            Reset password using token
+            </summary>
+            <param name="request">Password reset details</param>
+            <returns>Success message</returns>
+            <response code="200">If the password was reset successfully</response>
+            <response code="400">If the token is invalid or expired</response>
+        </member>
+        <member name="M:WebApplication1.Controllers.AuthController.ConfirmEmail(System.String)">
+            <summary>
+            Confirm email address
+            </summary>
+            <param name="token">Email confirmation token</param>
+            <returns>Success message</returns>
+            <response code="200">If the email was confirmed successfully</response>
+            <response code="400">If the token is invalid</response>
+        </member>
+        <member name="M:WebApplication1.Controllers.AuthController.ChangePassword(WebApplication1.Models.ChangePasswordRequest)">
+            <summary>
+            Change user password
+            </summary>
+            <param name="request">Password change details</param>
+            <returns>Success message</returns>
+            <response code="200">If the password was changed successfully</response>
+            <response code="400">If the current password is incorrect</response>
+            <response code="401">If the user is not authenticated</response>
+        </member>
+        <member name="M:WebApplication1.Controllers.UserController.GetProfile">
+            <summary>
+            Get the current user's profile
+            </summary>
+            <returns>User profile information</returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.UserController.UpdateProfile(WebApplication1.Models.UpdateUserProfileDto)">
+            <summary>
+            Update the current user's profile
+            </summary>
+            <param name="profileDto">Updated profile information</param>
+            <returns>Updated user profile</returns>
+        </member>
+        <member name="T:WebApplication1.Migrations.AddUserProfile">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddUserProfile.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddUserProfile.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddUserProfile.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

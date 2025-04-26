@@ -77,6 +77,11 @@ import MakePayment from './pages/payments/MakePayment';
 import Cart from './pages/payments/carts';
 import Mentors from './pages/admin/MentorManagement';
 import Donations from './pages/payments/Donations';
+import MentorCoursesDashboard from './components/mentor/MentorCoursesDashboard';
+import { MentorCourseForm, MentorCourseDetail } from './pages/mentor';
+import Monitoring from 'components/dashboards/technical/TechnicalDashboard';
+import FounderDashboard from './components/dashboards/founder/FounderDashboard';
+import TeacherDashboard from './components/dashboards/teacher/TeacherDashboard';
 
 const LoadingScreen = () => (
   <Box
@@ -137,6 +142,42 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <>{children}</>;
 };
 
+// Nuevo componente para restringir rutas por rol para el dashboard de profesor
+const TeacherRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, loading, user } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // Verificar si el usuario tiene rol de profesor
+  if (!['professor', 'instructor', 'teachingAssistant'].includes(user?.role || '')) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+// Nuevo componente para restringir rutas por rol
+const RestrictedRoute: React.FC<{
+  children: React.ReactNode;
+  allowedRoles: string[];
+  fallbackPath: string;
+}> = ({ children, allowedRoles, fallbackPath }) => {
+  const { user } = useAuth();
+  
+  if (!user || !allowedRoles.includes(user.role)) {
+    return <Navigate to={fallbackPath} replace />;
+  }
+
+  return <>{children}</>;
+};
+
 const AppRoutes = () => {
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -170,7 +211,7 @@ const AppRoutes = () => {
 
         {/* Rutas protegidas */}
         <Route path="/user/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/user/profile/setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
+        {/* <Route path="/user/profile/setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} /> */}
         <Route path="/editor" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
         <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
         <Route path="/courses/:courseId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
@@ -200,6 +241,11 @@ const AppRoutes = () => {
         <Route path="/admin/courses/new" element={<AdminRoute><CourseManagement mode="create" /></AdminRoute>} />
         <Route path="/admin/tutors" element={<AdminRoute><TutorManagement /></AdminRoute>} />
         <Route path="/admin/mentors" element={<AdminRoute><Mentors /></AdminRoute>} />
+        <Route path="/admin/monitoring" element={<AdminRoute><Monitoring /></AdminRoute>} />
+        <Route path="/admin/Founder" element={<AdminRoute><FounderDashboard /></AdminRoute>} />
+
+        {/* Rutas para el dashboard de profesor */}
+        <Route path="/teacher/Maestro" element={<TeacherRoute><TeacherDashboard /></TeacherRoute>} />
 
         {/* Ruta para el salón de clases en vivo */}
         <Route path="/live-classroom/:courseId" element={<ProtectedRoute><LiveClassroom /></ProtectedRoute>} />
@@ -208,6 +254,45 @@ const AppRoutes = () => {
         <Route path="/forum" element={<ProtectedRoute><Forum /></ProtectedRoute>} />
         <Route path="/forum/thread/:id" element={<ProtectedRoute><ForumThread /></ProtectedRoute>} />
         <Route path="/forum/new" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+
+        {/* Rutas específicas para mentores */}
+        <Route 
+          path="/mentor/courses" 
+          element={
+            <ProtectedRoute>
+              <MentorCoursesDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/mentor/courses/new" 
+          element={
+            <ProtectedRoute>
+              <MentorCourseForm />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/mentor/courses/:courseId" 
+          element={
+            <ProtectedRoute>
+              <MentorCourseDetail />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Remover acceso a /help para mentores */}
+        <Route 
+          path="/help" 
+          element={
+            <RestrictedRoute 
+              allowedRoles={['admin', 'founder', 'owner', 'cto']}
+              fallbackPath="/dashboard"
+            >
+              <Help />
+            </RestrictedRoute>
+          } 
+        />
 
         {/* Ruta por defecto - Redirige a la raíz */}
         <Route path="*" element={<Navigate to="/" replace />} />

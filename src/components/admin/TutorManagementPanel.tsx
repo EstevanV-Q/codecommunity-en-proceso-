@@ -23,15 +23,65 @@ import {
   Select,
   MenuItem,
   Grid,
+  Tabs,
+  Tab,
+  Switch,
+  FormControlLabel,
+  Alert,
 } from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Add as AddIcon,
   School as SchoolIcon,
+  Security as SecurityIcon,
 } from '@mui/icons-material';
-import { MockUser, mockUsers } from '../../mocks/users';
+import { MockUser, mockUsers, MentorPermissions } from '../../mocks/users';
 import type { AdminRole } from '../../types/roles';
+
+const mentorPermissions: Array<{
+  id: keyof MentorPermissions;
+  label: string;
+  description: string;
+  category: string;
+}> = [
+  {
+    id: 'courses.create',
+    label: 'Crear Cursos',
+    description: 'Permite crear nuevos cursos',
+    category: 'Cursos'
+  },
+  {
+    id: 'courses.edit',
+    label: 'Editar Cursos',
+    description: 'Permite modificar cursos existentes',
+    category: 'Cursos'
+  },
+  {
+    id: 'courses.manage',
+    label: 'Gestionar Cursos',
+    description: 'Permite gestionar todos los aspectos de los cursos',
+    category: 'Cursos'
+  },
+  {
+    id: 'content.create',
+    label: 'Crear Contenido',
+    description: 'Permite crear contenido educativo',
+    category: 'Contenido'
+  },
+  {
+    id: 'content.edit',
+    label: 'Editar Contenido',
+    description: 'Permite modificar contenido',
+    category: 'Contenido'
+  },
+  {
+    id: 'content.moderate',
+    label: 'Moderar Contenido',
+    description: 'Permite moderar contenido de otros',
+    category: 'Contenido'
+  }
+];
 
 const TutorManagementPanel = () => {
   const [tutors, setTutors] = useState<MockUser[]>(
@@ -44,6 +94,9 @@ const TutorManagementPanel = () => {
   const [selectedTutor, setSelectedTutor] = useState<MockUser | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showPermissions, setShowPermissions] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<string>('mentor');
+  const [rolePermissions, setRolePermissions] = useState<MentorPermissions>({});
   const [formData, setFormData] = useState<Partial<MockUser>>({
     displayName: '',
     email: '',
@@ -52,7 +105,8 @@ const TutorManagementPanel = () => {
     specialization: '',
     availability: '',
     rating: 0,
-    students: []
+    students: [],
+    permissions: {}
   });
 
   const mentorRoles: { value: AdminRole; label: string }[] = [
@@ -72,7 +126,8 @@ const TutorManagementPanel = () => {
         specialization: tutor.specialization || '',
         availability: tutor.availability || '',
         rating: tutor.rating || 0,
-        students: tutor.students || []
+        students: tutor.students || [],
+        permissions: tutor.permissions || {}
       });
     } else {
       setSelectedTutor(null);
@@ -84,7 +139,8 @@ const TutorManagementPanel = () => {
         specialization: '',
         availability: '',
         rating: 0,
-        students: []
+        students: [],
+        permissions: {}
       });
     }
     setOpenDialog(true);
@@ -101,8 +157,16 @@ const TutorManagementPanel = () => {
       specialization: '',
       availability: '',
       rating: 0,
-      students: []
+      students: [],
+      permissions: {}
     });
+  };
+
+  const handlePermissionChange = (permissionId: keyof MentorPermissions) => {
+    setRolePermissions(prev => ({
+      ...prev,
+      [permissionId]: !prev[permissionId]
+    }));
   };
 
   const handleSaveTutor = () => {
@@ -111,7 +175,6 @@ const TutorManagementPanel = () => {
     const newTutors = [...tutors];
     
     if (selectedTutor) {
-      // Actualizar tutor existente
       const tutorIndex = newTutors.findIndex(t => t.id === selectedTutor.id);
       if (tutorIndex !== -1) {
         newTutors[tutorIndex] = {
@@ -123,11 +186,11 @@ const TutorManagementPanel = () => {
           specialization: formData.specialization,
           availability: formData.availability,
           rating: formData.rating,
-          students: formData.students
+          students: formData.students,
+          permissions: rolePermissions
         };
       }
     } else {
-      // Crear nuevo tutor
       const newTutor: MockUser = {
         id: (newTutors.length + 1).toString(),
         displayName: formData.displayName!,
@@ -139,7 +202,8 @@ const TutorManagementPanel = () => {
         specialization: formData.specialization,
         availability: formData.availability,
         rating: formData.rating,
-        students: formData.students
+        students: formData.students,
+        permissions: rolePermissions
       };
       newTutors.push(newTutor);
     }
@@ -152,6 +216,62 @@ const TutorManagementPanel = () => {
     tutor.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     tutor.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const RolePermissionsPanel = () => {
+    const categories = Array.from(new Set(mentorPermissions.map(p => p.category)));
+    
+    return (
+      <Dialog
+        open={showPermissions}
+        onClose={() => setShowPermissions(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          Permisos de {mentorRoles.find(r => r.value === selectedRole)?.label}
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ p: 2 }}>
+            {categories.map(category => (
+              <Box key={category} sx={{ mb: 4 }}>
+                <Typography variant="h6" gutterBottom>{category}</Typography>
+                <Grid container spacing={2}>
+                  {mentorPermissions
+                    .filter(permission => permission.category === category)
+                    .map(permission => (
+                      <Grid item xs={12} sm={6} key={permission.id}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={rolePermissions[permission.id] || false}
+                              onChange={() => handlePermissionChange(permission.id as keyof MentorPermissions)}
+                            />
+                          }
+                          label={
+                            <Box>
+                              <Typography variant="body1">{permission.label}</Typography>
+                              <Typography variant="caption" color="textSecondary">
+                                {permission.description}
+                              </Typography>
+                            </Box>
+                          }
+                        />
+                      </Grid>
+                    ))}
+                </Grid>
+              </Box>
+            ))}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowPermissions(false)}>Cancelar</Button>
+          <Button onClick={handleSaveTutor} variant="contained" color="primary">
+            Guardar Cambios
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
 
   return (
     <Box>
@@ -216,6 +336,15 @@ const TutorManagementPanel = () => {
                     color="error"
                   >
                     <DeleteIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      setSelectedRole(tutor.role);
+                      setRolePermissions(tutor.permissions || {});
+                      setShowPermissions(true);
+                    }}
+                  >
+                    <SecurityIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -321,6 +450,8 @@ const TutorManagementPanel = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <RolePermissionsPanel />
     </Box>
   );
 };
