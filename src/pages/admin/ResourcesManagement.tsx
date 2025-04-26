@@ -33,7 +33,7 @@ const ResourcesManagement = () => {
         
         <Typography variant="body1" paragraph color="text.secondary">
           Desde aquí puedes crear, editar y eliminar los recursos adicionales que aparecen en la sección de Ayuda. 
-          Estos recursos incluyen tutoriales, documentación, guías, preguntas frecuentes y políticas.
+          Estos recursos incluyen tutoriales, documentación, guías, preguntas frecuentes y políticas etc lo que se refiera a ayuda al cliente.
         </Typography>
       </Paper>
       

@@ -7,7 +7,7 @@ import { Home as HomeIcon, MenuBook as MenuBookIcon, ArrowBack as ArrowBackIcon 
 const ResourceContentPage = () => {
   const { resourceId } = useParams<{ resourceId: string }>();
   const navigate = useNavigate();
-  
+   
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       <Paper sx={{ p: 3, mb: 3 }}>

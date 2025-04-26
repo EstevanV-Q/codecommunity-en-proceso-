@@ -56,6 +56,8 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import CourseContentService from '../../services/CourseContentService';
+import { useAuth } from '../../context/AuthContext';
+import { useAdmin } from '../../context/AdminContext';
 
 interface Course {
   id: string;
@@ -138,6 +140,8 @@ interface CourseManagementProps {
 }
 
 const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) => {
+  const { user } = useAuth();
+  const { checkPermission } = useAdmin();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -186,6 +190,50 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
     };
   };
 
+  // Función para verificar si el usuario puede editar un curso específico
+  const canEditCourse = (course: Course) => {
+    if (['founder', 'owner', 'admin'].includes(user?.role || '')) {
+      return true; // Roles administrativos pueden editar cualquier curso
+    }
+    
+    if (user?.role === 'seniorMentor') {
+      return true; // Senior mentores pueden editar cualquier curso
+    }
+    
+    if (user?.role === 'mentor') {
+      return course.mentor === user.displayName; // Mentores solo pueden editar sus propios cursos
+    }
+    
+    if (user?.role === 'juniorMentor') {
+      return false; // Junior mentores no pueden editar cursos
+    }
+    
+    return false;
+  };
+
+  // Función para filtrar cursos según el rol
+  const filterCoursesByRole = (allCourses: Course[]) => {
+    if (!user) return [];
+
+    if (['founder', 'owner', 'admin'].includes(user.role)) {
+      return allCourses; // Ven todos los cursos
+    }
+
+    if (user.role === 'seniorMentor') {
+      return allCourses; // Ven todos los cursos
+    }
+
+    if (user.role === 'mentor') {
+      return allCourses.filter(course => course.mentor === user.displayName);
+    }
+
+    if (user.role === 'juniorMentor') {
+      return allCourses.filter(course => course.mentor === user.displayName);
+    }
+
+    return [];
+  };
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -212,7 +260,10 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
             isPublic: true,
           },
         ];
-        setCourses(mockCourses);
+        
+        // Filtrar cursos según el rol del usuario
+        const filteredCourses = filterCoursesByRole(mockCourses);
+        setCourses(filteredCourses);
       } catch (err) {
         setError('Error al cargar los cursos');
         console.error(err);
@@ -222,7 +273,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
     };
 
     fetchCourses();
-  }, []);
+  }, [user]);
 
   const handleOpenDialog = (course?: Course) => {
     if (course) {
@@ -472,7 +523,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
         <Typography variant="h4" component="h1">
           {mode === 'create' ? 'Nuevo Curso' : 'Gestión de Cursos'}
         </Typography>
-        {mode === 'list' && (
+        {mode === 'list' && checkPermission('courses.create') && (
           <Box>
             <Button
               variant="contained"
@@ -487,6 +538,12 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
       </Box>
 
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+      {user?.role === 'juniorMentor' && (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          Como Mentor Junior, solo puedes ver los cursos pero no puedes editarlos.
+        </Alert>
+      )}
 
       {mode === 'list' && (
         <TableContainer component={Paper}>
@@ -503,7 +560,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
                 <TableCell>Estado</TableCell>
                 <TableCell>Tipo</TableCell>
                 <TableCell>Estudiantes</TableCell>
-                <TableCell>Contenido</TableCell>
+                {checkPermission('courses.manage') && <TableCell>Contenido</TableCell>}
                 <TableCell align="right">Acciones</TableCell>
               </TableRow>
             </TableHead>
@@ -565,26 +622,32 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
                         </Button>
                       </TableCell>
                       <TableCell align="right">
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                          <Tooltip title="Editar curso">
-                            <IconButton 
-                              onClick={() => handleOpenDialog(course)} 
+                        {canEditCourse(course) && (
+                          <>
+                            <IconButton
+                              onClick={() => handleOpenDialog(course)}
                               size="small"
-                              sx={{ mr: 1 }}
+                              color="primary"
                             >
                               <EditIcon />
                             </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Eliminar curso">
-                            <IconButton
-                              onClick={() => handleDeleteClick(course)}
-                              size="small"
-                              color="error"
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
+                            {checkPermission('courses.manage') && (
+                              <IconButton
+                                onClick={() => handleDeleteClick(course)}
+                                size="small"
+                                color="error"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            )}
+                          </>
+                        )}
+                        <IconButton
+                          onClick={() => navigate(`/courses/${course.id}`)}
+                          size="small"
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );

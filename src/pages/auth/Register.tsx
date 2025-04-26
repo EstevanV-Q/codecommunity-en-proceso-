@@ -29,7 +29,8 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  displayName: string;
+  firstName: string;
+  lastName: string;
 }
 
 const Register = () => {
@@ -44,7 +45,8 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    displayName: '',
+    firstName: '',
+    lastName: '',
   });
   const [emailError, setEmailError] = useState<string | null>(null);
 
@@ -64,8 +66,8 @@ const Register = () => {
   };
 
   const handleNext = () => {
-    if (activeStep === 0 && !formData.displayName) {
-      setError('Por favor, ingresa tu nombre');
+    if (activeStep === 0 && (!formData.firstName || !formData.lastName)) {
+      setError('Por favor, ingresa tu nombre y apellido');
       return;
     }
     if (activeStep === 1) {
@@ -107,7 +109,7 @@ const Register = () => {
       await register({
         email: formData.email,
         password: formData.password,
-        displayName: formData.displayName
+        displayName: `${formData.firstName} ${formData.lastName}`
       });
       navigate('/profile-setup');
     } catch (err) {
@@ -135,16 +137,28 @@ const Register = () => {
     switch (step) {
       case 0:
         return (
-          <TextField
-            fullWidth
-            label="Nombre completo"
-            name="displayName"
-            value={formData.displayName}
-            onChange={handleChange}
-            required
-            margin="normal"
-            autoComplete="name"
-          />
+          <>
+            <TextField
+              fullWidth
+              label="Nombre"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+              margin="normal"
+              autoComplete="given-name"
+            />
+            <TextField
+              fullWidth
+              label="Apellido"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+              margin="normal"
+              autoComplete="family-name"
+            />
+          </>
         );
       case 1:
         return (
@@ -218,7 +232,7 @@ const Register = () => {
               Confirma tus datos
             </Typography>
             <Typography>
-              Nombre: {formData.displayName}
+              Nombre: {formData.firstName} {formData.lastName}
             </Typography>
             <Typography>
               Correo: {formData.email}
