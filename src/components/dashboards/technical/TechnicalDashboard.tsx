@@ -20,6 +20,8 @@ import DeploymentPanel from './DeploymentPanel';
 import CodeQualityPanel from './CodeQualityPanel';
 import SecurityPanel from './SecurityPanel';
 import LogViewer from './LogViewer';
+import ActionsPanel from './panels/ActionsPanel'; // Update the import path to match the correct location
+import BuildCircleIcon from '@mui/icons-material/BuildCircle';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -69,6 +71,7 @@ const TechnicalDashboard: React.FC = () => {
           <Tab icon={<CodeIcon />} label="Code Quality" />
           <Tab icon={<SecurityIcon />} label="Security" />
           <Tab icon={<AssessmentIcon />} label="Logs" />
+          <Tab icon={<BuildCircleIcon />} label="Actions" />
         </Tabs>
 
         <TabPanel value={activeTab} index={0}>
@@ -86,9 +89,12 @@ const TechnicalDashboard: React.FC = () => {
         <TabPanel value={activeTab} index={4}>
           <LogViewer />
         </TabPanel>
+        <TabPanel value={activeTab} index={5}>
+          <ActionsPanel />
+        </TabPanel>
       </Paper>
     </Container>
   );
 };
 
-export default TechnicalDashboard; 
+export default TechnicalDashboard;

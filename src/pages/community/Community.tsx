@@ -54,6 +54,17 @@ const Community = () => {
         <Typography variant="body1" color="text.secondary">
           Conecta con otros desarrolladores, participa en discusiones, eventos y mucho más.
         </Typography>
+        <Box sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            component={RouterLink}
+            to="/community-management"
+            sx={{ fontWeight: 'bold' }}
+          >
+            Ir al Panel de Gestión
+          </Button>
+        </Box>
       </Box>
       
       {/* Sección de bienvenida y estadísticas */}
@@ -289,4 +300,4 @@ const Community = () => {
   );
 };
 
-export default Community; 
+export default Community;

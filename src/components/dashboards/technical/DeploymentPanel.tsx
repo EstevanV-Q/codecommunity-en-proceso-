@@ -181,39 +181,44 @@ const DeploymentPanel: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="md"
+        fullWidth
+      >
         <DialogTitle>New Deployment</DialogTitle>
         <DialogContent>
           <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-              label="Version"
-              value={version}
-              onChange={(e) => setVersion(e.target.value)}
-              fullWidth
-            />
-            <FormControl fullWidth>
-              <InputLabel>Environment</InputLabel>
-              <Select
-                value={selectedEnvironment}
-                label="Environment"
-                onChange={(e) => setSelectedEnvironment(e.target.value as any)}
-              >
-                <MenuItem value="development">Development</MenuItem>
-                <MenuItem value="staging">Staging</MenuItem>
-                <MenuItem value="production">Production</MenuItem>
-              </Select>
-            </FormControl>
+        <TextField
+          label="Version"
+          value={version}
+          onChange={(e) => setVersion(e.target.value)}
+          fullWidth
+        />
+        <FormControl fullWidth>
+          <InputLabel>Environment</InputLabel>
+          <Select
+            value={selectedEnvironment}
+            label="Environment"
+            onChange={(e) => setSelectedEnvironment(e.target.value as any)}
+          >
+            <MenuItem value="development">Development</MenuItem>
+            <MenuItem value="staging">Staging</MenuItem>
+            <MenuItem value="production">Production</MenuItem>
+          </Select>
+        </FormControl>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
           <Button
-            variant="contained"
-            onClick={handleDeploy}
-            disabled={!version}
-            startIcon={<DeployIcon />}
+        variant="contained"
+        onClick={handleDeploy}
+        disabled={!version}
+        startIcon={<DeployIcon />}
           >
-            Deploy
+        Deploy
           </Button>
         </DialogActions>
       </Dialog>

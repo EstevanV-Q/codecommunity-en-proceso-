@@ -110,7 +110,7 @@ const Courses = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
-
+  
   const levels = ['Principiante', 'Intermedio', 'Avanzado'];
   const priceRanges = [
     { value: 'free', label: 'Gratis' },
@@ -179,7 +179,7 @@ const Courses = () => {
       {/* Filtros */}
       <Paper sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <TextField
               fullWidth
               placeholder="Buscar cursos..."
@@ -194,7 +194,7 @@ const Courses = () => {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={2}>
             <FormControl fullWidth>
               <InputLabel>Nivel</InputLabel>
               <Select
@@ -222,6 +222,20 @@ const Courses = () => {
                     {range.label}
                   </MenuItem>
                 ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <FormControl fullWidth>
+              <InputLabel>Tipo</InputLabel>
+              <Select
+                value={selectedLevel}
+                label="Tipo"
+                onChange={handleLevelChange}
+              >
+                <MenuItem value="all">Todos</MenuItem>
+                <MenuItem value="video">Videos</MenuItem>
+                <MenuItem value="live">En Vivo</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -345,4 +359,4 @@ const Courses = () => {
   );
 };
 
-export default Courses; 
+export default Courses;

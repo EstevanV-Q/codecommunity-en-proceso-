@@ -106,9 +106,19 @@ const Projects = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Proyectos
-      </Typography>
+      <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Proyectos
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/projects-management')}
+          sx={{ fontWeight: 'semi-bold', ml: 29}}
+        >
+          Ir al Panel de Gestión
+        </Button>
+      </Box>
 
       {/* Encabezado y Filtros */}
       <Box sx={{ mb: 4 }}>
@@ -272,4 +282,4 @@ const Projects = () => {
   );
 };
 
-export default Projects; 
+export default Projects;
