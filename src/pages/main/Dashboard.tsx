@@ -251,9 +251,8 @@ const AdminDashboard: React.FC<DashboardProps> = ({ user }) => {
     { title: 'Gestión de Usuarios', icon: PeopleIcon, path: '/admin/users' },
     { title: 'Gestión de Tutor', icon: CodeIcon, path: '/admin/tutors' },
     { title: 'Gestión de Cursos', icon: SchoolIcon, path: '/admin/courses' },
-    { title: 'Gestión de Pagos', icon: PaymentIcon, path: '/admin/payments' },
     { title: 'Analíticas', icon: AssessmentIcon, path: '/admin/analytics' },
-    { title: 'Panel Adminstracion 2.0 (beta)', icon: AndroidIcon, path: '/admin' },
+    
   ];
 
   return (
