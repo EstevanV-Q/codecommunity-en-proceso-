@@ -30,6 +30,7 @@ import {
   MenuItem,
   Alert,
   Collapse,
+  Link,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -46,6 +47,8 @@ import {
   Add as AddIcon,
   Close as CloseIcon,
   Warning as WarningIcon,
+  Delete as DeleteIcon,
+  Link as LinkIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
 
@@ -71,6 +74,19 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
+interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  credential?: string;
+  type: 'codecommunity' | 'external';
+  attachment?: {
+    type: 'image' | 'link';
+    url: string;
+  };
+}
+
 interface ProfileData {
   displayName: string;
   bio: string;
@@ -87,6 +103,7 @@ interface ProfileData {
   interests: string[];
   specialization: string;
   yearsOfExperience: number;
+  certifications: Certification[];
 }
 
 const Profile = () => {
@@ -96,6 +113,13 @@ const Profile = () => {
   const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
   const [showAlert, setShowAlert] = useState(true);
   const [profileCompleted, setProfileCompleted] = useState(false);
+  const [openCertificationDialog, setOpenCertificationDialog] = useState(false);
+  const [editingCertification, setEditingCertification] = useState<Certification | null>(null);
+  const [newCertification, setNewCertification] = useState<Partial<Certification>>({
+    type: 'external',
+    attachment: { type: 'link', url: '' }
+  });
+  const [certificationTab, setCertificationTab] = useState(0);
 
   const programmingLevels = ['Principiante', 'Intermedio', 'Avanzado', 'Experto'];
   const languageLevels = ['Básico', 'Intermedio', 'Avanzado', 'Nativo'];
@@ -129,22 +153,25 @@ const Profile = () => {
     interests: ['Web Development', 'Cloud Computing', 'AI/ML', 'Open Source'],
     specialization: 'Full Stack Development',
     yearsOfExperience: 3,
+    certifications: [
+      {
+        id: '1',
+        name: 'React Developer Certification',
+        issuer: 'CodeCommunity',
+        date: '2023',
+        credential: 'CERT-12345',
+        type: 'codecommunity'
+      },
+      {
+        id: '2',
+        name: 'Node.js Advanced',
+        issuer: 'CodeCommunity',
+        date: '2023',
+        credential: 'CERT-67890',
+        type: 'codecommunity'
+      }
+    ]
   });
-
-  const certifications = [
-    {
-      name: 'React Developer Certification',
-      issuer: 'CodeCommunity',
-      date: '2023',
-      credential: 'CERT-12345',
-    },
-    {
-      name: 'Node.js Advanced',
-      issuer: 'CodeCommunity',
-      date: '2023',
-      credential: 'CERT-67890',
-    },
-  ];
 
   const achievements = [
     {
@@ -179,6 +206,100 @@ const Profile = () => {
 
   const handlePhotoUpload = () => {
     setOpenPhotoDialog(true);
+  };
+
+  const handleAddCertification = () => {
+    setNewCertification({
+      type: 'external',
+      attachment: { type: 'link', url: '' }
+    });
+    setOpenCertificationDialog(true);
+  };
+
+  const handleEditCertification = (cert: Certification) => {
+    if (cert.type === 'codecommunity') return; // No permitir editar certificaciones de CodeCommunity
+    setEditingCertification({ ...cert });
+    setOpenCertificationDialog(true);
+  };
+
+  const handleSaveCertification = () => {
+    if (editingCertification) {
+      setProfileData({
+        ...profileData,
+        certifications: profileData.certifications.map(cert => 
+          cert.id === editingCertification.id ? editingCertification : cert
+        )
+      });
+    } else {
+      const newCert: Certification = {
+        id: Date.now().toString(),
+        name: newCertification.name || '',
+        issuer: newCertification.issuer || '',
+        date: new Date().toISOString().split('T')[0],
+        type: newCertification.type || 'external',
+        credential: newCertification.credential,
+        attachment: newCertification.attachment
+      };
+      setProfileData({
+        ...profileData,
+        certifications: [...profileData.certifications, newCert]
+      });
+    }
+    setOpenCertificationDialog(false);
+    setEditingCertification(null);
+    setNewCertification({
+      type: 'external',
+      attachment: { type: 'link', url: '' }
+    });
+  };
+
+  const handleCertificationChange = (field: keyof Certification, value: any) => {
+    if (editingCertification) {
+      setEditingCertification({
+        ...editingCertification,
+        [field]: value,
+        id: editingCertification.id,
+        name: editingCertification.name,
+        issuer: editingCertification.issuer,
+        date: editingCertification.date,
+        type: editingCertification.type
+      });
+    } else {
+      setNewCertification({
+        ...newCertification,
+        [field]: value,
+        type: newCertification.type || 'external',
+        attachment: newCertification.attachment || { type: 'link', url: '' }
+      });
+    }
+  };
+
+  const handleAttachmentChange = (type: 'image' | 'link', url: string) => {
+    const attachment = { type, url };
+    if (editingCertification) {
+      setEditingCertification({
+        ...editingCertification,
+        attachment
+      });
+    } else {
+      setNewCertification({
+        ...newCertification,
+        attachment
+      });
+    }
+  };
+
+  const handleDeleteCertification = (id: string) => {
+    const cert = profileData.certifications.find(c => c.id === id);
+    if (cert?.type === 'codecommunity') return; // No permitir eliminar certificaciones de CodeCommunity
+    setProfileData({
+      ...profileData,
+      certifications: profileData.certifications.filter(cert => cert.id !== id)
+    });
+  };
+
+  const handleCertificationTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setCertificationTab(newValue);
   };
 
   useEffect(() => {
@@ -644,27 +765,129 @@ const Profile = () => {
         {/* Tab: Certificaciones */}
         <TabPanel value={tabValue} index={2}>
           <Grid container spacing={3}>
-            {certifications.map((cert, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Card>
-                  <CardContent>
-            <Typography variant="h6" gutterBottom>
-                      {cert.name}
-            </Typography>
-                    <Typography color="textSecondary" gutterBottom>
-                      {cert.issuer}
-                    </Typography>
-                    <Typography variant="body2">
-                      Expedido: {cert.date}
-                  </Typography>
-                    <Typography variant="body2">
-                      Credencial: {cert.credential}
-            </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-              </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+                <Tabs value={certificationTab} onChange={handleCertificationTabChange}>
+                  <Tab label="CodeCommunity" />
+                  <Tab label="Externas" />
+                </Tabs>
+              </Box>
+
+              {/* Certificaciones CodeCommunity */}
+              <TabPanel value={certificationTab} index={0}>
+                <Grid container spacing={3}>
+                  {profileData.certifications
+                    .filter(cert => cert.type === 'codecommunity')
+                    .map((cert) => (
+                      <Grid item xs={12} md={6} key={cert.id}>
+                        <Card>
+                          <CardContent>
+                            <Typography variant="h6" gutterBottom>
+                              {cert.name}
+                            </Typography>
+                            <Typography color="textSecondary" gutterBottom>
+                              {cert.issuer}
+                            </Typography>
+                            <Typography variant="body2">
+                              Expedido: {cert.date}
+                            </Typography>
+                            {cert.credential && (
+                              <Typography variant="body2">
+                                Credencial: {cert.credential}
+                              </Typography>
+                            )}
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    ))}
+                </Grid>
+              </TabPanel>
+
+              {/* Certificaciones Externas */}
+              <TabPanel value={certificationTab} index={1}>
+                <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={handleAddCertification}
+                  >
+                    Agregar Certificación Externa
+                  </Button>
+                </Box>
+
+                <Grid container spacing={3}>
+                  {profileData.certifications
+                    .filter(cert => cert.type === 'external')
+                    .map((cert) => (
+                      <Grid item xs={12} md={6} key={cert.id}>
+                        <Card>
+                          <CardContent>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                              <Typography variant="h6" gutterBottom>
+                                {cert.name}
+                              </Typography>
+                              {isEditing && (
+                                <Box>
+                                  <IconButton onClick={() => handleEditCertification(cert)} size="small">
+                                    <EditIcon />
+                                  </IconButton>
+                                  <IconButton onClick={() => handleDeleteCertification(cert.id)} size="small" color="error">
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Box>
+                              )}
+                            </Box>
+                            <Typography color="textSecondary" gutterBottom>
+                              {cert.issuer}
+                            </Typography>
+                            <Typography variant="body2">
+                              Expedido: {cert.date}
+                            </Typography>
+                            {cert.credential && (
+                              <Typography variant="body2">
+                                Credencial: {cert.credential}
+                              </Typography>
+                            )}
+                            {cert.attachment && (
+                              <Box sx={{ mt: 2 }}>
+                                {cert.attachment.type === 'image' ? (
+                                  <img 
+                                    src={cert.attachment.url} 
+                                    alt={cert.name}
+                                    style={{ maxWidth: '100%', maxHeight: '200px' }}
+                                  />
+                                ) : (
+                                  cert.attachment.url && (
+                                    <Link
+                                      href={cert.attachment.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 1,
+                                        textDecoration: 'none',
+                                        color: 'primary.main',
+                                        '&:hover': {
+                                          textDecoration: 'underline'
+                                        }
+                                      }}
+                                    >
+                                      <LinkIcon fontSize="small" />
+                                      Ver Certificación
+                                    </Link>
+                                  )
+                                )}
+                              </Box>
+                            )}
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    ))}
+                </Grid>
+              </TabPanel>
+            </Grid>
+          </Grid>
         </TabPanel>
 
         {/* Tab: Logros */}
@@ -716,6 +939,102 @@ const Profile = () => {
         <DialogActions>
           <Button onClick={() => setOpenPhotoDialog(false)}>Cancelar</Button>
           <Button variant="contained" onClick={() => setOpenPhotoDialog(false)}>
+            Guardar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Diálogo para editar certificación */}
+      <Dialog open={openCertificationDialog} onClose={() => setOpenCertificationDialog(false)}>
+        <DialogTitle>{editingCertification ? 'Editar Certificación Externa' : 'Agregar Certificación Externa'}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
+            <TextField
+              fullWidth
+              label="Nombre"
+              value={editingCertification?.name || newCertification.name || ''}
+              onChange={(e) => handleCertificationChange('name', e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Emisor"
+              value={editingCertification?.issuer || newCertification.issuer || ''}
+              onChange={(e) => handleCertificationChange('issuer', e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Fecha"
+              type="date"
+              value={editingCertification?.date || newCertification.date || new Date().toISOString().split('T')[0]}
+              onChange={(e) => handleCertificationChange('date', e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Credencial"
+              value={editingCertification?.credential || newCertification.credential || ''}
+              onChange={(e) => handleCertificationChange('credential', e.target.value)}
+            />
+            <FormControl fullWidth>
+              <InputLabel>Tipo de Adjunto</InputLabel>
+              <Select
+                value={editingCertification?.attachment?.type || newCertification.attachment?.type || 'link'}
+                label="Tipo de Adjunto"
+                onChange={(e) => handleAttachmentChange(e.target.value as 'image' | 'link', '')}
+              >
+                <MenuItem value="link">Enlace</MenuItem>
+                <MenuItem value="image">Imagen</MenuItem>
+              </Select>
+            </FormControl>
+            {(editingCertification?.attachment?.type === 'image' || newCertification.attachment?.type === 'image') ? (
+              <Box>
+                <input
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  id="certification-image-upload"
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      // Aquí normalmente subirías la imagen a tu servidor/storage
+                      // Por ahora usaremos una URL temporal
+                      const imageUrl = URL.createObjectURL(file);
+                      handleAttachmentChange('image', imageUrl);
+                    }
+                  }}
+                />
+                <label htmlFor="certification-image-upload">
+                  <Button
+                    variant="outlined"
+                    component="span"
+                    fullWidth
+                    startIcon={<PhotoCameraIcon />}
+                  >
+                    Subir Imagen
+                  </Button>
+                </label>
+                {(editingCertification?.attachment?.url || newCertification.attachment?.url) && (
+                  <Box sx={{ mt: 2, textAlign: 'center' }}>
+                    <img
+                      src={editingCertification?.attachment?.url || newCertification.attachment?.url}
+                      alt="Vista previa"
+                      style={{ maxWidth: '100%', maxHeight: '200px' }}
+                    />
+                  </Box>
+                )}
+              </Box>
+            ) : (
+              <TextField
+                fullWidth
+                label="URL del Enlace"
+                value={editingCertification?.attachment?.url || newCertification.attachment?.url || ''}
+                onChange={(e) => handleAttachmentChange('link', e.target.value)}
+              />
+            )}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenCertificationDialog(false)}>Cancelar</Button>
+          <Button onClick={handleSaveCertification} variant="contained" color="primary">
             Guardar
           </Button>
         </DialogActions>

@@ -205,6 +205,45 @@ export const mockUsers: MockUser[] = [
     education: 'Desarrollo Web'
   },
 
+  // Roles de Soporte
+  {
+    id: '22',
+    email: 'support@codecommunity.com',
+    password: 'Support2024!',
+    displayName: 'Soporte', 
+    role: 'support',
+    roles: ['support'],
+    emailVerified: true,
+    photoURL: '/assets/avatars/support-avatar.jpg',
+    experienceLevel: 'intermediate',
+    technologies: ['Customer Support', 'Technical Support']
+  },
+  {
+    id: '23',
+    email: 'supportll@codecommunity.com',
+    password: 'SupportLL2024!',
+    displayName: 'Soporte Nivel 2',
+    role: 'supportll',
+    roles: ['supportll'],
+    emailVerified: true,
+    photoURL: '/assets/avatars/supportll-avatar.jpg',
+    experienceLevel: 'advanced',
+    technologies: ['Technical Support', 'Troubleshooting']
+  },
+  {
+    id: '24',
+    email: 'supportmanager@codecommunity.com',
+    password: 'SupportManager2024!',
+    displayName: 'Gerente de Soporte',
+    role: 'supportManager',
+    roles: ['supportManager'],
+    emailVerified: true,
+    photoURL: '/assets/avatars/support-manager-avatar.jpg',
+    experienceLevel: 'expert',
+    technologies: ['Team Management', 'Customer Support', 'Technical Support']
+  },
+  
+
   // Roles Educativos
   {
     id: '8',

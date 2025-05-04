@@ -70,7 +70,7 @@
             </summary>
             <returns>User profile information</returns>
         </member>
-        <member name="M:WebApplication1.Controllers.UserController.UpdateProfile(WebApplication1.Models.UpdateUserProfileDto)">
+        <member name="M:WebApplication1.Controllers.UserController.UpdateProfile(WebApplication1.Models.DTOs.UpdateUserProfileDto)">
             <summary>
             Update the current user's profile
             </summary>
@@ -99,6 +99,102 @@
             <inheritdoc />
         </member>
         <member name="M:WebApplication1.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.nose">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.nose.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.nose.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.nose.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.RecreateUsersTable">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.RecreateUsersTable.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.RecreateUsersTable.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.RecreateUsersTable.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.AddResourceTable">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddResourceTable.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddResourceTable.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddResourceTable.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.new1">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.new1.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.new1.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.new1.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.AddRequiredJsonFields">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddRequiredJsonFields.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddRequiredJsonFields.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddRequiredJsonFields.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.FixCascadeDelete">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.FixCascadeDelete.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.FixCascadeDelete.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.FixCascadeDelete.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.FixUserProfileAndAuthorRelations">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.FixUserProfileAndAuthorRelations.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.FixUserProfileAndAuthorRelations.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.FixUserProfileAndAuthorRelations.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.AddSupportTickets">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddSupportTickets.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddSupportTickets.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddSupportTickets.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

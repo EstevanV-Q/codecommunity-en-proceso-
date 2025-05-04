@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
   Paper,
@@ -20,7 +20,10 @@ import {
   Step,
   StepLabel,
   Divider,
-  SelectChangeEvent,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from '@mui/material';
 import {
   CreditCard as CreditCardIcon,
@@ -28,7 +31,16 @@ import {
   Payment as PaymentIcon,
   CheckCircle as CheckCircleIcon,
   AccountBalanceWallet as StripeIcon,
+  ShoppingCart as CartIcon,
 } from '@mui/icons-material';
+
+interface CartItem {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+  description: string;
+}
 
 interface PaymentForm {
   amount: number;
@@ -54,10 +66,14 @@ const initialForm: PaymentForm = {
 
 const MakePayment = () => {
   const location = useLocation();
-  const totalAmount = location.state?.totalAmount || 0;
+  const navigate = useNavigate();
+  const { totalAmount, items } = location.state || { totalAmount: 0, items: [] };
 
   const [activeStep, setActiveStep] = useState(0);
-  const [form, setForm] = useState<PaymentForm>(initialForm);
+  const [form, setForm] = useState<PaymentForm>({
+    ...initialForm,
+    amount: totalAmount
+  });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({
@@ -65,62 +81,7 @@ const MakePayment = () => {
     cvv: '',
   });
 
-  const validateField = (name: string, value: string) => {
-    if (name === 'expiryDate') {
-      const isValid = /^\d{2}\/\d{2}$/.test(value); // MM/YY format
-      setErrors(prev => ({
-        ...prev,
-        expiryDate: isValid ? '' : 'El formato debe ser MM/YY',
-      }));
-    }
-
-    if (name === 'cvv') {
-      const isValid = /^\d{3,4}$/.test(value); // 3 or 4 digits
-      setErrors(prev => ({
-        ...prev,
-        cvv: isValid ? '' : 'El CVV debe contener 3 o 4 dígitos',
-      }));
-    }
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-
-    // Restrict input for specific fields
-    if (name === 'expiryDate') {
-      const numericValue = value.replace(/[^0-9/]/g, ''); // Allow only numbers and "/"
-      if (numericValue.length <= 5) {
-        validateField(name, numericValue);
-        setForm(prev => ({
-          ...prev,
-          [name]: numericValue,
-        }));
-      }
-      return;
-    }
-
-    if (name === 'cvv') {
-      const numericValue = value.replace(/[^0-9]/g, ''); // Allow only numbers
-      if (numericValue.length <= 4) {
-        validateField(name, numericValue);
-        setForm(prev => ({
-          ...prev,
-          [name]: numericValue,
-        }));
-      }
-      return;
-    }
-
-    // For other fields
-    setForm(prev => ({
-      ...prev,
-      [name]: name === 'amount' ? Number(value) : value,
-    }));
-  };
-
-  const handleSelectChange = (e: SelectChangeEvent<string>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm(prev => ({
       ...prev,
@@ -128,37 +89,57 @@ const MakePayment = () => {
     }));
   };
 
-  const handleNext = () => {
-    setActiveStep(prev => prev + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(prev => prev - 1);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       // Aquí iría la lógica para procesar el pago
+      // Después de procesar el pago exitosamente:
+      
+      // Limpiar el carrito
+      localStorage.removeItem('cart');
+      
       setSuccess(true);
       setForm(initialForm);
       setActiveStep(0);
+      
+      // Redirigir a la página de éxito o al dashboard
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
     } catch (error) {
       setError('Error al procesar el pago');
     }
   };
 
-  const steps = ['Detalles del Pago', 'Método de Pago', 'Confirmación'];
+  const steps = ['Resumen de Compra', 'Método de Pago', 'Confirmación'];
 
   const renderStepContent = (step: number) => {
     switch (step) {
       case 0:
         return (
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              Resumen de la Compra
+            </Typography>
+            <List>
+              {items.map((item: CartItem) => (
+                <ListItem key={item.id}>
+                  <ListItemIcon>
+                    <CartIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.title}
+                    secondary={`$${item.price}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+            <Divider sx={{ my: 2 }} />
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Monto"
+                  label="Total"
                 name="amount"
                 value={totalAmount}
                 type="number"
@@ -172,7 +153,7 @@ const MakePayment = () => {
                 <Select
                   name="currency"
                   value={form.currency}
-                  onChange={handleSelectChange}
+                    onChange={(e) => setForm(prev => ({ ...prev, currency: e.target.value }))}
                   label="Moneda"
                 >
                   <MenuItem value="USD">USD - Dólar Estadounidense</MenuItem>
@@ -193,6 +174,7 @@ const MakePayment = () => {
               />
             </Grid>
           </Grid>
+          </Box>
         );
 
       case 1:
@@ -204,7 +186,7 @@ const MakePayment = () => {
                 <Select
                   name="paymentMethod"
                   value={form.paymentMethod}
-                  onChange={handleSelectChange}
+                  onChange={(e) => setForm(prev => ({ ...prev, paymentMethod: e.target.value }))}
                   fullWidth
                 >
                   <MenuItem value="credit_card">
@@ -235,13 +217,13 @@ const MakePayment = () => {
                   name="cardNumber"
                   value={form.cardNumber}
                   onChange={(e) => {
-                    const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                      const numericValue = e.target.value.replace(/[^0-9]/g, '');
                     setForm(prev => ({
                     ...prev,
                     cardNumber: numericValue,
                     }));
                   }}
-                  inputProps={{ maxLength: 16 }} // Optional: Limit to 16 digits
+                    inputProps={{ maxLength: 16 }}
                   required
                   />
                 </Grid>
@@ -261,7 +243,15 @@ const MakePayment = () => {
                     label="Fecha de Expiración"
                     name="expiryDate"
                     value={form.expiryDate}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9/]/g, '');
+                      if (numericValue.length <= 5) {
+                        setForm(prev => ({
+                          ...prev,
+                          expiryDate: numericValue,
+                        }));
+                      }
+                    }}
                     placeholder="MM/YY"
                     error={!!errors.expiryDate}
                     helperText={errors.expiryDate}
@@ -274,7 +264,15 @@ const MakePayment = () => {
                     label="CVV"
                     name="cvv"
                     value={form.cvv}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, '');
+                      if (numericValue.length <= 4) {
+                        setForm(prev => ({
+                          ...prev,
+                          cvv: numericValue,
+                        }));
+                      }
+                    }}
                     type="password"
                     error={!!errors.cvv}
                     helperText={errors.cvv}
@@ -300,7 +298,7 @@ const MakePayment = () => {
                     <Typography color="text.secondary">Monto:</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography>{form.amount} {form.currency}</Typography>
+                    <Typography>${totalAmount} {form.currency}</Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography color="text.secondary">Método de Pago:</Typography>
@@ -350,7 +348,7 @@ const MakePayment = () => {
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
               {activeStep > 0 && (
-                <Button onClick={handleBack} sx={{ mr: 1 }}>
+                <Button onClick={() => setActiveStep(prev => prev - 1)} sx={{ mr: 1 }}>
                   Atrás
                 </Button>
               )}
@@ -366,7 +364,7 @@ const MakePayment = () => {
               ) : (
                 <Button
                   variant="contained"
-                  onClick={handleNext}
+                  onClick={() => setActiveStep(prev => prev + 1)}
                 >
                   Siguiente
                 </Button>

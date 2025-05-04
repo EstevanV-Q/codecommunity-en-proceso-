@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Container, 
   Typography, 
@@ -13,7 +13,15 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  MenuItem,
+  Snackbar,
+  Alert as MuiAlert
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
@@ -27,10 +35,38 @@ import {
 } from '@mui/icons-material';
 import DynamicResources from '../../components/help/DynamicResources';
 import { useAdmin } from '../../context/AdminContext';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const Help = () => {
   const { isAdmin } = useAdmin();
+  const [openTicket, setOpenTicket] = useState(false);
+  const [ticket, setTicket] = useState({ title: '', description: '', priority: 'medium' });
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
+
+  const handleOpenTicket = () => setOpenTicket(true);
+  const handleCloseTicket = () => setOpenTicket(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTicket({ ...ticket, [e.target.name]: e.target.value });
+  const handleSubmit = () => {
+    // Guardar ticket en localStorage
+    const tickets = JSON.parse(localStorage.getItem('studentTickets') || '[]');
+    const newTicket = {
+      id: Date.now().toString(),
+      title: ticket.title,
+      description: ticket.description,
+      priority: ticket.priority,
+      date: new Date().toISOString(),
+      status: 'open',
+    };
+    localStorage.setItem('studentTickets', JSON.stringify([...tickets, newTicket]));
+    setOpenTicket(false);
+    setSuccess(true);
+    setTicket({ title: '', description: '', priority: 'medium' });
+    setTimeout(() => {
+      setSuccess(false);
+      navigate(`/tickets/${newTicket.id}`);
+    }, 1200);
+  };
   
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -205,10 +241,62 @@ const Help = () => {
             >
               Contactar Soporte
             </Button>
-            
-            <Typography variant="body2" color="text.secondary">
-              Tiempo de respuesta promedio: 24 horas
-            </Typography>
+            <Button
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              sx={{ mb: 2 }}
+              onClick={handleOpenTicket}
+            >
+              Abrir Ticket
+            </Button>
+            <Dialog open={openTicket} onClose={handleCloseTicket} maxWidth="sm" fullWidth>
+              <DialogTitle>Abrir Ticket de Soporte</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Título"
+                  name="title"
+                  fullWidth
+                  value={ticket.title}
+                  onChange={handleChange}
+                />
+                <TextField
+                  margin="dense"
+                  label="Descripción"
+                  name="description"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  value={ticket.description}
+                  onChange={handleChange}
+                />
+                <TextField
+                  margin="dense"
+                  label="Prioridad"
+                  name="priority"
+                  select
+                  fullWidth
+                  value={ticket.priority}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="low">Baja</MenuItem>
+                  <MenuItem value="medium">Media</MenuItem>
+                  <MenuItem value="high">Alta</MenuItem>
+                  <MenuItem value="critical">Crítica</MenuItem>
+                </TextField>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseTicket}>Cancelar</Button>
+                <Button variant="contained" onClick={handleSubmit} disabled={!ticket.title || !ticket.description}>Enviar</Button>
+              </DialogActions>
+            </Dialog>
+            <Snackbar open={success} autoHideDuration={1200} onClose={() => setSuccess(false)}>
+              <MuiAlert onClose={() => setSuccess(false)} severity="success" sx={{ width: '100%' }}>
+                ¡Ticket enviado correctamente! Redirigiendo a tu detalle de ticket...
+              </MuiAlert>
+            </Snackbar>
           </Paper>
           
           <Paper sx={{ p: 3 }}>

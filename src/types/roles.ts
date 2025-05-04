@@ -19,6 +19,9 @@ export type AdminRole =
   | 'marketing'
   | 'accounting'
   | 'designer'
+  | 'support'
+  | 'supportll'
+  | 'supportManager'
   
   // Roles Educativos
   | 'professor'
@@ -39,6 +42,9 @@ export type AdminRole =
 
 // Roles técnicos (desarrollo y mantenimiento)
 export type TechnicalRole = 'cto' | 'seniorDev' | 'juniorDev' | 'devOps';
+
+// Roles de soporte
+export type SupportRole = 'supportll' | 'support' | 'supportManager';
 
 // Roles educativos
 export type TeachingRole = 'professor' | 'instructor' | 'teachingAssistant';

@@ -369,6 +369,7 @@ const Navbar = ({ onDrawerToggle }: { onDrawerToggle?: () => void }) => {
     { text: 'Comunidad', path: '/community', icon: <ForumIcon fontSize="small" /> },
     { text: 'Foro', path: '/forum', icon: <ComputerIcon fontSize="small" /> },
     { text: 'Carrito', path: '/Cart', icon: <ShoppingBasketIcon fontSize="small" /> },
+    { text: 'Ofertas de trabajo', path: '/jobs', icon: <PersonIcon fontSize="small" /> },
     // { text: 'Perfil', path: '/profile', icon: <PersonIcon fontSize="small" /> },
     // { text: 'Configuración', path: '/settings', icon: <SettingsIcon fontSize="small" /> },
     { text: 'Ayuda', path: '/help', icon: <HelpIcon fontSize="small" /> },

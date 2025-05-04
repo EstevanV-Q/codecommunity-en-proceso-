@@ -4,10 +4,20 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using WebApplication1.Data;
+using WebApplication1.Extensions;
 using WebApplication1.Interfaces;
 using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Listen(System.Net.IPAddress.Loopback, 5251); // Puerto HTTP
+    options.Listen(System.Net.IPAddress.Loopback, 7142, listenOptions =>
+    {
+        listenOptions.UseHttps(); // Puerto HTTPS
+    });
+});
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -103,6 +113,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICommunityService, CommunityService>();
+builder.Services.AddScoped<IResourceService, ResourceService>();
+builder.Services.AddScoped<IMonitoringService, MonitoringService>();
+builder.Services.AddScoped<IValidationService, ValidationService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+
+// Register system monitoring services
+builder.Services.AddHostedService<SystemMetricsCollector>();
+builder.Services.AddMemoryCache(); // Para cachear métricas temporalmente
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>()
+    .AddDiskStorageHealthCheck(options =>
+    {
+        options.AddDrive(@"C:\", 1024); // Revisar al menos 1GB libre
+    });
 
 var app = builder.Build();
 
@@ -121,6 +146,7 @@ if (app.Environment.IsDevelopment())
 
 // Enforce HTTPS
 app.UseHttpsRedirection();
+
 
 // Add security headers
 app.Use(async (context, next) =>

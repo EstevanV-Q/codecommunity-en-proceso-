@@ -20,6 +20,10 @@ const CoursesPage: React.FC = () => {
             id: '1',
             title: 'Desarrollo Web con React',
             description: 'Aprende a crear aplicaciones web modernas con React, incluyendo hooks, context, y las mejores prácticas de desarrollo.',
+            instructor: {
+              name: 'Juan Pérez',
+              avatar: ''
+            },
             level: 'intermediate',
             category: 'Desarrollo Web',
             duration: 40,
@@ -29,6 +33,7 @@ const CoursesPage: React.FC = () => {
             price: 99.99,
             mentor: 'Juan Pérez',
             enrolledStudents: 150,
+            totalStudents: 150,
             rating: 4.5,
             hasSpecificStartDate: true,
             startDate: '2024-04-15',
@@ -36,11 +41,16 @@ const CoursesPage: React.FC = () => {
             updatedAt: new Date().toISOString(),
             courseType: 'recorded',
             thumbnail: '/images/react-course.jpg',
+            status: 'published'
           },
           {
             id: '2',
             title: 'Machine Learning en Tiempo Real',
             description: 'Curso en vivo sobre implementación de modelos de Machine Learning en aplicaciones del mundo real.',
+            instructor: {
+              name: 'Ana García',
+              avatar: ''
+            },
             level: 'advanced',
             category: 'Machine Learning',
             duration: 30,
@@ -50,6 +60,7 @@ const CoursesPage: React.FC = () => {
             price: 149.99,
             mentor: 'Ana García',
             enrolledStudents: 75,
+            totalStudents: 75,
             rating: 4.8,
             hasSpecificStartDate: true,
             startDate: '2024-05-01',
@@ -57,11 +68,16 @@ const CoursesPage: React.FC = () => {
             updatedAt: new Date().toISOString(),
             courseType: 'live',
             thumbnail: '/images/ml-course.jpg',
+            status: 'published'
           },
           {
             id: '3',
             title: 'Introducción a la Programación',
             description: 'Curso básico para principiantes que quieren empezar en el mundo de la programación.',
+            instructor: {
+              name: 'Carlos Rodríguez',
+              avatar: ''
+            },
             level: 'beginner',
             category: 'Desarrollo Web',
             duration: 20,
@@ -71,6 +87,7 @@ const CoursesPage: React.FC = () => {
             price: 49.99,
             mentor: 'Carlos Rodríguez',
             enrolledStudents: 300,
+            totalStudents: 300,
             rating: 4.2,
             hasSpecificStartDate: false,
             startDate: new Date().toISOString(),
@@ -78,6 +95,7 @@ const CoursesPage: React.FC = () => {
             updatedAt: new Date().toISOString(),
             courseType: 'recorded',
             thumbnail: '/images/intro-course.jpg',
+            status: 'published'
           },
         ];
 

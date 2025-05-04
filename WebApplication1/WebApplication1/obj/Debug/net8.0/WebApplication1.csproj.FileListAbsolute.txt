@@ -177,4 +177,7 @@ D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\bin\Debug\net8.0
 D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
+D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.dll
+D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
+D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll
 D:\pr\codecommunity-en-proceso-\WebApplication1\WebApplication1\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

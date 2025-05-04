@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Paper,
@@ -6,6 +7,7 @@ import {
   Grid,
   Card,
   CardContent,
+  CardActions,
   Button,
   Dialog,
   DialogTitle,
@@ -26,6 +28,16 @@ import {
   MenuItem,
   Alert,
   Snackbar,
+  Stack,
+  useTheme,
+  alpha,
+  Avatar,
+  CardMedia,
+  Tooltip,
+  Badge,
+  Tabs,
+  Tab,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -36,8 +48,18 @@ import {
   Upload as UploadIcon,
   Link as LinkIcon,
   ContentCopy as CopyIcon,
+  AccessTime as AccessTimeIcon,
+  CalendarToday as CalendarIcon,
+  PlayCircle as PlayIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
+  Schedule as ScheduleIcon,
+  CheckCircle as CheckCircleIcon,
+  Cancel as CancelIcon,
 } from '@mui/icons-material';
 import { Course } from '../../../types/dashboard';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 interface VideoContent {
   id: string;
@@ -66,9 +88,39 @@ interface CourseContent {
   liveSessions: LiveSession[];
 }
 
-const CourseContentManagement: React.FC<{ course: Course }> = ({ course }) => {
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`content-tabpanel-${index}`}
+      aria-labelledby={`content-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+const CourseContentManagement: React.FC<{ course: Course | null }> = ({ course: initialCourse }) => {
+  const { courseId } = useParams<{ courseId: string }>();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [course, setCourse] = useState<Course | null>(initialCourse);
   const [content, setContent] = useState<CourseContent>({
-    courseId: course.id,
+    courseId: courseId || '',
     videos: [],
     liveSessions: [],
   });
@@ -77,6 +129,7 @@ const CourseContentManagement: React.FC<{ course: Course }> = ({ course }) => {
   const [dialogType, setDialogType] = useState<'video' | 'live' | null>(null);
   const [selectedContent, setSelectedContent] = useState<VideoContent | LiveSession | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+  const [tabValue, setTabValue] = useState(0);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -87,13 +140,58 @@ const CourseContentManagement: React.FC<{ course: Course }> = ({ course }) => {
     endDate: '',
   });
 
+  useEffect(() => {
+    if (!course && courseId) {
+      // Aquí iría la llamada a la API para obtener los detalles del curso
+      const fetchCourse = async () => {
+        try {
+          // Simulación de llamada a API
+          const mockCourse: Course = {
+            id: courseId,
+            title: 'Curso de Ejemplo',
+            description: 'Descripción del curso',
+            level: 'beginner',
+            category: 'Programación',
+            duration: 40,
+            technologies: ['React', 'TypeScript'],
+            requirements: ['Conocimientos básicos'],
+            isPublished: true,
+            price: 99.99,
+            mentor: 'Profesor Ejemplo',
+            enrolledStudents: 0,
+            rating: 0,
+            hasSpecificStartDate: false,
+            startDate: new Date().toISOString(),
+            endDate: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            courseType: 'recorded',
+            isPublic: true,
+            coverImage: '',
+            liveClassroom: {
+              meetingLink: '',
+              meetingId: '',
+              meetingPassword: '',
+              schedule: []
+            }
+          };
+          setCourse(mockCourse);
+        } catch (error) {
+          console.error('Error fetching course:', error);
+        }
+      };
+
+      fetchCourse();
+    }
+  }, [courseId, course]);
+
   const generateVideoUrl = (title: string) => {
     const baseUrl = 'https://your-platform.com/videos';
     const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
-    return `${baseUrl}/${course.id}/${slug}-${Date.now()}`;
+    return `${baseUrl}/${course?.id}/${slug}-${Date.now()}`;
   };
 
   const generateStreamUrl = (title: string) => {
@@ -102,7 +200,7 @@ const CourseContentManagement: React.FC<{ course: Course }> = ({ course }) => {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
-    return `${baseUrl}/${course.id}/${slug}-${Date.now()}`;
+    return `${baseUrl}/${course?.id}/${slug}-${Date.now()}`;
   };
 
   const handleOpenDialog = (type: 'video' | 'live', content?: VideoContent | LiveSession) => {
@@ -141,6 +239,30 @@ const CourseContentManagement: React.FC<{ course: Course }> = ({ course }) => {
       videoUrl: dialogType === 'video' ? generateVideoUrl(title) : prev.videoUrl,
       streamUrl: dialogType === 'live' ? generateStreamUrl(title) : prev.streamUrl,
     }));
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData({ ...formData, description: e.target.value });
+  };
+
+  const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, duration: e.target.value });
+  };
+
+  const handleVideoUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, videoUrl: e.target.value });
+  };
+
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, startDate: e.target.value });
+  };
+
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, endDate: e.target.value });
+  };
+
+  const handleStreamUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, streamUrl: e.target.value });
   };
 
   const handleCopyUrl = (url: string) => {
@@ -234,235 +356,330 @@ const CourseContentManagement: React.FC<{ course: Course }> = ({ course }) => {
   };
 
   return (
-    <Box>
-      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h5">Course Content Management</Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+    <Box sx={{ p: 3 }}>
+      {/* Header Section */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 4,
+          borderRadius: 2,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          color: 'white',
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+            Gestión de Contenido
+          </Typography>
           <Button
             variant="contained"
-            startIcon={<VideoIcon />}
-            onClick={() => handleOpenDialog('video')}
+            startIcon={<AddIcon />}
+            onClick={() => handleOpenDialog(tabValue === 0 ? 'video' : 'live')}
+            sx={{
+              bgcolor: 'white',
+              color: theme.palette.primary.main,
+              '&:hover': {
+                bgcolor: alpha(theme.palette.common.white, 0.9),
+              },
+            }}
           >
-            Add Video
+            Agregar {tabValue === 0 ? 'Video' : 'Clase en Vivo'}
           </Button>
-          {course.courseType === 'live' && (
-            <Button
-              variant="contained"
-              startIcon={<LiveIcon />}
-              onClick={() => handleOpenDialog('live')}
-            >
-              Add Live Session
-            </Button>
-          )}
         </Box>
-      </Box>
+        <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
+          Administra el contenido de tu curso {course?.title}
+        </Typography>
+      </Paper>
 
-      <Grid container spacing={3}>
-        {/* Videos Section */}
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Videos
-              </Typography>
-              <List>
-                {content.videos.map((video) => (
-                  <React.Fragment key={video.id}>
-                    <ListItem>
-                      <ListItemText
-                        primary={video.title}
-                        secondary={
-                          <>
-                            <Typography variant="body2" color="text.secondary">
-                              {video.description}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                              Duration: {video.duration}
-                            </Typography>
-                            <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <Typography variant="caption" color="text.secondary">
-                                URL: {video.videoUrl}
-                              </Typography>
-                              <IconButton
-                                size="small"
-                                onClick={() => handleCopyUrl(video.videoUrl)}
-                              >
-                                <CopyIcon fontSize="small" />
-                              </IconButton>
-                            </Box>
-                          </>
-                        }
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton edge="end" onClick={() => handleOpenDialog('video', video)}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" onClick={() => handleDelete('video', video.id)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider />
-                  </React.Fragment>
-                ))}
-              </List>
-            </CardContent>
-          </Card>
+      {/* Tabs Section */}
+      <Paper elevation={0} sx={{ mb: 4, borderRadius: 2, p: 2 }}>
+        <Tabs
+          value={tabValue}
+          onChange={(_, newValue) => setTabValue(newValue)}
+          sx={{
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              fontWeight: 'bold',
+            },
+          }}
+        >
+          <Tab icon={<VideoIcon />} label="Videos" />
+          <Tab icon={<LiveIcon />} label="Clases en Vivo" />
+        </Tabs>
+      </Paper>
+
+      {/* Content Section */}
+      {tabValue === 0 ? (
+        <Grid container spacing={3}>
+          {content.videos.map((video) => (
+            <Grid item xs={12} sm={6} md={4} key={video.id}>
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: `0 8px 16px ${alpha(theme.palette.primary.main, 0.2)}`,
+                  },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={video.thumbnailUrl || 'https://source.unsplash.com/random/400x200?education'}
+                  alt={video.title}
+                  sx={{ objectFit: 'cover' }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                    <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
+                      {video.title}
+                    </Typography>
+                    <Chip
+                      icon={video.isPublished ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      label={video.isPublished ? 'Publicado' : 'Borrador'}
+                      size="small"
+                      sx={{
+                        bgcolor: video.isPublished
+                          ? alpha(theme.palette.success.main, 0.1)
+                          : alpha(theme.palette.warning.main, 0.1),
+                        color: video.isPublished
+                          ? theme.palette.success.main
+                          : theme.palette.warning.main,
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    {video.description}
+                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+                    <Chip
+                      icon={<AccessTimeIcon />}
+                      label={video.duration}
+                      size="small"
+                      sx={{
+                        bgcolor: alpha(theme.palette.info.main, 0.1),
+                        color: theme.palette.info.main,
+                      }}
+                    />
+                    <Chip
+                      icon={<CalendarIcon />}
+                      label={new Date(video.createdAt).toLocaleDateString()}
+                      size="small"
+                      sx={{
+                        bgcolor: alpha(theme.palette.primary.main, 0.1),
+                        color: theme.palette.primary.main,
+                      }}
+                    />
+                  </Stack>
+                </CardContent>
+                <CardActions sx={{ p: 2, pt: 0 }}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<EditIcon />}
+                    onClick={() => handleOpenDialog('video', video)}
+                    fullWidth
+                  >
+                    Editar
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
+      ) : (
+        <Grid container spacing={3}>
+          {content.liveSessions.map((session) => (
+            <Grid item xs={12} sm={6} md={4} key={session.id}>
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: `0 8px 16px ${alpha(theme.palette.primary.main, 0.2)}`,
+                  },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image="https://source.unsplash.com/random/400x200?live"
+                  alt={session.title}
+                  sx={{ objectFit: 'cover' }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                    <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
+                      {session.title}
+                    </Typography>
+                    <Chip
+                      icon={session.isActive ? <CheckCircleIcon /> : <CancelIcon />}
+                      label={session.isActive ? 'En Vivo' : 'Programada'}
+                      size="small"
+                      sx={{
+                        bgcolor: session.isActive
+                          ? alpha(theme.palette.success.main, 0.1)
+                          : alpha(theme.palette.error.main, 0.1),
+                        color: session.isActive
+                          ? theme.palette.success.main
+                          : theme.palette.error.main,
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    {session.description}
+                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+                    <Chip
+                      icon={<CalendarIcon />}
+                      label={new Date(session.startDate).toLocaleDateString()}
+                      size="small"
+                      sx={{
+                        bgcolor: alpha(theme.palette.primary.main, 0.1),
+                        color: theme.palette.primary.main,
+                      }}
+                    />
+                    <Chip
+                      icon={<AccessTimeIcon />}
+                      label={`${new Date(session.startDate).toLocaleTimeString()} - ${new Date(session.endDate).toLocaleTimeString()}`}
+                      size="small"
+                      sx={{
+                        bgcolor: alpha(theme.palette.info.main, 0.1),
+                        color: theme.palette.info.main,
+                      }}
+                    />
+                  </Stack>
+                </CardContent>
+                <CardActions sx={{ p: 2, pt: 0 }}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<EditIcon />}
+                    onClick={() => handleOpenDialog('live', session)}
+                    fullWidth
+                  >
+                    Editar
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
-        {/* Live Sessions Section */}
-        {course.courseType === 'live' && (
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Live Sessions
-                </Typography>
-                <List>
-                  {content.liveSessions.map((session) => (
-                    <React.Fragment key={session.id}>
-                      <ListItem>
-                        <ListItemText
-                          primary={session.title}
-                          secondary={
-                            <>
-                              <Typography variant="body2" color="text.secondary">
-                                {session.description}
-                              </Typography>
-                              <Typography variant="caption" color="text.secondary">
-                                {new Date(session.startDate).toLocaleString()} - {new Date(session.endDate).toLocaleString()}
-                              </Typography>
-                              <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Typography variant="caption" color="text.secondary">
-                                  Stream URL: {session.streamUrl}
-                                </Typography>
-                                <IconButton
-                                  size="small"
-                                  onClick={() => handleCopyUrl(session.streamUrl)}
-                                >
-                                  <CopyIcon fontSize="small" />
-                                </IconButton>
-                              </Box>
-                              {session.isActive && (
-                                <Chip
-                                  label="Live Now"
-                                  color="error"
-                                  size="small"
-                                  sx={{ mt: 1 }}
-                                />
-                              )}
-                            </>
-                          }
-                        />
-                        <ListItemSecondaryAction>
-                          <IconButton edge="end" onClick={() => handleOpenDialog('live', session)}>
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton edge="end" onClick={() => handleDelete('live', session.id)}>
-                            <DeleteIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                      <Divider />
-                    </React.Fragment>
-                  ))}
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-      </Grid>
-
-      {/* Dialog for adding/editing content */}
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {selectedContent ? 'Edit' : 'Add'} {dialogType === 'video' ? 'Video' : 'Live Session'}
+      {/* Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+          },
+        }}
+      >
+        <DialogTitle sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+          <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
+            {selectedContent ? 'Editar' : 'Agregar'} {dialogType === 'video' ? 'Video' : 'Clase en Vivo'}
+          </Typography>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ p: 3 }}>
           <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
-              label="Title"
+              label="Título"
               fullWidth
               value={formData.title}
               onChange={handleTitleChange}
             />
             <TextField
-              label="Description"
+              label="Descripción"
               fullWidth
               multiline
               rows={3}
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={handleDescriptionChange}
             />
             {dialogType === 'video' ? (
               <>
                 <TextField
-                  label="Duration (e.g., 1:30:00)"
+                  label="Duración (minutos)"
                   fullWidth
                   value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                  onChange={handleDurationChange}
                 />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <TextField
-                    label="Video URL"
-                    fullWidth
-                    value={formData.videoUrl}
-                    disabled
-                  />
-                  <IconButton onClick={() => handleCopyUrl(formData.videoUrl)}>
-                    <CopyIcon />
-                  </IconButton>
-                </Box>
+                <TextField
+                  label="URL del Video"
+                  fullWidth
+                  value={formData.videoUrl}
+                  onChange={handleVideoUrlChange}
+                />
               </>
             ) : (
               <>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <TextField
-                    label="Stream URL"
-                    fullWidth
-                    value={formData.streamUrl}
-                    disabled
-                  />
-                  <IconButton onClick={() => handleCopyUrl(formData.streamUrl)}>
-                    <CopyIcon />
-                  </IconButton>
-                </Box>
                 <TextField
-                  label="Start Date"
+                  label="Fecha y Hora de Inicio"
                   type="datetime-local"
                   fullWidth
                   value={formData.startDate}
-                  onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  onChange={handleStartDateChange}
                   InputLabelProps={{ shrink: true }}
                 />
                 <TextField
-                  label="End Date"
+                  label="Fecha y Hora de Fin"
                   type="datetime-local"
                   fullWidth
                   value={formData.endDate}
-                  onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                  onChange={handleEndDateChange}
                   InputLabelProps={{ shrink: true }}
+                />
+                <TextField
+                  label="URL de la Transmisión"
+                  fullWidth
+                  value={formData.streamUrl}
+                  onChange={handleStreamUrlChange}
                 />
               </>
             )}
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained">
-            {selectedContent ? 'Update' : 'Create'}
+        <DialogActions sx={{ p: 3, borderTop: `1px solid ${theme.palette.divider}` }}>
+          <Button onClick={handleCloseDialog}>Cancelar</Button>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            sx={{
+              bgcolor: theme.palette.primary.main,
+              '&:hover': {
+                bgcolor: theme.palette.primary.dark,
+              },
+            }}
+          >
+            {selectedContent ? 'Guardar Cambios' : 'Crear'}
           </Button>
         </DialogActions>
       </Dialog>
 
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={3000}
+        autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        message={snackbar.message}
-      />
-
-      {loading && <LinearProgress sx={{ mt: 3 }} />}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

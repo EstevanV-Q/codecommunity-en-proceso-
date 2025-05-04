@@ -1,0 +1,553 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\migrations\\20250427022026_nose.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\migrations\\20250427022026_nose.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\migrations\\20250427022026_nose.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\migrations\\20250427022026_nose.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\ticketrequests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\ticketrequests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\supportagent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\supportagent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\ticketmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\ticketmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\interfaces\\iticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\interfaces\\iticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\dtos\\ticketmessagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\dtos\\ticketmessagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\dtos\\dashboardstatsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\dtos\\dashboardstatsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\services\\ticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\ticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\dtos\\createticketrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\dtos\\createticketrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\dtos\\ticketdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\dtos\\ticketdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\resource.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\resource.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\announcement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\announcement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\interfaces\\imonitoringservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\interfaces\\imonitoringservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\services\\systemmetricscollector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\systemmetricscollector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\services\\monitoringservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\monitoringservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\monitoring\\systemmetrics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\monitoring\\systemmetrics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\monitoring\\systemlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\monitoring\\systemlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\monitoring\\securityevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\monitoring\\securityevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\monitoring\\codemetrics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\monitoring\\codemetrics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\models\\dtos\\monitoringdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\dtos\\monitoringdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\controllers\\monitoringcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\monitoringcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\services\\validationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\validationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|d:\\pr\\codecommunity-en-proceso-\\webapplication1\\webapplication1\\services\\ivalidationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A06A207F-3876-431F-922C-4B954017ADAC}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\ivalidationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\EmailService.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\EmailService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\EmailService.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAmwDQAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T21:59:01.305Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "20250427022026_nose.Designer.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Migrations\\20250427022026_nose.Designer.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Migrations\\20250427022026_nose.Designer.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Migrations\\20250427022026_nose.Designer.cs",
+              "RelativeToolTip": "WebApplication1\\Migrations\\20250427022026_nose.Designer.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAmwA8AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T21:41:02.632Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "20250427022026_nose.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Migrations\\20250427022026_nose.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Migrations\\20250427022026_nose.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Migrations\\20250427022026_nose.cs",
+              "RelativeToolTip": "WebApplication1\\Migrations\\20250427022026_nose.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T21:40:55.853Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "WebApplication1\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Properties\\launchSettings.json",
+              "RelativeToolTip": "WebApplication1\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-03T21:31:04.313Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\appsettings.json",
+              "RelativeDocumentMoniker": "WebApplication1\\appsettings.json",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\appsettings.json",
+              "RelativeToolTip": "WebApplication1\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-03T18:15:00.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "TicketRequests.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\TicketRequests.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\TicketRequests.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\TicketRequests.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\TicketRequests.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAIwA8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T20:31:21.465Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Program.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Program.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Program.cs",
+              "RelativeToolTip": "WebApplication1\\Program.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAADwvyQAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:34:44.329Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "TicketService.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\TicketService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\TicketService.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\TicketService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\TicketService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T20:21:07.928Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DashboardStatsDto.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\DashboardStatsDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\DTOs\\DashboardStatsDto.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\DashboardStatsDto.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\DTOs\\DashboardStatsDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T20:05:40.412Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "TicketMessageDto.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\TicketMessageDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\DTOs\\TicketMessageDto.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\TicketMessageDto.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\DTOs\\TicketMessageDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T20:05:03.619Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "WebApplication1\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAAAHQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:48:30.787Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ITicketService.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Interfaces\\ITicketService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Interfaces\\ITicketService.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Interfaces\\ITicketService.cs",
+              "RelativeToolTip": "WebApplication1\\Interfaces\\ITicketService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAuwBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T18:25:25.498Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Ticket.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Ticket.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Ticket.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Ticket.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Ticket.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAmwBwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T18:21:17.638Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TicketMessage.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\TicketMessage.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\TicketMessage.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\TicketMessage.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\TicketMessage.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAwBMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T19:59:39.883Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "SupportAgent.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\SupportAgent.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\SupportAgent.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\SupportAgent.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\SupportAgent.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAwA8AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T20:02:33.833Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TicketController.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Controllers\\TicketController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\TicketController.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Controllers\\TicketController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\TicketController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAuwBIAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T20:24:35.515Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CreateTicketRequest.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\CreateTicketRequest.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\DTOs\\CreateTicketRequest.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\CreateTicketRequest.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\DTOs\\CreateTicketRequest.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAmwBYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T20:27:54.832Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "TicketDto.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\TicketDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\DTOs\\TicketDto.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\TicketDto.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\DTOs\\TicketDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T18:22:22.304Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Resource.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Resource.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Resource.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Resource.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Resource.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAmwCYAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T18:03:33.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\User.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\User.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\User.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\User.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAA4wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T18:03:32.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Announcement.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Announcement.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Announcement.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Announcement.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Announcement.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAmwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T18:03:28.671Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "MonitoringDtos.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\MonitoringDtos.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\DTOs\\MonitoringDtos.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\DTOs\\MonitoringDtos.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\DTOs\\MonitoringDtos.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:35:17.038Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "CodeMetrics.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\CodeMetrics.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Monitoring\\CodeMetrics.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\CodeMetrics.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Monitoring\\CodeMetrics.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:35:11.216Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "SecurityEvent.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\SecurityEvent.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Monitoring\\SecurityEvent.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\SecurityEvent.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Monitoring\\SecurityEvent.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:35:08.863Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "SystemLog.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\SystemLog.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Monitoring\\SystemLog.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\SystemLog.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Monitoring\\SystemLog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:35:04.214Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "SystemMetrics.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\SystemMetrics.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Monitoring\\SystemMetrics.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Models\\Monitoring\\SystemMetrics.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Monitoring\\SystemMetrics.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:35:02.867Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "MonitoringService.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\MonitoringService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\MonitoringService.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\MonitoringService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\MonitoringService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:34:55.456Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "SystemMetricsCollector.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\SystemMetricsCollector.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\SystemMetricsCollector.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\SystemMetricsCollector.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\SystemMetricsCollector.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:34:53.208Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "IMonitoringService.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Interfaces\\IMonitoringService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Interfaces\\IMonitoringService.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Interfaces\\IMonitoringService.cs",
+              "RelativeToolTip": "WebApplication1\\Interfaces\\IMonitoringService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:35:21.53Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "MonitoringController.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Controllers\\MonitoringController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\MonitoringController.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Controllers\\MonitoringController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\MonitoringController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:35:24.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "ValidationService.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\ValidationService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\ValidationService.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\ValidationService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\ValidationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:34:46.124Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "IValidationService.cs",
+              "DocumentMoniker": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\IValidationService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\IValidationService.cs",
+              "ToolTip": "D:\\pr\\codecommunity-en-proceso-\\WebApplication1\\WebApplication1\\Services\\IValidationService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\IValidationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T08:34:57.112Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

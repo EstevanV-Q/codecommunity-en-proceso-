@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { MockUser, validateUserCredentials, mockUsers } from '../mocks/users';
+import { LearningRole, TeachingRole, AdminRole, UserRole } from '../types/roles';
 
 interface AuthContextType {
   user: MockUser | null;
@@ -43,42 +44,64 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const userWithRoles = {
           ...validatedUser,
           roles: validatedUser.roles || [validatedUser.role],
-          role: validatedUser.role || 'user' // Asegurar que siempre haya un rol principal
+          role: validatedUser.role || 'viewer' // Rol por defecto
         };
         
         console.log('Usuario validado:', userWithRoles);
         console.log('Roles del usuario:', userWithRoles.roles);
         console.log('Rol principal:', userWithRoles.role);
         
-        // Verificar si el usuario tiene roles administrativos
-        const adminRoles = [
+        // Roles de aprendizaje tienen prioridad
+        const learningRoles: LearningRole[] = ['student', 'mentee'];
+        if (learningRoles.includes(userWithRoles.role as LearningRole)) {
+          setUser(userWithRoles);
+          localStorage.setItem('user', JSON.stringify(userWithRoles));
+          return;
+        }
+        
+        // Roles de enseñanza
+        const teachingRoles: TeachingRole[] = ['professor', 'instructor', 'teachingAssistant'];
+        if (teachingRoles.includes(userWithRoles.role as TeachingRole)) {
+          setUser(userWithRoles);
+          localStorage.setItem('user', JSON.stringify(userWithRoles));
+          return;
+        }
+        
+        // Roles administrativos
+        const adminRoles: AdminRole[] = [
           'founder', 
           'owner', 
           'cto',
           'admin', 
-          'professor',
-          'seniorMentor',
           'seniorDev',
+          'juniorDev',
+          'devOps',
           'moderator',
+          'helper',
+          'marketing',
           'accounting',
-          'marketing'
+          'designer',
+          'support',
+          'supportll',
+          'supportManager'
         ];
         
-        const hasAdminRole = userWithRoles.roles.some(r => adminRoles.includes(r));
-        console.log('¿Tiene rol administrativo?:', hasAdminRole);
-        
-        // Si tiene roles administrativos, usar el rol más alto según la jerarquía
-        if (hasAdminRole) {
-          const effectiveRole = userWithRoles.roles.reduce((highest, current) => {
-            const currentIndex = adminRoles.indexOf(current);
-            const highestIndex = adminRoles.indexOf(highest);
-            return currentIndex < highestIndex ? current : highest;
-          }, userWithRoles.roles[0]);
-          
-          console.log('Rol efectivo:', effectiveRole);
-          userWithRoles.role = effectiveRole;
+        if (adminRoles.includes(userWithRoles.role as AdminRole)) {
+          setUser(userWithRoles);
+          localStorage.setItem('user', JSON.stringify(userWithRoles));
+          return;
         }
         
+        // Roles de usuario regular
+        const userRoles: UserRole[] = ['viewer', 'subscriber'];
+        if (userRoles.includes(userWithRoles.role as UserRole)) {
+          setUser(userWithRoles);
+          localStorage.setItem('user', JSON.stringify(userWithRoles));
+          return;
+        }
+        
+        // Si no coincide con ningún rol conocido, establecer como viewer
+        userWithRoles.role = 'viewer';
         setUser(userWithRoles);
         localStorage.setItem('user', JSON.stringify(userWithRoles));
       } else {

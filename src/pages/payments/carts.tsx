@@ -202,22 +202,19 @@ const AppCarrito: React.FC = () => {
   
     const totalAmount = calcularTotal(); // Calculate the total price of the cart
   
-    const nuevaCompra: Compra = {
-      id: `compra-${Date.now()}`,
-      fecha: new Date(),
-      items: [...estado.itemsCarrito],
-      total: totalAmount,
-      estado: 'completada',
-    };
-  
-    setEstado(prevEstado => ({
-      ...prevEstado,
-      compras: [nuevaCompra, ...prevEstado.compras],
-      itemsCarrito: [],
-    }));
-  
-    // Pass the total amount as state when navigating to the payment page
-    navigate('/payment', { state: { totalAmount } });
+    // Redirigir a la página de pago con el total y los items
+    navigate('/payment', { 
+      state: { 
+        totalAmount,
+        items: estado.itemsCarrito.map(item => ({
+          id: item.curso.id,
+          title: item.curso.titulo,
+          price: item.curso.precio,
+          image: item.curso.imagen,
+          description: item.curso.descripcion
+        }))
+      } 
+    });
   };
   
   // Funciones para las suscripciones
