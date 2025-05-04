@@ -479,16 +479,33 @@ const TeacherCourseAdmin: React.FC = () => {
                         )}
                       </Box>
                     )}
-                    <Tooltip title="Edit">
-                      <IconButton onClick={() => handleOpenDialog(course)}>
-                        <EditIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton onClick={() => handleDelete(course.id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        startIcon={<EditIcon />}
+                        onClick={() => handleOpenDialog(course)}
+                      >
+                        Editar
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<VideoIcon />}
+                        onClick={() => navigate(`/teacher/courses/${course.id}/content`)}
+                      >
+                        Contenido
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleDelete(course.id)}
+                      >
+                        Eliminar
+                      </Button>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}

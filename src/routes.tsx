@@ -4,6 +4,8 @@ import { useAuth } from './context/AuthContext';
 import { useAdmin } from './context/AdminContext';
 import { CircularProgress, Box } from '@mui/material';
 import CreateButton from './components/common/CreateButton';
+import { LearningRole } from './types/roles';
+import ProtectedRouteComponent from './components/ProtectedRoute';
 
 // Importaciones de páginas
 import {
@@ -21,7 +23,6 @@ import {
   Community,
   Forum,
   ForumThread,
-  CreateThread,
   CreatePost,
   
   // Learning Pages
@@ -55,11 +56,12 @@ import {
   // Admin Pages
   AdminDashboard,
   UserManagement,
-  ContentManagement,
+  ContentManagement as AdminContentManagement,
   Analytics,
   OrganizationStructure,
-  CourseManagement,
-  TutorManagement
+  CourseManagement as AdminCourseManagement,
+  TutorManagement,
+  SupportDashboard
 } from './pages';
 
 // Importar las nuevas páginas de recursos
@@ -82,6 +84,25 @@ import { MentorCourseForm, MentorCourseDetail } from './pages/mentor';
 import Monitoring from 'components/dashboards/technical/TechnicalDashboard';
 import FounderDashboard from './components/dashboards/founder/FounderDashboard';
 import TeacherDashboard from './components/dashboards/teacher/TeacherDashboard';
+import TeacherCourseManagement from './components/dashboards/teacher/CourseManagement';
+import TeacherCourseAdmin from './components/dashboards/teacher/TeacherCourseAdmin';
+import CourseContentManagement from './components/dashboards/teacher/CourseContentManagement';
+import StudentProgress from './components/dashboards/teacher/StudentProgress';
+import AssignmentManager from './components/dashboards/teacher/AssignmentManager';
+import GradeBook from './components/dashboards/teacher/GradeBook';
+import MaterialLibrary from './components/dashboards/teacher/MaterialLibrary';
+import CommunicationHub from './components/dashboards/teacher/CommunicationHub';
+import CalendarView from './components/dashboards/teacher/CalendarView';
+import ContentManagement from './pages/teacher/ContentManagement';
+import JobListings from './pages/jobs/JobListings';
+import JobManagement from './pages/admin/JobManagement';
+import CommunityAdminPanel from './components/admin/CommunityAdminPanel';
+import Earnings from './pages/teacher/Earnings';
+import StudentDashboard from './components/dashboards/student/StudentDashboard';
+import StudyGroup from './components/community/StudyGroup';
+import StudyGroupsList from './components/community/StudyGroupsList';
+import StudyGroupsAdmin from './pages/admin/StudyGroupsAdmin';
+import TicketDetail from './pages/tickets/TicketDetail';
 
 const LoadingScreen = () => (
   <Box
@@ -96,8 +117,36 @@ const LoadingScreen = () => (
 
 // Componente para redireccionar a login o dashboard según autenticación
 const AuthRedirect = () => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/auth/login" replace />;
+  const { isAuthenticated, user } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  // Redirigir según el rol del usuario
+  switch (user?.role) {
+    case 'student':
+      return <Navigate to="/student/dashboard" replace />;
+    case 'professor':
+    case 'instructor':
+    case 'teachingAssistant':
+      return <Navigate to="/teacher/dashboard" replace />;
+    case 'mentor':
+    case 'seniorMentor':
+    case 'juniorMentor':
+      return <Navigate to="/mentor/courses" replace />;
+    case 'founder':
+    case 'owner':
+    case 'cto':
+    case 'admin':
+      return <Navigate to="/admin" replace />;
+    case 'support':
+    case 'supportll':
+    case 'supportManager':
+      return <Navigate to="/support/dashboard" replace />;
+    default:
+      return <Navigate to="/dashboard" replace />;
+  }
 };
 
 // Componente para rutas protegidas
@@ -178,6 +227,27 @@ const RestrictedRoute: React.FC<{
   return <>{children}</>;
 };
 
+// Componente para rutas de soporte
+const SupportRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, loading, user } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // Verificar si el usuario tiene rol de soporte
+  if (!['support', 'supportll', 'supportManager'].includes(user?.role || '')) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+};
+
 const AppRoutes = () => {
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -201,20 +271,28 @@ const AppRoutes = () => {
         {/* Rutas principales */}
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/teacher/dashboard" element={<TeacherRoute><TeacherDashboard /></TeacherRoute>} />
+        <Route path="/support/dashboard" element={<SupportRoute><SupportDashboard /></SupportRoute>} />
         
         {/* Rutas de comunidad */}
         <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+        <Route path="/community/groups" element={<ProtectedRoute><StudyGroupsList /></ProtectedRoute>} />
+        <Route path="/community/groups/:groupId" element={<ProtectedRoute><StudyGroup /></ProtectedRoute>} />
         <Route path="/community/new" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+        <Route path="/community/thread/:id" element={<ProtectedRoute><ForumThread /></ProtectedRoute>} />
         
         {/* Rutas de anuncios */}
         <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
+
+        {/* Rutas de ofertas de trabajo */}
+        <Route path="/jobs" element={<ProtectedRoute><JobListings /></ProtectedRoute>} />
 
         {/* Rutas protegidas */}
         <Route path="/user/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         {/* <Route path="/user/profile/setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} /> */}
         <Route path="/editor" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
         <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
-        <Route path="/courses/:courseId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
+        <Route path="/courses/:courseId" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
         <Route path="/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
         <Route path="/projects/:projectId" element={<ProtectedRoute><ProjectDetail /></ProtectedRoute>} />
         <Route path="/projects/new" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
@@ -229,23 +307,50 @@ const AppRoutes = () => {
         <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         <Route path="/admin/organization" element={<AdminRoute><OrganizationStructure /></AdminRoute>} />
         <Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
-        <Route path="/admin/content" element={<AdminRoute><ContentManagement /></AdminRoute>} />
+        <Route path="/admin/content" element={<AdminRoute><AdminContentManagement /></AdminRoute>} />
         <Route path="/admin/analytics" element={<AdminRoute><Analytics /></AdminRoute>} />
         <Route path="/admin/payments" element={<AdminRoute><PaymentManagement /></AdminRoute>} />
         <Route path="/admin/resources" element={<AdminRoute><ResourcesManagement /></AdminRoute>} />
+        <Route path="/admin/community" element={<AdminRoute><CommunityAdminPanel /></AdminRoute>} />
+        <Route path="/admin/community/groups" element={<AdminRoute><StudyGroupsAdmin /></AdminRoute>} />
         <Route path="/admin/resources/:resourceId" element={<AdminRoute><ResourceContentPage /></AdminRoute>} />
         <Route path="/admin/announcements" element={<AdminRoute><AnnouncementsList /></AdminRoute>} />
         <Route path="/admin/announcements/new" element={<AdminRoute><AnnouncementForm /></AdminRoute>} />
         <Route path="/admin/announcements/:id" element={<AdminRoute><AnnouncementForm /></AdminRoute>} />
-        <Route path="/admin/courses" element={<AdminRoute><CourseManagement /></AdminRoute>} />
-        <Route path="/admin/courses/new" element={<AdminRoute><CourseManagement mode="create" /></AdminRoute>} />
+        <Route path="/admin/courses" element={<AdminRoute><AdminCourseManagement /></AdminRoute>} />
+        <Route path="/admin/courses/new" element={<AdminRoute><AdminCourseManagement mode="create" /></AdminRoute>} />
         <Route path="/admin/tutors" element={<AdminRoute><TutorManagement /></AdminRoute>} />
         <Route path="/admin/mentors" element={<AdminRoute><Mentors /></AdminRoute>} />
         <Route path="/admin/monitoring" element={<AdminRoute><Monitoring /></AdminRoute>} />
         <Route path="/admin/Founder" element={<AdminRoute><FounderDashboard /></AdminRoute>} />
+        <Route path="/admin/jobs" element={<AdminRoute><JobManagement /></AdminRoute>} />
+        <Route path="/admin/support" element={<SupportRoute><SupportDashboard /></SupportRoute>} />
+
+        {/* Rutas para el dashboard de estudiante */}
+        <Route 
+          path="/student/dashboard" 
+          element={
+            <ProtectedRoute>
+              <RestrictedRoute allowedRoles={['student' as LearningRole]} fallbackPath="/dashboard">
+                <StudentDashboard />
+              </RestrictedRoute>
+            </ProtectedRoute>
+          } 
+        />
 
         {/* Rutas para el dashboard de profesor */}
-        <Route path="/teacher/Maestro" element={<TeacherRoute><TeacherDashboard /></TeacherRoute>} />
+        <Route path="/teacher" element={<TeacherRoute><TeacherDashboard /></TeacherRoute>} />
+        <Route path="/teacher/courses" element={<TeacherRoute><TeacherCourseManagement /></TeacherRoute>} />
+        <Route path="/teacher/courses/:courseId" element={<TeacherRoute><TeacherCourseAdmin /></TeacherRoute>} />
+        <Route path="/teacher/courses/:courseId/content" element={<TeacherRoute><CourseContentManagement course={null} /></TeacherRoute>} />
+        <Route path="/teacher/students" element={<TeacherRoute><StudentProgress /></TeacherRoute>} />
+        <Route path="/teacher/assignments" element={<TeacherRoute><AssignmentManager /></TeacherRoute>} />
+        <Route path="/teacher/grades" element={<TeacherRoute><GradeBook /></TeacherRoute>} />
+        <Route path="/teacher/materials" element={<TeacherRoute><MaterialLibrary /></TeacherRoute>} />
+        <Route path="/teacher/communication" element={<TeacherRoute><CommunicationHub /></TeacherRoute>} />
+        <Route path="/teacher/calendar" element={<TeacherRoute><CalendarView /></TeacherRoute>} />
+        <Route path="/teacher/content" element={<TeacherRoute><ContentManagement /></TeacherRoute>} />
+        <Route path="/teacher/earnings" element={<TeacherRoute><Earnings /></TeacherRoute>} />
 
         {/* Ruta para el salón de clases en vivo */}
         <Route path="/live-classroom/:courseId" element={<ProtectedRoute><LiveClassroom /></ProtectedRoute>} />
@@ -293,6 +398,9 @@ const AppRoutes = () => {
             </RestrictedRoute>
           } 
         />
+
+        {/* Ruta para detalle de ticket */}
+        <Route path="/tickets/:ticketId" element={<TicketDetail />} />
 
         {/* Ruta por defecto - Redirige a la raíz */}
         <Route path="*" element={<Navigate to="/" replace />} />

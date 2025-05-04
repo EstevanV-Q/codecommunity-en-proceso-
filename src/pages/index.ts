@@ -50,6 +50,7 @@ export { default as Analytics } from './admin/Analytics';
 export { default as OrganizationStructure } from './admin/OrganizationStructure';
 export { default as CourseManagement } from './admin/CourseManagement';
 export { default as TutorManagement } from './admin/TutorManagement';
+export { default as SupportDashboard } from './admin/SupportDashboard';
 
 // Live Classroom
 export { default as LiveClassroom } from './LiveClassroom'; 

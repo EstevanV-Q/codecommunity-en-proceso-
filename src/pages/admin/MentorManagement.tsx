@@ -54,6 +54,7 @@ import {
   AttachMoney as AttachMoneyIcon,
   CalendarMonth as CalendarMonthIcon,
   VerifiedUser as VerifiedUserIcon,
+  Book as BookIcon,
 } from '@mui/icons-material';
 import { Mentor, MentorLevel, MentorSpecialty, MentorStatus } from '../../types/roles';
 
@@ -102,12 +103,59 @@ interface MentorAvailability {
   endTime: string;
 }
 
+interface MentorFormData {
+  name: string;
+  email: string;
+  level: MentorLevel;
+  specialties: MentorSpecialty[];
+  status: MentorStatus;
+  availability: {
+    hoursPerWeek: number;
+    timeZone: string;
+    preferredHours: string[];
+  };
+  experience: {
+    yearsOfExperience: number;
+    technologies: string[];
+    languages: string[];
+  };
+}
+
+interface MentorCourse {
+  id: string;
+  title: string;
+  description: string;
+  students: number;
+  rating: number;
+  status: 'active' | 'draft' | 'archived';
+  lastUpdated: string;
+}
+
+const INITIAL_FORM_DATA: MentorFormData = {
+  name: '',
+  email: '',
+  level: 'junior',
+  specialties: [],
+  status: 'active',
+  availability: {
+    hoursPerWeek: 20,
+    timeZone: 'UTC-3',
+    preferredHours: []
+  },
+  experience: {
+    yearsOfExperience: 0,
+    technologies: [],
+    languages: []
+  }
+};
+
 const MentorManagement = () => {
   const [mentors, setMentors] = useState<Mentor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedMentor, setSelectedMentor] = useState<Mentor | null>(null);
+  const [editMode, setEditMode] = useState(false);
   const [tabValue, setTabValue] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -115,6 +163,9 @@ const MentorManagement = () => {
   const [sessions, setSessions] = useState<MentorSession[]>([]);
   const [certifications, setCertifications] = useState<MentorCertification[]>([]);
   const [availability, setAvailability] = useState<MentorAvailability[]>([]);
+  const [formData, setFormData] = useState<MentorFormData>(INITIAL_FORM_DATA);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     fetchMentors();
@@ -226,13 +277,35 @@ const MentorManagement = () => {
     setTabValue(newValue);
   };
 
+  const handleEditClick = (mentor: Mentor) => {
+    setFormData({
+      name: mentor.name,
+      email: mentor.email,
+      level: mentor.level,
+      specialties: mentor.specialties,
+      status: mentor.status,
+      availability: mentor.availability,
+      experience: mentor.experience
+    });
+    setSelectedMentor(mentor);
+    setEditMode(true);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setEditMode(false);
+    setSelectedMentor(null);
+    setFormData(INITIAL_FORM_DATA);
+  };
+
   const renderMentorDetails = () => {
-    if (!selectedMentor) return null;
+    if (!selectedMentor || editMode) return null;
 
     return (
       <Dialog 
         open={openDialog} 
-        onClose={() => setOpenDialog(false)} 
+        onClose={handleCloseDialog}
         maxWidth="lg" 
         fullWidth
       >
@@ -261,7 +334,7 @@ const MentorManagement = () => {
               <Tab icon={<AssessmentIcon />} label="Resumen" />
               <Tab icon={<CalendarMonthIcon />} label="Sesiones" />
               <Tab icon={<SchoolIcon />} label="Certificaciones" />
-              <Tab icon={<AttachMoneyIcon />} label="Precios" />
+              <Tab icon={<BookIcon />} label="Cursos" />
               <Tab icon={<ScheduleIcon />} label="Disponibilidad" />
             </Tabs>
           </Box>
@@ -413,41 +486,67 @@ const MentorManagement = () => {
 
           <TabPanel value={tabValue} index={3}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Tarifa por Hora
-                    </Typography>
-                    <Typography variant="h4" color="primary">
-                      ${selectedMentor.pricing?.hourlyRate}
-                      <Typography variant="caption" sx={{ ml: 1 }}>
-                        {selectedMentor.pricing?.currency}
-                      </Typography>
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom>
-                  Paquetes Disponibles
+                  Cursos Impartidos
                 </Typography>
                 <Grid container spacing={2}>
-                  {selectedMentor.pricing?.packages.map((pkg, index) => (
-                    <Grid item xs={12} md={4} key={index}>
+                  {[
+                    {
+                      id: '1',
+                      title: 'React desde Cero',
+                      description: 'Aprende React desde los fundamentos hasta conceptos avanzados',
+                      students: 125,
+                      rating: 4.8,
+                      status: 'active',
+                      lastUpdated: '2024-03-15'
+                    },
+                    {
+                      id: '2',
+                      title: 'TypeScript Avanzado',
+                      description: 'Domina TypeScript y sus características más avanzadas',
+                      students: 85,
+                      rating: 4.6,
+                      status: 'active',
+                      lastUpdated: '2024-03-10'
+                    },
+                    {
+                      id: '3',
+                      title: 'Node.js y Express',
+                      description: 'Desarrollo backend con Node.js y Express',
+                      students: 95,
+                      rating: 4.7,
+                      status: 'active',
+                      lastUpdated: '2024-03-01'
+                    }
+                  ].map((course) => (
+                    <Grid item xs={12} md={4} key={course.id}>
                       <Card>
                         <CardContent>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
                           <Typography variant="h6" gutterBottom>
-                            {pkg.description}
+                              {course.title}
                           </Typography>
-                          <Typography variant="h4" color="primary" gutterBottom>
-                            ${pkg.price}
+                            <Chip
+                              label={course.status === 'active' ? 'Activo' : course.status === 'draft' ? 'Borrador' : 'Archivado'}
+                              color={course.status === 'active' ? 'success' : 'default'}
+                              size="small"
+                            />
+                          </Box>
+                          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                            {course.description}
                           </Typography>
+                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <Rating value={course.rating} readOnly precision={0.1} size="small" />
+                            <Typography variant="body2" sx={{ ml: 1 }}>
+                              ({course.rating})
+                            </Typography>
+                          </Box>
                           <Typography variant="body2">
-                            {pkg.hours} horas de mentoría
+                            {course.students} estudiantes
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            ${(pkg.price / pkg.hours).toFixed(2)} por hora
+                          <Typography variant="caption" color="text.secondary">
+                            Última actualización: {new Date(course.lastUpdated).toLocaleDateString()}
                           </Typography>
                         </CardContent>
                       </Card>
@@ -494,15 +593,277 @@ const MentorManagement = () => {
           </TabPanel>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cerrar</Button>
+          <Button onClick={handleCloseDialog}>Cerrar</Button>
           <Button
             variant="contained"
             startIcon={<EditIcon />}
             onClick={() => {
-              // Implementar lógica de edición
+              setFormData({
+                name: selectedMentor.name,
+                email: selectedMentor.email,
+                level: selectedMentor.level,
+                specialties: selectedMentor.specialties,
+                status: selectedMentor.status,
+                availability: selectedMentor.availability,
+                experience: selectedMentor.experience
+              });
+              setEditMode(true);
             }}
           >
             Editar Perfil
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  const handleCreate = async () => {
+    try {
+      // Simular creación de mentor
+      const newMentor: Mentor = {
+        id: Date.now().toString(),
+        ...formData,
+        createdAt: new Date().toISOString(),
+        metrics: {
+          studentsHelped: 0,
+          averageRating: 0,
+          completedSessions: 0,
+          successRate: 0
+        }
+      };
+
+      setMentors([...mentors, newMentor]);
+      setOpenDialog(false);
+      setFormData(INITIAL_FORM_DATA);
+      setSnackbar({
+        open: true,
+        message: 'Mentor creado exitosamente',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.error('Error al crear mentor:', error);
+      setSnackbar({
+        open: true,
+        message: 'Error al crear el mentor',
+        severity: 'error'
+      });
+    }
+  };
+
+  const handleEdit = async () => {
+    if (!selectedMentor) return;
+
+    try {
+      const updatedMentor: Mentor = {
+        ...selectedMentor,
+        ...formData
+      };
+
+      setMentors(mentors.map(m => m.id === selectedMentor.id ? updatedMentor : m));
+      setOpenDialog(false);
+      setFormData(INITIAL_FORM_DATA);
+      setSelectedMentor(null);
+      setSnackbar({
+        open: true,
+        message: 'Mentor actualizado exitosamente',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.error('Error al actualizar mentor:', error);
+      setSnackbar({
+        open: true,
+        message: 'Error al actualizar el mentor',
+        severity: 'error'
+      });
+    }
+  };
+
+  const handleDelete = async (mentorId: string) => {
+    if (!window.confirm('¿Estás seguro de que deseas eliminar este mentor?')) {
+      return;
+    }
+
+    try {
+      setMentors(mentors.filter(m => m.id !== mentorId));
+      setSnackbar({
+        open: true,
+        message: 'Mentor eliminado exitosamente',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.error('Error al eliminar mentor:', error);
+      setSnackbar({
+        open: true,
+        message: 'Error al eliminar el mentor',
+        severity: 'error'
+      });
+    }
+  };
+
+  const renderMentorForm = () => {
+    if (!editMode && selectedMentor) return null;
+    
+    return (
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
+        <DialogTitle>
+          {selectedMentor ? 'Editar Mentor' : 'Nuevo Mentor'}
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Nombre"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>Nivel</InputLabel>
+                <Select
+                  value={formData.level}
+                  label="Nivel"
+                  onChange={(e) => setFormData({ ...formData, level: e.target.value as MentorLevel })}
+                >
+                  <MenuItem value="junior">Junior</MenuItem>
+                  <MenuItem value="intermediate">Intermedio</MenuItem>
+                  <MenuItem value="senior">Senior</MenuItem>
+                  <MenuItem value="expert">Experto</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>Estado</InputLabel>
+                <Select
+                  value={formData.status}
+                  label="Estado"
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as MentorStatus })}
+                >
+                  <MenuItem value="active">Activo</MenuItem>
+                  <MenuItem value="inactive">Inactivo</MenuItem>
+                  <MenuItem value="pending">Pendiente</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <InputLabel>Especialidades</InputLabel>
+                <Select
+                  multiple
+                  value={formData.specialties}
+                  onChange={(e) => setFormData({ ...formData, specialties: e.target.value as MentorSpecialty[] })}
+                  label="Especialidades"
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  <MenuItem value="frontend">Frontend</MenuItem>
+                  <MenuItem value="backend">Backend</MenuItem>
+                  <MenuItem value="mobile">Mobile</MenuItem>
+                  <MenuItem value="devops">DevOps</MenuItem>
+                  <MenuItem value="data">Data Science</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Horas por semana"
+                value={formData.availability.hoursPerWeek}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  availability: {
+                    ...formData.availability,
+                    hoursPerWeek: parseInt(e.target.value)
+                  }
+                })}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Zona horaria"
+                value={formData.availability.timeZone}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  availability: {
+                    ...formData.availability,
+                    timeZone: e.target.value
+                  }
+                })}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Años de experiencia"
+                value={formData.experience.yearsOfExperience}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  experience: {
+                    ...formData.experience,
+                    yearsOfExperience: parseInt(e.target.value)
+                  }
+                })}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Tecnologías (separadas por coma)"
+                value={formData.experience.technologies.join(', ')}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  experience: {
+                    ...formData.experience,
+                    technologies: e.target.value.split(',').map(t => t.trim())
+                  }
+                })}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Idiomas (separados por coma)"
+                value={formData.experience.languages.join(', ')}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  experience: {
+                    ...formData.experience,
+                    languages: e.target.value.split(',').map(l => l.trim())
+                  }
+                })}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancelar</Button>
+          <Button 
+            onClick={selectedMentor ? handleEdit : handleCreate} 
+            variant="contained" 
+            color="primary"
+          >
+            {selectedMentor ? 'Guardar cambios' : 'Crear mentor'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -520,6 +881,8 @@ const MentorManagement = () => {
           startIcon={<AddIcon />}
           onClick={() => {
             setSelectedMentor(null);
+            setFormData(INITIAL_FORM_DATA);
+            setEditMode(true);
             setOpenDialog(true);
           }}
         >
@@ -640,17 +1003,26 @@ const MentorManagement = () => {
                   </TableCell>
                   <TableCell align="right">
                     <Tooltip title="Ver detalles">
-                      <IconButton onClick={() => handleMentorSelect(mentor)} size="small">
+                      <IconButton onClick={() => {
+                        setSelectedMentor(mentor);
+                        setTabValue(0);
+                        setOpenDialog(true);
+                        setEditMode(false);
+                      }} size="small">
                         <AssessmentIcon />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Editar">
-                      <IconButton onClick={() => handleMentorSelect(mentor)} size="small">
+                      <IconButton onClick={() => handleEditClick(mentor)} size="small">
                         <EditIcon />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Eliminar">
-                      <IconButton size="small" color="error">
+                      <IconButton 
+                        onClick={() => handleDelete(mentor.id)} 
+                        size="small" 
+                        color="error"
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -675,6 +1047,7 @@ const MentorManagement = () => {
       </TableContainer>
 
       {renderMentorDetails()}
+      {renderMentorForm()}
 
       <Snackbar
         open={snackbar.open}

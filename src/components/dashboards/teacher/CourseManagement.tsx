@@ -26,6 +26,13 @@ import {
   Autocomplete,
   Tabs,
   Tab,
+  Avatar,
+  Stack,
+  useTheme,
+  alpha,
+  CardMedia,
+  Tooltip,
+  Badge,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -36,6 +43,10 @@ import {
   Assignment as AssignmentIcon,
   Image as ImageIcon,
   VideoLibrary as VideoIcon,
+  Star as StarIcon,
+  AccessTime as AccessTimeIcon,
+  School as SchoolIcon,
+  LiveTv as LiveIcon,
 } from '@mui/icons-material';
 import { Course } from '../../../types/dashboard';
 import CourseContentManagement from './CourseContentManagement';
@@ -110,15 +121,16 @@ interface CourseManagementProps {
 }
 
 const CourseManagement: React.FC<CourseManagementProps> = ({ courseType }) => {
+  const theme = useTheme();
   const [courses, setCourses] = useState<Course[]>(mockCourses);
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [menuCourse, setMenuCourse] = useState<Course | null>(null);
+  const [selectedCourseForMenu, setSelectedCourseForMenu] = useState<Course | undefined>(undefined);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [selectedCourseForContent, setSelectedCourseForContent] = useState<Course | null>(null);
 
   // Filter courses based on courseType prop
@@ -126,32 +138,29 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ courseType }) => {
     ? courses.filter(course => course.courseType === courseType)
     : courses;
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Partial<Course>>({
     title: '',
     description: '',
-    level: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
+    level: 'beginner',
     category: '',
     duration: 0,
-    technologies: [] as string[],
-    requirements: [] as string[],
+    technologies: [],
+    requirements: [],
     isPublished: false,
     price: 0,
     mentor: '',
-    hasSpecificStartDate: false,
-    startDate: '',
-    courseType: 'recorded' as 'recorded' | 'live',
+    courseType: courseType || 'recorded',
     isPublic: false,
-    coverImage: '',
   });
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, course: Course) => {
     setAnchorEl(event.currentTarget);
-    setMenuCourse(course);
+    setSelectedCourseForMenu(course);
   };
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
-    setMenuCourse(null);
+    setSelectedCourseForMenu(undefined);
   };
 
   const handleOpenDialog = (course?: Course) => {
@@ -168,8 +177,6 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ courseType }) => {
         isPublished: course.isPublished,
         price: course.price,
         mentor: course.mentor,
-        hasSpecificStartDate: course.hasSpecificStartDate,
-        startDate: course.startDate,
         courseType: course.courseType,
         isPublic: course.isPublic,
         coverImage: course.coverImage || '',
@@ -188,9 +195,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ courseType }) => {
         isPublished: false,
         price: 0,
         mentor: '',
-        hasSpecificStartDate: false,
-        startDate: '',
-        courseType: 'recorded',
+        courseType: courseType || 'recorded',
         isPublic: false,
         coverImage: '',
       });
@@ -239,12 +244,32 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ courseType }) => {
       // Crear nuevo curso
       const newCourse: Course = {
         id: String(Date.now()),
-        ...formData,
+        title: formData.title || '',
+        description: formData.description || '',
+        level: formData.level || 'beginner',
+        category: formData.category || '',
+        duration: formData.duration || 0,
+        technologies: formData.technologies || [],
+        requirements: formData.requirements || [],
+        isPublished: formData.isPublished || false,
+        price: formData.price || 0,
+        mentor: formData.mentor || '',
         enrolledStudents: 0,
         rating: 0,
+        hasSpecificStartDate: false,
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        courseType: formData.courseType || 'recorded',
+        isPublic: formData.isPublic || false,
         coverImage: previewImage || '',
+        liveClassroom: formData.courseType === 'live' ? {
+          meetingLink: '',
+          meetingId: '',
+          meetingPassword: '',
+          schedule: []
+        } : undefined
       };
       setCourses([...courses, newCourse]);
     }
@@ -263,132 +288,180 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ courseType }) => {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
+    setTabValue(newValue);
   };
 
   const handleCourseSelect = (course: Course) => {
     setSelectedCourseForContent(course);
-    setActiveTab(1);
+    setTabValue(1);
   };
 
   return (
-    <Box>
-      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h5">
-          {courseType === 'recorded' ? 'Videos Grabados' : 
-           courseType === 'live' ? 'Clases en Vivo' : 'Mis Cursos'}
+    <Box sx={{ p: 3 }}>
+      {/* Header Section */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 4,
+          borderRadius: 2,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          color: 'white',
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+            {courseType === 'live' ? 'Clases en Vivo' : 'Gestión de Cursos'}
         </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => handleOpenDialog()}
-        >
-          Nuevo Curso
+            sx={{
+              bgcolor: 'white',
+              color: theme.palette.primary.main,
+              '&:hover': {
+                bgcolor: alpha(theme.palette.common.white, 0.9),
+              },
+            }}
+          >
+            Crear Nuevo
         </Button>
       </Box>
+        <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
+          {courseType === 'live' 
+            ? 'Gestiona tus clases en vivo y su programación' 
+            : 'Administra tus cursos y su contenido'}
+        </Typography>
+      </Paper>
 
-      <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
-        <Tab label="Cursos" />
-        <Tab label="Gestión de Contenido" disabled={!selectedCourseForContent} />
+      {/* Tabs Section */}
+      <Paper elevation={0} sx={{ mb: 4, borderRadius: 2, p: 2 }}>
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          sx={{
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              fontWeight: 'bold',
+            },
+          }}
+        >
+          <Tab label="Todos los Cursos" />
+          <Tab label="Publicados" />
+          <Tab label="Borradores" />
       </Tabs>
+      </Paper>
 
-      {activeTab === 0 ? (
+      {/* Courses Grid */}
         <Grid container spacing={3}>
           {filteredCourses.map((course) => (
-            <Grid item xs={12} md={6} lg={4} key={course.id}>
-              <Card>
-                <CardContent>
-                  {course.coverImage && (
-                    <Box sx={{ mb: 2, height: 140, overflow: 'hidden', borderRadius: 1 }}>
-                      <img
-                        src={course.coverImage}
+          <Grid item xs={12} sm={6} md={4} key={course.id}>
+            <Card
+              sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                transition: 'all 0.3s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: `0 8px 16px ${alpha(theme.palette.primary.main, 0.2)}`,
+                },
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="140"
+                image={course.coverImage || 'https://source.unsplash.com/random/400x200?education'}
                         alt={course.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                sx={{ objectFit: 'cover' }}
                       />
-                    </Box>
-                  )}
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <Typography variant="h6" gutterBottom>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                  <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
                       {course.title}
                     </Typography>
-                    <IconButton onClick={(e) => handleOpenMenu(e, course)}>
+                  <IconButton
+                    onClick={(e) => handleOpenMenu(e, course)}
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
                       <MoreVertIcon />
                     </IconButton>
                   </Box>
-
-                  <Typography color="textSecondary" gutterBottom>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                     {course.description}
                   </Typography>
-
-                  <Box sx={{ mt: 2, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
                     <Chip
-                      icon={<PeopleIcon />}
-                      label={`${course.enrolledStudents} Students`}
-                      size="small"
-                    />
-                    <Chip
+                    icon={<SchoolIcon />}
                       label={course.level}
                       size="small"
-                      color="primary"
+                    sx={{
+                      bgcolor: alpha(theme.palette.primary.main, 0.1),
+                      color: theme.palette.primary.main,
+                    }}
                     />
                     <Chip
-                      label={course.courseType}
+                    icon={course.courseType === 'live' ? <LiveIcon /> : <VideoIcon />}
+                    label={course.courseType === 'live' ? 'En Vivo' : 'Grabado'}
                       size="small"
-                      color="secondary"
-                    />
+                    sx={{
+                      bgcolor: alpha(theme.palette.info.main, 0.1),
+                      color: theme.palette.info.main,
+                    }}
+                  />
+                </Stack>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <StarIcon sx={{ color: theme.palette.warning.main, mr: 0.5 }} />
+                    <Typography variant="body2">{course.rating}</Typography>
                   </Box>
-
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="body2" color="textSecondary">
-                      {`${new Date(course.startDate).toLocaleDateString()} - ${course.duration} hours`}
-                    </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <PeopleIcon sx={{ color: theme.palette.success.main, mr: 0.5 }} />
+                    <Typography variant="body2">{course.enrolledStudents}</Typography>
                   </Box>
-
-                  <Box sx={{ mt: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <AccessTimeIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+                    <Typography variant="body2">{course.duration}h</Typography>
+                  </Box>
+                </Box>
+                <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
+                  ${course.price}
+                </Typography>
+              </CardContent>
+              <CardActions sx={{ p: 2, pt: 0 }}>
                     <Button
                       variant="outlined"
-                      startIcon={<VideoIcon />}
-                      onClick={() => handleCourseSelect(course)}
+                  startIcon={<EditIcon />}
+                  onClick={() => handleOpenDialog(course)}
                       fullWidth
                     >
-                      Manage Content
+                  Editar
                     </Button>
-                  </Box>
-                </CardContent>
+              </CardActions>
               </Card>
             </Grid>
           ))}
         </Grid>
-      ) : (
-        selectedCourseForContent && <CourseContentManagement course={selectedCourseForContent} />
-      )}
 
-      {/* Menu for course actions */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-      >
-        <MenuItem onClick={() => {
-          handleCloseMenu();
-          menuCourse && handleOpenDialog(menuCourse);
-        }}>
-          <EditIcon sx={{ mr: 1 }} /> Edit
-        </MenuItem>
-        <MenuItem
-          onClick={() => menuCourse && handleDelete(menuCourse.id)}
-          sx={{ color: 'error.main' }}
+      {/* Course Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+          },
+        }}
         >
-          <DeleteIcon sx={{ mr: 1 }} /> Delete
-        </MenuItem>
-      </Menu>
-
-      {/* Dialog for creating/editing courses */}
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-        <DialogTitle>
-          {selectedCourse ? 'Edit Course' : 'New Course'}
+        <DialogTitle sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+          <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
+            {selectedCourse ? 'Editar Curso' : 'Crear Nuevo Curso'}
+          </Typography>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ p: 3 }}>
           <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box sx={{ display: 'flex', gap: 2 }}>
               <TextField
@@ -554,15 +627,42 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ courseType }) => {
             </Box>
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained">
-            {selectedCourse ? 'Update' : 'Create'}
+        <DialogActions sx={{ p: 3, borderTop: `1px solid ${theme.palette.divider}` }}>
+          <Button onClick={handleCloseDialog}>Cancelar</Button>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            sx={{
+              bgcolor: theme.palette.primary.main,
+              '&:hover': {
+                bgcolor: theme.palette.primary.dark,
+              },
+            }}
+          >
+            {selectedCourse ? 'Guardar Cambios' : 'Crear Curso'}
           </Button>
         </DialogActions>
       </Dialog>
 
-      {loading && <LinearProgress sx={{ mt: 3 }} />}
+      {/* Course Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            boxShadow: `0 4px 12px ${alpha(theme.palette.common.black, 0.1)}`,
+          },
+        }}
+      >
+        <MenuItem onClick={() => selectedCourseForMenu && handleOpenDialog(selectedCourseForMenu)}>
+          <EditIcon sx={{ mr: 1 }} /> Editar
+        </MenuItem>
+        <MenuItem onClick={() => handleDelete(selectedCourseForMenu?.id || '')}>
+          <DeleteIcon sx={{ mr: 1 }} /> Eliminar
+        </MenuItem>
+      </Menu>
     </Box>
   );
 };

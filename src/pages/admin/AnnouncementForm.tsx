@@ -31,7 +31,7 @@ import { useAnnouncements, Announcement } from '../../context/AnnouncementContex
 
 // Tipo para los datos del formulario
 type FormData = Omit<Announcement, 'id' | 'createdAt' | 'updatedAt' | 'viewCount'>;
-
+ 
 const AnnouncementForm = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

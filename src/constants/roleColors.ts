@@ -1,4 +1,4 @@
-import { colors } from '../theme/tokens';
+import { colors } from './colors';
 import type { AdminRole } from '../types/roles';
 
 export const roleColors: Record<AdminRole, string> = {
@@ -10,7 +10,7 @@ export const roleColors: Record<AdminRole, string> = {
   cto: colors.primary[500],
   seniorDev: colors.primary[400],
   juniorDev: colors.primary[300],
-  devOps: colors.primary[400],
+  devOps: colors.primary[200],
   
   // Equipo de Moderación
   admin: colors.secondary[700],
@@ -18,9 +18,12 @@ export const roleColors: Record<AdminRole, string> = {
   helper: colors.secondary[500],
   
   // Departamentos Especializados
-  marketing: colors.accent[600],
-  accounting: colors.accent[500],
-  designer: colors.accent[400],
+  marketing: colors.accent[700],
+  accounting: colors.accent[600],
+  designer: colors.accent[500],
+  support: colors.accent[400],
+  supportll: colors.accent[300],
+  supportManager: colors.accent[200],
   
   // Roles Educativos
   professor: colors.success[700],
@@ -28,14 +31,14 @@ export const roleColors: Record<AdminRole, string> = {
   teachingAssistant: colors.success[500],
   student: colors.success[400],
   mentee: colors.success[300],
-  seniorMentor: colors.success[600],
-  mentor: colors.success[500],
-  juniorMentor: colors.success[400],
+  seniorMentor: colors.success[200],
+  mentor: colors.success[100],
+  juniorMentor: colors.success[50],
   
   // Roles de Comunidad
-  viewer: colors.neutral[400],
-  subscriber: colors.neutral[500],
+  viewer: colors.grey[700],
+  subscriber: colors.grey[600],
   
   // Usuario regular
-  user: colors.neutral[300]
+  user: colors.grey[500]
 } as const;

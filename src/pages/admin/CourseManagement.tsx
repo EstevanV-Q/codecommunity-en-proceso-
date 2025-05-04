@@ -54,10 +54,11 @@ import {
   Lock as LockIcon,
   Close as CloseIcon,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CourseContentService from '../../services/CourseContentService';
 import { useAuth } from '../../context/AuthContext';
 import { useAdmin } from '../../context/AdminContext';
+import ChapterManager from '../../components/admin/ChapterManager';
 
 interface Course {
   id: string;
@@ -79,6 +80,8 @@ interface Course {
   updatedAt: string;
   courseType: 'recorded' | 'live';
   isPublic: boolean;
+  type: string;
+  status: string;
 }
 
 interface CourseFormData {
@@ -96,6 +99,14 @@ interface CourseFormData {
   startDate: string;
   courseType: 'recorded' | 'live';
   isPublic: boolean;
+}
+
+interface Chapter {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  videoUrl?: string;
 }
 
 const INITIAL_FORM_DATA: CourseFormData = {
@@ -136,18 +147,23 @@ const TECHNOLOGIES = [
 ];
 
 interface CourseManagementProps {
-  mode?: 'create' | 'list';
+  mode?: 'create' | 'list' | 'edit';
+  courseType?: 'recorded' | 'live';
 }
 
-const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) => {
+const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list', courseType }) => {
   const { user } = useAuth();
   const { checkPermission } = useAdmin();
+  const { courseId } = useParams<{ courseId: string }>();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [openDialog, setOpenDialog] = useState(mode === 'create');
+  const [openDialog, setOpenDialog] = useState(mode === 'create' || mode === 'edit');
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [formData, setFormData] = useState<CourseFormData>(INITIAL_FORM_DATA);
+  const [formData, setFormData] = useState<CourseFormData>({
+    ...INITIAL_FORM_DATA,
+    courseType: courseType || 'recorded'
+  });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
@@ -162,6 +178,32 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
   });
   const [chapters, setChapters] = useState<any[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (mode === 'edit' && courseId) {
+      // Cargar el curso específico para edición
+      const courseToEdit = courses.find(c => c.id === courseId);
+      if (courseToEdit) {
+        setSelectedCourse(courseToEdit);
+        setFormData({
+          title: courseToEdit.title,
+          description: courseToEdit.description,
+          level: courseToEdit.level,
+          category: courseToEdit.category,
+          duration: courseToEdit.duration,
+          technologies: courseToEdit.technologies,
+          requirements: courseToEdit.requirements,
+          isPublished: courseToEdit.isPublished,
+          price: courseToEdit.price,
+          mentor: courseToEdit.mentor,
+          hasSpecificStartDate: courseToEdit.hasSpecificStartDate,
+          startDate: courseToEdit.startDate,
+          courseType: courseToEdit.courseType,
+          isPublic: courseToEdit.isPublic,
+        });
+      }
+    }
+  }, [mode, courseId, courses]);
 
   const getCourseStatus = (course: Course) => {
     const now = new Date();
@@ -258,6 +300,8 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
             updatedAt: new Date().toISOString(),
             courseType: 'recorded',
             isPublic: true,
+            type: 'recorded',
+            status: 'published'
           },
         ];
         
@@ -400,7 +444,9 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
       updatedAt: new Date().toISOString(),
       enrolledStudents: 0,
       rating: 0,
-      isPublished: data.isPublic
+      isPublished: data.isPublic,
+      type: data.courseType,
+      status: data.isPublic ? 'published' : 'draft'
     };
 
     try {
@@ -452,34 +498,39 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
   };
 
   const handleOpenContent = async (courseId: string) => {
-    const course = courses.find(c => c.id === courseId);
-    if (!course) return;
-
-    setContentDialog({
-      open: true,
-      courseId
-    });
-
     try {
-      if (course.courseType === 'recorded') {
-        // Cargar capítulos si es un curso de video
-        const loadedChapters = await CourseContentService.getChapters(courseId);
-        setChapters(loadedChapters);
-      } else {
-        // Asegurarse de que exista la sesión en vivo
-        const liveSession = CourseContentService.getLiveSessionInfo(courseId);
-        if (!liveSession) {
-          // Si no existe la sesión, crearla
-          await CourseContentService.createCourse(courseId, 'live');
+      // Datos simulados de capítulos para demostración
+      const mockChapters: Chapter[] = [
+        {
+          id: '1',
+          title: 'Introducción al Curso',
+          description: 'Bienvenida y visión general del curso',
+          order: 1,
+          videoUrl: 'https://example.com/videos/intro.mp4'
+        },
+        {
+          id: '2',
+          title: 'Configuración del Entorno',
+          description: 'Instalación y configuración de herramientas necesarias',
+          order: 2,
+          videoUrl: 'https://example.com/videos/setup.mp4'
+        },
+        {
+          id: '3',
+          title: 'Fundamentos Básicos',
+          description: 'Conceptos fundamentales y primeros pasos',
+          order: 3,
+          videoUrl: 'https://example.com/videos/basics.mp4'
         }
-      }
-    } catch (error) {
-      console.error('Error al cargar el contenido del curso:', error);
-      setSnackbar({
+      ];
+
+      setChapters(mockChapters);
+      setContentDialog({
         open: true,
-        message: 'Error al cargar el contenido del curso',
-        severity: 'error'
+        courseId
       });
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -488,40 +539,74 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
       open: false,
       courseId: null
     });
-    setChapters([]);
   };
 
-  const handleFileSelect = async (chapterId: string) => {
-    if (!contentDialog.courseId) return;
-
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'video/*';
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        try {
-          await CourseContentService.uploadVideo(contentDialog.courseId!, chapterId, file);
-          // Recargar los capítulos
-          const loadedChapters = await CourseContentService.getChapters(contentDialog.courseId!);
-          setChapters(loadedChapters);
-        } catch (error) {
-          console.error('Error al subir el video:', error);
-        }
-      }
-    };
-    input.click();
+  const handleChaptersUpdate = async (updatedChapters: Chapter[]) => {
+    try {
+      await CourseContentService.updateChapters(contentDialog.courseId!, updatedChapters);
+      setChapters(updatedChapters);
+      setSnackbar({
+        open: true,
+        message: 'Capítulos actualizados correctamente',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.error('Error updating chapters:', error);
+      setSnackbar({
+        open: true,
+        message: 'Error al actualizar los capítulos',
+        severity: 'error'
+      });
+    }
   };
 
-  const getLiveSessionInfo = (courseId: string) => {
-    return CourseContentService.getLiveSessionInfo(courseId);
+  const renderActions = (course: Course) => {
+    return (
+      <TableCell align="right">
+        {canEditCourse(course) && (
+          <>
+            <IconButton
+              onClick={() => handleOpenDialog(course)}
+              size="small"
+              color="primary"
+            >
+              <EditIcon />
+            </IconButton>
+            {checkPermission('courses.manage') && (
+              <IconButton
+                onClick={() => handleDeleteClick(course)}
+                size="small"
+                color="error"
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </>
+        )}
+        {course.courseType === 'recorded' && (
+          <IconButton
+            onClick={() => handleOpenContent(course.id)}
+            size="small"
+            color="primary"
+          >
+            <PlayCircleIcon />
+          </IconButton>
+        )}
+        <IconButton
+          onClick={() => navigate(`/courses/${course.id}`)}
+          size="small"
+        >
+          <VisibilityIcon />
+        </IconButton>
+      </TableCell>
+    );
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h4" component="h1">
-          {mode === 'create' ? 'Nuevo Curso' : 'Gestión de Cursos'}
+          {mode === 'create' ? 'Nuevo Curso' : mode === 'edit' ? 'Editar Curso' : 'Gestión de Cursos'}
         </Typography>
         {mode === 'list' && checkPermission('courses.create') && (
           <Box>
@@ -613,41 +698,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
                       </TableCell>
                       <TableCell>{course.enrolledStudents}</TableCell>
                       <TableCell>
-                        <Button
-                          variant="outlined"
-                          startIcon={course.courseType === 'live' ? <LiveIcon /> : <PlayCircleIcon />}
-                          onClick={() => handleOpenContent(course.id)}
-                        >
-                          {course.courseType === 'live' ? 'Ver sesión' : 'Ver capítulos'}
-                        </Button>
-                      </TableCell>
-                      <TableCell align="right">
-                        {canEditCourse(course) && (
-                          <>
-                            <IconButton
-                              onClick={() => handleOpenDialog(course)}
-                              size="small"
-                              color="primary"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            {checkPermission('courses.manage') && (
-                              <IconButton
-                                onClick={() => handleDeleteClick(course)}
-                                size="small"
-                                color="error"
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            )}
-                          </>
-                        )}
-                        <IconButton
-                          onClick={() => navigate(`/courses/${course.id}`)}
-                          size="small"
-                        >
-                          <VisibilityIcon />
-                        </IconButton>
+                        {renderActions(course)}
                       </TableCell>
                     </TableRow>
                   );
@@ -940,139 +991,35 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ mode = 'list' }) =>
         </Alert>
       </Snackbar>
 
-      {/* Diálogo de contenido */}
+      {/* Dialog para gestionar capítulos */}
       <Dialog
         open={contentDialog.open}
         onClose={handleCloseContent}
-        maxWidth="md"
+        maxWidth="lg"
         fullWidth
       >
-        <DialogTitle>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography>
-              {contentDialog.courseId ? 
-                courses.find(c => c.id === contentDialog.courseId)?.title :
-                'Contenido del curso'
-              }
-            </Typography>
-            <IconButton onClick={handleCloseContent}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <PlayCircleIcon color="primary" />
+          Gestión de Contenido del Curso
         </DialogTitle>
         <DialogContent>
           {contentDialog.courseId && (
-            <Box>
-              {(() => {
-                const course = courses.find(c => c.id === contentDialog.courseId);
-                if (!course) return (
-                  <Alert severity="error">
-                    No se encontró el curso
-                  </Alert>
-                );
-
-                if (course.courseType === 'recorded') {
-                  return (
-                    <List>
-                      {chapters.map((chapter) => (
-                        <React.Fragment key={chapter.id}>
-                          <ListItem>
-                            <ListItemIcon>
-                              {chapter.isLocked ? <LockIcon /> : <PlayCircleIcon />}
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={chapter.title}
-                              secondary={`Duración: ${chapter.duration}`}
-                            />
-                            <IconButton
-                              color="primary"
-                              onClick={() => handleFileSelect(chapter.id)}
-                            >
-                              <UploadIcon />
-                            </IconButton>
-                            {chapter.videoUrl && (
-                              <Chip
-                                label="Video disponible"
-                                color="success"
-                                size="small"
-                                sx={{ ml: 1 }}
-                              />
-                            )}
-                          </ListItem>
-                          <Divider />
-                        </React.Fragment>
-                      ))}
-                    </List>
-                  );
-                } else {
-                  const liveSession = getLiveSessionInfo(contentDialog.courseId);
-                  if (!liveSession) {
-                    return (
-                      <Alert severity="error">
-                        No se encontró información de la sesión en vivo. Por favor, intenta recargar la página.
-                      </Alert>
-                    );
-                  }
-
-                  return (
-                    <Box>
-                      <Typography variant="h6" gutterBottom>
-                        Enlaces para la clase en vivo
-                      </Typography>
-                      <Paper sx={{ p: 2, mb: 2 }}>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Link para el profesor:
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                          <TextField
-                            fullWidth
-                            value={`${window.location.origin}/live-classroom/${course.id}`}
-                            InputProps={{
-                              readOnly: true,
-                            }}
-                            size="small"
-                          />
-                          <Button
-                            sx={{ ml: 1 }}
-                            variant="outlined"
-                            onClick={() => navigator.clipboard.writeText(`${window.location.origin}/live-classroom/${course.id}`)}
-                          >
-                            Copiar
-                          </Button>
-                        </Box>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Link para estudiantes:
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <TextField
-                            fullWidth
-                            value={`${window.location.origin}/live-classroom/${course.id}`}
-                            InputProps={{
-                              readOnly: true,
-                            }}
-                            size="small"
-                          />
-                          <Button
-                            sx={{ ml: 1 }}
-                            variant="outlined"
-                            onClick={() => navigator.clipboard.writeText(`${window.location.origin}/live-classroom/${course.id}`)}
-                          >
-                            Copiar
-                          </Button>
-                        </Box>
-                      </Paper>
-                      <Alert severity="info">
-                        Estos enlaces son permanentes y únicos para este curso. Compártelos con los estudiantes cuando el curso esté activo.
-                      </Alert>
-                    </Box>
-                  );
-                }
-              })()}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                Organiza los capítulos y gestiona los videos del curso
+              </Typography>
+              <ChapterManager
+                courseId={contentDialog.courseId}
+                initialChapters={chapters}
+                onChaptersUpdate={handleChaptersUpdate}
+              />
             </Box>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseContent}>Cerrar</Button>
+          <Button onClick={handleCloseContent} color="primary">
+            Cerrar
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>

@@ -60,7 +60,8 @@ const Login = () => {
 
     try {
       await login(formData.email, formData.password);
-      navigate('/dashboard');
+      navigate('/student/dashboard');
+      // No redirigir aquí, el AuthRedirect se encargará de la redirección
     } catch (err) {
       setError('Error al iniciar sesión. Por favor, verifica tus credenciales.');
       console.error('Error de inicio de sesión:', err);

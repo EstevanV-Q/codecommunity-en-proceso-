@@ -1104,7 +1104,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         'cto',
         'seniorDev',
         'accounting',
-        'marketing'
+        'marketing',
+        'support',
+        'supportll',
+        'supportManager'
       ];
 
       // Verificar si el usuario tiene roles administrativos
@@ -1183,11 +1186,14 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     'seniorMentor',
     'mentor',
     'cto',
-    'seniorDev'
+    'seniorDev',
+    'support',
+    'supportll',
+    'supportManager'
   ].includes(role);
   
   // Determinar si el usuario es parte del equipo técnico
-  const isTechnical = ['cto', 'seniorDev', 'juniorDev', 'devOps'].includes(role);
+  const isTechnical = ['cto', 'seniorDev', 'juniorDev', 'devOps', 'support', 'supportll', 'supportManager'].includes(role);
   
   // Determinar si el usuario es parte del núcleo ejecutivo
   const isExecutive = ['founder', 'owner', 'cto'].includes(role);

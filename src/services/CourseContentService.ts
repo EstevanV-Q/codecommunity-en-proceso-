@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { Chapter } from '../types/course';
+
 // Función para generar IDs únicos
 const generateId = () => {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -29,11 +32,11 @@ interface CourseContent {
 
 class CourseContentService {
     private static instance: CourseContentService;
-    private apiUrl: string;
+    private baseUrl: string;
     private courseContentMap: Map<string, CourseContent>;
 
     private constructor() {
-        this.apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+        this.baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
         this.courseContentMap = new Map();
     }
 
@@ -85,30 +88,66 @@ class CourseContentService {
         }
     }
 
-    async uploadVideo(courseId: string, chapterId: string, file: File): Promise<string> {
-        const courseContent = this.courseContentMap.get(courseId);
-        if (!courseContent || courseContent.type !== 'video' || !courseContent.chapters) {
-            throw new Error('Curso no encontrado o no es de tipo video');
+    async getChapters(courseId: string): Promise<Chapter[]> {
+        const response = await fetch(`${this.baseUrl}/courses/${courseId}/chapters`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch chapters');
         }
-
-        // Aquí iría la lógica real para subir el video a un servicio de almacenamiento
-        const mockVideoUrl = `https://storage.example.com/videos/${courseId}/${chapterId}/${file.name}`;
-        
-        const chapterIndex = courseContent.chapters.findIndex(c => c.id === chapterId);
-        if (chapterIndex !== -1) {
-            courseContent.chapters[chapterIndex].videoUrl = mockVideoUrl;
-            this.courseContentMap.set(courseId, courseContent);
-        }
-
-        return mockVideoUrl;
+        return response.json();
     }
 
-    async getChapters(courseId: string): Promise<VideoChapter[]> {
-        const courseContent = this.courseContentMap.get(courseId);
-        if (!courseContent || courseContent.type !== 'video' || !courseContent.chapters) {
-            throw new Error('Curso no encontrado o no es de tipo video');
+    async updateChapters(courseId: string, chapters: Chapter[]): Promise<Chapter[]> {
+        const response = await fetch(`${this.baseUrl}/courses/${courseId}/chapters`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(chapters),
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update chapters');
         }
-        return courseContent.chapters;
+        return response.json();
+    }
+
+    async uploadVideo(courseId: string, chapterId: string, file: File, onProgress?: (progress: number) => void): Promise<string> {
+        const formData = new FormData();
+        formData.append('video', file);
+
+        const xhr = new XMLHttpRequest();
+        return new Promise((resolve, reject) => {
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable && onProgress) {
+                    const progress = (event.loaded / event.total) * 100;
+                    onProgress(progress);
+                }
+            });
+
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    resolve(response.videoUrl);
+                } else {
+                    reject(new Error('Failed to upload video'));
+                }
+            });
+
+            xhr.addEventListener('error', () => {
+                reject(new Error('Failed to upload video'));
+            });
+
+            xhr.open('POST', `${this.baseUrl}/courses/${courseId}/chapters/${chapterId}/video`);
+            xhr.send(formData);
+        });
+    }
+
+    async deleteVideo(courseId: string, chapterId: string): Promise<void> {
+        const response = await fetch(`${this.baseUrl}/courses/${courseId}/chapters/${chapterId}/video`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete video');
+        }
     }
 
     getLiveSessionInfo(courseId: string): LiveSession | null {

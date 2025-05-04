@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Grid,
@@ -51,17 +51,10 @@ import {
 } from '@mui/icons-material';
 
 import { useAuth } from '../../context/AuthContext';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { MockUser } from '../../mocks/users';
 import MentorCoursesDashboard from '../../components/mentor/MentorCoursesDashboard';
-// import { 
-//   AdminRole, 
-//   TechnicalRole, 
-//   TeachingRole, 
-//   LearningRole, 
-//   MentoringRole, 
-//   UserRole 
-// } from '../../types/roles';
+import { Role } from '../../types/roles';
 
 // Definición de tipos específicos para el dashboard
 type SpecializedRole = 'marketing' | 'accounting' | 'designer';
@@ -642,86 +635,59 @@ const TeacherDashboard: React.FC<DashboardProps> = ({ user }) => {
   );
 };
 
-// Componente para el Dashboard de Comunidad
-// const CommunityDashboard: React.FC<DashboardProps> = ({ user }) => {
-//   const communityStats = [
-//     { title: 'Posts', value: '25', icon: ForumIcon },
-//     { title: 'Respuestas', value: '142', icon: ChatIcon },
-//     { title: 'Reputación', value: '756', icon: StarIcon },
-//     { title: 'Seguidores', value: '89', icon: PeopleIcon },
-//   ];
-
-//   return (
-//     <Grid container spacing={3}>
-//       {communityStats.map((stat, index) => (
-//         <Grid item xs={12} sm={3} key={index}>
-//           <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-//             <Box sx={{ p: 1, bgcolor: 'secondary.light', borderRadius: '50%', mb: 2 }}>
-//               <stat.icon sx={{ color: 'secondary.main' }} />
-//             </Box>
-//             <Typography variant="h4" component="div" gutterBottom>
-//               {stat.value}
-//             </Typography>
-//             <Typography color="textSecondary">{stat.title}</Typography>
-//           </Paper>
-//         </Grid>
-//       ))}
-//     </Grid>
-//   );
-// };
-
 // Componente principal del Dashboard
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      if (["professor", "instructor", "teachingAssistant"].includes(user.role)) {
+        navigate("/teacher/dashboard");
+      }
+      if (["support", "supportll", "supportManager"].includes(user.role)) {
+        navigate("/support/dashboard");
+      }
+    }
+  }, [user, navigate]);
 
   if (!user) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <CircularProgress />
-      </Box>
-    );
+    return null;
   }
 
   const renderDashboardByRole = () => {
-    const safeUser: MockUser = {
-      ...user,
-      id: user.id || '',
-      email: user.email || '',
-      password: user.password || '',
-      displayName: user.displayName || '',
-      role: user.role || 'user',
-      emailVerified: user.emailVerified || false
-    };
-
-    switch (user.role) {
-      case 'founder':
-      case 'owner':
-        return <FounderDashboard user={safeUser} />;
-      case 'cto':
-      case 'seniorDev':
-        return <TechnicalDashboard user={safeUser} />;
-      case 'admin':
-        return <AdminDashboard user={safeUser} />;
+    const role = user.role as Role;
+    
+    switch (role) {
+      case 'student':
+        return <StudentDashboard user={user} />;
       case 'mentor':
       case 'seniorMentor':
       case 'juniorMentor':
-        return <MentorDashboard user={safeUser} />;
-      case 'student':
-      case 'mentee':
-        return <StudentDashboard user={safeUser} />;
+        return <MentorDashboard user={user} />;
+      case 'admin':
+        return <AdminDashboard user={user} />;
+      case 'founder':
+      case 'owner':
+        return <FounderDashboard user={user} />;
+      case 'cto':
+      case 'seniorDev':
+      case 'juniorDev':
+      case 'devOps':
+        return <TechnicalDashboard user={user} />;
+      case 'moderator':
+      case 'helper':
+        return <ModeratorDashboard user={user} />;
       case 'marketing':
       case 'accounting':
       case 'designer':
-        return <SpecializedDashboard user={safeUser} />;
+        return <SpecializedDashboard user={user} />;
       case 'professor':
       case 'instructor':
       case 'teachingAssistant':
-        return <TeacherDashboard user={safeUser} />;
-      case 'moderator':
-      case 'helper':
-        return <ModeratorDashboard user={safeUser} />;
+        return <TeacherDashboard user={user} />;
       default:
-        return <StudentDashboard user={safeUser} />;
+        return <StudentDashboard user={user} />;
     }
   };
 

@@ -12,7 +12,7 @@ import {
   Paper,
   Chip,
   Avatar,
-  styled
+  styled,
 } from '@mui/material';
 import { 
   Announcement as AnnouncementIcon,
@@ -21,12 +21,13 @@ import {
   Person as PersonIcon,
   Add as AddIcon,
   ArrowForward as ArrowForwardIcon,
-  AttachMoney as MoneyIcon
+  AttachMoney as MoneyIcon,
+  Work as WorkIcon,
+  ViewQuilt as ViewQuiltIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../../context/AdminContext';
 import { AdminPermissions } from '../../context/AdminContext';
-
 // Estilos para las tarjetas
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -123,13 +124,39 @@ const DashboardCards = () => {
       }
     },
     {
-      id: 'Mentor2',
-      title: 'Usuarios',
-      description: 'Gestiona los usuarios de la plataforma, sus roles y permisos.',
-      color: '#EC407A',
+      id: 'jobs',
+      title: 'Ofertas de trabajo',
+      description: 'Gestiona las ofertas de trabajo de la plataforma.',
+      color: '#FFA726',
+      icon: <WorkIcon fontSize="large" />,
+      path: '/admin/jobs',
+      action: 'Gestionar ofertas de trabajo',
+      stats: {
+        total: 1250,
+        active: 820
+      }
+    },
+    {
+      id: 'studyGroups',
+      title: 'Grupos de Estudio',
+      description: 'Gestiona los grupos de estudio y sus miembros.',
+      color: '#4CAF50',
       icon: <GroupIcon fontSize="large" />,
-      path: '/admin/Mentor2',
-      action: 'Gestionar usuarios',
+      path: '/admin/community/groups',
+      action: 'Gestionar grupos',
+      stats: {
+        total: 45,
+        active: 32
+      }
+    },
+    {
+      id: 'community',
+      title: 'Community',
+      description: 'Gestiona la comunidad de la plataforma.',
+      color: '#46d9f0',
+      icon: <ViewQuiltIcon fontSize="large" />,
+      path: '/admin/community',
+      action: 'Gestionar comunidad',
       stats: {
         total: 1250,
         active: 820
@@ -166,8 +193,14 @@ const DashboardCards = () => {
       case 'users':
         navigate('/admin/users');
         break;
-      case 'Mentor2':
-        navigate('/admin/tutors')
+      case 'jobs':
+        navigate('/admin/jobs');
+        break;
+      case 'studyGroups':
+        navigate('/admin/community/groups');
+        break;
+      case 'community':
+        navigate('/admin/community');
         break;
       default:
         navigate('/admin');
