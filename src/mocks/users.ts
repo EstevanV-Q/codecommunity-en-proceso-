@@ -325,7 +325,7 @@ export const mockUsers: MockUser[] = [
     id: '12',
     email: 'intermediate.student@codecommunity.com',
     password: 'Intermediate2024!',
-    displayName: 'Estudiante Intermedio',
+    displayName: 'Esteban',
     role: 'student',
     roles: ['student'],
     emailVerified: true,

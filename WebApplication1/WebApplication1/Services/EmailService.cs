@@ -69,5 +69,38 @@ namespace WebApplication1.Services
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
         }
+
+        // **Nuevo m�todo para enviar correos del formulario de contacto**
+        public async Task SendContactEmailAsync(string name, string email, string subject, string messageContent)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(name, email));
+            message.To.Add(new MailboxAddress(_fromName, _fromEmail));
+            message.Subject = subject;
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = $"<p><strong>De:</strong> {name} ({email})</p><p><strong>Mensaje:</strong><br>{messageContent}</p>"
+            };
+            message.Body = bodyBuilder.ToMessageBody();
+
+            await SendEmailAsync(message);
+        }
+
+        // M�todo reutilizable para enviar correos
+        private async Task SendEmailAsync(MimeMessage message)
+        {
+            using var client = new SmtpClient();
+            try
+            {
+                await client.ConnectAsync(_smtpServer, _smtpPort, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(_smtpUsername, _smtpPassword);
+                await client.SendAsync(message);
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
+            }
+        }
     }
-} 
+}

@@ -7,9 +7,13 @@ using WebApplication1.Data;
 using WebApplication1.Extensions;
 using WebApplication1.Interfaces;
 using WebApplication1.Services;
+using WebApplication1.Hubs;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar Kestrel para HTTP y HTTPS
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.Listen(System.Net.IPAddress.Loopback, 5251); // Puerto HTTP
@@ -118,6 +122,8 @@ builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddScoped<IMonitoringService, MonitoringService>();
 builder.Services.AddScoped<IValidationService, ValidationService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IRecordingService, RecordingService>();
+builder.Services.AddScoped<IJobService, JobService>();
 
 // Register system monitoring services
 builder.Services.AddHostedService<SystemMetricsCollector>();
@@ -128,6 +134,9 @@ builder.Services.AddHealthChecks()
     {
         options.AddDrive(@"C:\", 1024); // Revisar al menos 1GB libre
     });
+
+// Add SignalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -147,7 +156,6 @@ if (app.Environment.IsDevelopment())
 // Enforce HTTPS
 app.UseHttpsRedirection();
 
-
 // Add security headers
 app.Use(async (context, next) =>
 {
@@ -159,12 +167,36 @@ app.Use(async (context, next) =>
     await next();
 });
 
+
+
+//// Configura la cultura
+//var supportedCultures = new[]
+//{
+//    new CultureInfo("en-US"), // O simplemente "en"
+//    new CultureInfo("es-ES")  // O simplemente "es"
+//};
+
+//builder.Services.Configure<RequestLocalizationOptions>(options =>
+//{
+//    options.DefaultRequestCulture = new RequestCulture("en-US");
+//    options.SupportedCultures = supportedCultures;
+//    options.SupportedUICultures = supportedCultures;
+//});
+
+
+//// Usa la localización
+//app.UseRequestLocalization();
+
+
+
 app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<LiveClassroomHub>("/live-classroom-hub");
 
 // Aplicar migraciones automáticamente
 using (var scope = app.Services.CreateScope())
