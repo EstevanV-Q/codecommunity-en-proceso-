@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import {
   Container,
   Grid,
@@ -31,6 +32,8 @@ import {
 import { JobPosting } from '../../types/JobPosting';
 
 const JobListings: React.FC = () => {
+  const theme = useTheme();
+
   const [jobs, setJobs] = useState<JobPosting[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -127,24 +130,70 @@ const JobListings: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       {/* Header */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs>
-            <Typography variant="h4" gutterBottom>
-              Ofertas de Trabajo
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleOpenDialog}
-            >
-              Publicar Oferta
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
+      <Box
+        sx={{
+          mb: 4,
+          p: 3,
+          borderRadius: 4,
+          height: { xs: 'auto', md: '120px' },
+          background: theme.palette.mode === 'light'
+            ? 'linear-gradient(to right, rgb(1, 62, 122), rgb(6, 97, 189))'
+            : 'linear-gradient(to right, rgb(152, 207, 255), rgb(68, 169, 252))',
+          color: 'white',
+          boxShadow: 1,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: { xs: 'flex-start', md: 'center' },
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ mb: { xs: 2, md: 0 }, width: '100%' }}>
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            sx={{
+              fontWeight: 'bold',
+              whiteSpace: 'normal',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontSize: { xs: '1.5rem', md: '2.125rem' },
+              textAlign: { xs: 'center', md: 'left' },
+              animation: 'bounce 3s infinite',
+              '@keyframes bounce': {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-5px)' },
+              },
+            }}
+          >
+            Ofertas de Trabajo
+          </Typography>
+          <Typography
+            variant="body1"
+            color="white"
+            sx={{
+              whiteSpace: 'normal',
+              textAlign: { xs: 'center', md: 'left' },
+            }}
+          >
+            Encuentra oportunidades laborales y conecta con empresas
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, width: '100%' }}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleOpenDialog}
+            sx={{
+              backgroundColor: 'white',
+              color: 'primary.main',
+              '&:hover': { backgroundColor: '#f0f0f0' },
+            }}
+          >
+            Publicar Oferta
+          </Button>
+        </Box>
+      </Box>
 
       {/* Search Bar */}
       <Paper sx={{ p: 2, mb: 3 }}>
@@ -348,4 +397,4 @@ const JobListings: React.FC = () => {
   );
 };
 
-export default JobListings; 
+export default JobListings;

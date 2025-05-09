@@ -33,6 +33,8 @@ import {
   Language as WebsiteIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import { useAuth } from '../../context/AuthContext'; // Import the AuthContext to get the user's role
 
 // Datos de ejemplo para proyectos
 const projectsData = [
@@ -90,6 +92,8 @@ const categories = [
 
 const Projects = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const { user } = useAuth(); // Get the logged-in user's information
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -106,18 +110,53 @@ const Projects = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Box
+        sx={{
+          height: 90,
+          mb: 4,
+          p: 2,
+          borderRadius: 4,
+          background: theme.palette.mode === 'light'
+            ? 'linear-gradient(to right, rgb(1, 62, 122), rgb(6, 97, 189))'
+            : 'linear-gradient(to right, rgb(152, 207, 255), rgb(68, 169, 252))',
+          color: 'white',
+          boxShadow: 1,
+        }}
+      >
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{
+            fontWeight: 'bold',
+            animation: 'bounce 3s infinite',
+            '@keyframes bounce': {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-5px)' },
+            },
+            justifyItems: 'center',
+            py: 1,
+          }}
+        >
           Proyectos
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate('/projects-management')}
-          sx={{ fontWeight: 'semi-bold', ml: 29}}
-        >
-          Ir al Panel de Gestión
-        </Button>
+        {user?.role === 'admin' && ( // Check if the user's role is 'admin'
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', height: '100%', mt: "-70px" }}>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: 'rgb(255, 255, 255)',
+                color: theme.palette.primary.main,
+                '&:hover': {
+                  backgroundColor: 'rgb(240, 240, 240)', // Gris claro al hacer hover
+                },
+              }}
+              onClick={() => navigate('/projects-management')}
+            >
+              Ir al Panel de Gestión
+            </Button>
+          </Box>
+        )}
       </Box>
 
       {/* Encabezado y Filtros */}

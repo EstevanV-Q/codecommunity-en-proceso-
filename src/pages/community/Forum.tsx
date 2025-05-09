@@ -33,6 +33,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '@mui/material/styles'; // Add this import
 
 // Tipos
 interface ForumThread {
@@ -107,6 +108,7 @@ const mockThreads: ForumThread[] = [
 const Forum = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const theme = useTheme(); // Use the theme hook
   const [threads, setThreads] = useState<ForumThread[]>(mockThreads);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -178,28 +180,72 @@ const Forum = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Foro
-      </Typography>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
 
       {/* Encabezado */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Box>
-          <Typography variant="h4" gutterBottom>
+      <Box
+        sx={{
+          mb: 4,
+          p: 3,
+          borderRadius: 4,
+          height: { xs: 'auto', md: '120px' },
+          background: theme.palette.mode === 'light'
+        ? 'linear-gradient(to right, rgb(1, 62, 122), rgb(6, 97, 189))'
+        : 'linear-gradient(to right, rgb(152, 207, 255), rgb(68, 169, 252))',
+          color: 'white',
+          boxShadow: 1,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: { xs: 'flex-start', md: 'center' },
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ mb: { xs: 2, md: 0 }, width: '100%' }}>
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            sx={{
+              fontWeight: 'bold',
+              whiteSpace: 'normal',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontSize: { xs: '1.5rem', md: '2.125rem' },
+              textAlign: { xs: 'center', md: 'left' },
+              animation: 'bounce 3s infinite',
+        '@keyframes bounce': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5px)' },
+        },
+            }}
+          >
             Foro de Discusión
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography
+            variant="body1"
+            color="white"
+            sx={{
+              whiteSpace: 'normal',
+              textAlign: { xs: 'center', md: 'left' },
+            }}
+          >
             Comparte conocimientos y aprende de la comunidad
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleCreateThread}
-        >
-          Nuevo Tema
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, width: '100%' }}>
+          <Button
+        variant="contained"
+        startIcon={<AddIcon />}
+        onClick={handleCreateThread}
+        sx={{
+          backgroundColor: 'white',
+          color: 'primary.main',
+          '&:hover': { backgroundColor: '#f0f0f0' },
+        }}
+          >
+        Nuevo Tema
+          </Button>
+        </Box>
       </Box>
 
       {/* Filtros */}
@@ -364,4 +410,4 @@ const Forum = () => {
   );
 };
 
-export default Forum; 
+export default Forum;

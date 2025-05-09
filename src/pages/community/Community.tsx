@@ -25,8 +25,13 @@ import {
   ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles'; // Import useTheme
+import { useAuth } from '../../context/AuthContext'; // Import AuthContext
 
 const Community = () => {
+  const theme = useTheme(); // Use the theme hook
+  const { user } = useAuth(); // Get the current user
+
   // Datos de ejemplo para mostrar en la página
   const featuredTopics = [
     { id: '1', title: 'Guía para principiantes en React', author: 'Carlos Martínez', replies: 24, views: 352 },
@@ -47,24 +52,62 @@ const Community = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Box 
+        sx={{ 
+          mb: 4, 
+          p: 3, 
+          borderRadius: 4, 
+          height: 'auto',
+          background: theme.palette.mode === 'light' 
+        ? 'linear-gradient(to right, rgb(1, 62, 122), rgb(6, 97, 189))' 
+        : 'linear-gradient(to right, rgb(152, 207, 255), rgb(68, 169, 252))',
+          color: 'white',
+          boxShadow: 1, 
+          textAlign: { xs: 'center', md: 'left' }, // Center text on mobile
+        }}
+      >
+        <Typography 
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{
+        fontWeight: 'bold',
+        animation: 'bounce 3s infinite',
+        '@keyframes bounce': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5px)' },
+        },
+        fontSize: { xs: '1.8rem', md: '2.125rem' }, // Adjust font size for mobile
+          }}
+        >
           Comunidad
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography 
+          variant="body1" 
+          color="white" 
+          sx={{ mt: -2, fontSize: { xs: '0.9rem', md: '1rem' } }} // Adjust font size for mobile
+        >
           Conecta con otros desarrolladores, participa en discusiones, eventos y mucho más.
         </Typography>
-        <Box sx={{ mt: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            component={RouterLink}
-            to="/community-management"
-            sx={{ fontWeight: 'bold' }}
+        {['founder', 'owner', 'admin', 'moderator'].includes(user?.role || '') && ( // Show only for admins
+          <Box 
+        sx={{ 
+          mt: 2, // Adjust spacing for mobile
+          display: 'flex', 
+          justifyContent: { xs: 'center', md: 'flex-start' }, // Center button on mobile
+        }}
           >
-            Ir al Panel de Gestión
-          </Button>
-        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          component={RouterLink}
+          to="/community-management"
+          sx={{ fontWeight: 'bold', fontSize: { xs: '0.8rem', md: '1rem' } }} // Adjust button font size for mobile
+        >
+          Ir al Panel de Gestión
+        </Button>
+          </Box>
+        )}
       </Box>
       
       {/* Sección de bienvenida y estadísticas */}

@@ -12,7 +12,6 @@ import {
   Button,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Dialog,
   DialogTitle,
@@ -25,19 +24,16 @@ import {
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
-  QuestionAnswer as QuestionAnswerIcon,
-  School as SchoolIcon,
-  Code as CodeIcon,
-  Person as PersonIcon,
-  Settings as SettingsIcon,
   Email as EmailIcon,
   Edit as EditIcon
 } from '@mui/icons-material';
 import DynamicResources from '../../components/help/DynamicResources';
 import { useAdmin } from '../../context/AdminContext';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 const Help = () => {
+  const theme = useTheme();
   const { isAdmin } = useAdmin();
   const [openTicket, setOpenTicket] = useState(false);
   const [ticket, setTicket] = useState({ title: '', description: '', priority: 'medium' });
@@ -70,10 +66,72 @@ const Help = () => {
   
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Centro de Ayuda
-      </Typography>
-      
+      {/* Header */}
+      <Box
+        sx={{
+          mb: 4,
+          p: 3,
+          borderRadius: 4,
+          height: { xs: 'auto', md: '120px' },
+          background: theme.palette.mode === 'light'
+            ? 'linear-gradient(to right, rgb(1, 62, 122), rgb(6, 97, 189))'
+            : 'linear-gradient(to right, rgb(152, 207, 255), rgb(68, 169, 252))',
+          color: 'white',
+          boxShadow: 1,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: { xs: 'flex-start', md: 'center' },
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ mb: { xs: 2, md: 0 }, width: '100%' }}>
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            sx={{
+              fontWeight: 'bold',
+              whiteSpace: 'normal',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontSize: { xs: '1.5rem', md: '2.125rem' },
+              textAlign: { xs: 'center', md: 'left' },
+              animation: 'bounce 3s infinite',
+              '@keyframes bounce': {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-5px)' },
+              },
+            }}
+          >
+            Centro de Ayuda
+          </Typography>
+          <Typography
+            variant="body1"
+            color="white"
+            sx={{
+              whiteSpace: 'normal',
+              textAlign: { xs: 'center', md: 'left' },
+            }}
+          >
+            Encuentra respuestas y guías para aprovechar al máximo nuestra plataforma
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, width: '100%' }}>
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={handleOpenTicket}
+            sx={{
+              backgroundColor: 'white',
+              color: 'primary.main',
+              '&:hover': { backgroundColor: '#f0f0f0' },
+            }}
+          >
+            Abrir Ticket
+          </Button>
+        </Box>
+      </Box>
+
       <Typography variant="body1" color="text.secondary" paragraph>
         Bienvenido al Centro de Ayuda de CodeCommunity. Aquí encontrarás respuestas a las preguntas más frecuentes y guías para aprovechar al máximo nuestra plataforma.
       </Typography>
@@ -327,4 +385,4 @@ const Help = () => {
   );
 };
 
-export default Help; 
+export default Help;

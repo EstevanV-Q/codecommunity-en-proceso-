@@ -326,16 +326,22 @@ const StudentDashboard: React.FC = () => {
           }
         }}
       >
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Box>
+        <Box 
+          display="flex" 
+          justifyContent="space-between" 
+          alignItems="center" 
+          mb={3} 
+          flexDirection={{ xs: 'column', sm: 'row' }}
+        >
+          <Box textAlign={{ xs: 'center', sm: 'left' }}>
             <Typography 
               variant="h3" 
               component="h1" 
               gutterBottom 
               sx={{ 
-                fontWeight: 'bold', 
-                textShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                animation: `${floatAnimation} 3s ease-in-out infinite`
+          fontWeight: 'bold', 
+          textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          animation: `${floatAnimation} 3s ease-in-out infinite`
               }}
             >
               ¡Bienvenido, {user?.displayName}!
@@ -343,32 +349,40 @@ const StudentDashboard: React.FC = () => {
             <Typography 
               variant="h6" 
               sx={{ 
-                opacity: 0.9, 
-                textShadow: '0 1px 2px rgba(0,0,0,0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1
+          opacity: 0.9, 
+          textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          justifyContent: { xs: 'center', sm: 'flex-start' }
               }}
             >
               <RocketIcon sx={{ animation: `${pulseAnimation} 2s ease-in-out infinite` }} />
               Continúa tu aprendizaje y alcanza tus metas
-      </Typography>
+            </Typography>
           </Box>
-          <Tooltip title="Ver Calendario">
-            <IconButton 
-              onClick={handleCalendarClick}
-              sx={{ 
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: alpha(theme.palette.common.white, 0.1),
-                  transform: 'scale(1.1)',
-                  transition: 'transform 0.2s'
-                }
-              }}
-            >
-              <CalendarIcon />
-            </IconButton>
-          </Tooltip>
+          <Box 
+            display="flex" 
+            alignItems="center" 
+            gap={2} 
+            mt={{ xs: 2, sm: 0 }}
+          >
+            <Tooltip title="Ver Calendario">
+              <IconButton 
+          onClick={handleCalendarClick}
+          sx={{ 
+            color: 'white',
+            '&:hover': {
+              backgroundColor: alpha(theme.palette.common.white, 0.1),
+              transform: 'scale(1.1)',
+              transition: 'transform 0.2s'
+            }
+          }}
+              >
+          <CalendarIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
 
         <Grid container spacing={3}>

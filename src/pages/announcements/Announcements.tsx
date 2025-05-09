@@ -200,12 +200,37 @@ const Announcements = () => {
         </Alert>
       )}
       
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Box 
+        sx={{ 
+          mb: 4, 
+          p: 3, 
+          borderRadius: 4, 
+          background: theme.palette.mode === 'light' 
+        ? 'linear-gradient(to right, rgb(1, 62, 122), rgb(6, 97, 189))' 
+        : 'linear-gradient(to right, rgb(152, 207, 255), rgb(68, 169, 252))',
+          color: 'white',
+          boxShadow: 1, 
+        }}
+      >
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{
+        fontWeight: 'bold',
+        animation: 'bounce 3s infinite',
+        '@keyframes bounce': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5px)' },
+        },
+          }}
+        >
           Anuncios
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Mantente al día con los últimos anuncios, eventos y actualizaciones.
+        <Typography
+          variant="body1"
+        >
+          Mantente al dia de las novedades, actualizaciones y eventos importantes de la comunidad.
         </Typography>
       </Box>
       
